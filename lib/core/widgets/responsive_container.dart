@@ -3,23 +3,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class ResponsiveContainer extends ConsumerWidget {
-  const ResponsiveContainer({super.key, required this.children});
+  const ResponsiveContainer({
+    super.key,
+    required this.children,
+    this.layout = ResponsiveRowColumnType.COLUMN,
+  });
+
   final List<ResponsiveRowColumnItem> children;
+  final ResponsiveRowColumnType? layout;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool isDesktop = ResponsiveBreakpoints.of(context).isDesktop;
-
-    ResponsiveRowColumnType layout = isDesktop
-        ? ResponsiveRowColumnType.ROW
-        : ResponsiveRowColumnType.COLUMN;
-
     return ResponsiveRowColumn(
+      columnPadding: const EdgeInsets.all(16),
+      rowSpacing: 16,
+      columnSpacing: 16,
       columnMainAxisAlignment: MainAxisAlignment.center,
       rowCrossAxisAlignment: CrossAxisAlignment.center,
       columnCrossAxisAlignment: CrossAxisAlignment.center,
       rowMainAxisAlignment: MainAxisAlignment.center,
-      layout: layout,
+      layout: layout!,
       children: children,
     );
   }
