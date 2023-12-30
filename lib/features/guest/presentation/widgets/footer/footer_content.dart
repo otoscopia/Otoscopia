@@ -20,6 +20,7 @@ class FooterContent extends StatelessWidget {
       columnSpacing: 8,
       rowMainAxisAlignment: MainAxisAlignment.center,
       rowCrossAxisAlignment: CrossAxisAlignment.center,
+      rowSpacing: 4,
       children: const [
         ResponsiveRowColumnItem(
             child: ClickableText(kLicensed, uri: kLicensedUri)),
