@@ -13,9 +13,8 @@ class Footer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool responsive = ResponsiveBreakpoints.of(context).screenWidth > 650;
-    return ResponsiveContainer(
+    return ResponsiveRowColumn(
       layout: ResponsiveRowColumnType.COLUMN,
-      
       columnCrossAxisAlignment: CrossAxisAlignment.center,
       columnSpacing: responsive ? 4 : 8,
       children: [
