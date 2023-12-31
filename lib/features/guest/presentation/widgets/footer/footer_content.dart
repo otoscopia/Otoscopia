@@ -2,8 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'package:otoscopia/core/core.dart';
-
-import '../responsive_divider.dart';
+import 'package:otoscopia/features/guest/guest.dart';
 
 class FooterContent extends StatelessWidget {
   const FooterContent({super.key});
@@ -18,23 +17,15 @@ class FooterContent extends StatelessWidget {
     return ResponsiveRowColumn(
       layout: layout,
       columnSpacing: 8,
+      rowSpacing: 8,
       rowMainAxisAlignment: MainAxisAlignment.center,
       rowCrossAxisAlignment: CrossAxisAlignment.center,
-      rowSpacing: 4,
       children: const [
-        ResponsiveRowColumnItem(
-            child: ClickableText(kLicensed, uri: kLicensedUri)),
+        ResponsiveRowColumnItem(child: TextNavigator(kTermsAndConditions, child: GuestNamedRoutes.termsAndConditions)),
         ResponsiveRowColumnItem(child: ResponsiveDivider()),
-        ResponsiveRowColumnItem(
-          child: ClickableText(
-            kPrivacyPolicy,
-            uri: kPrivacyPolicyUri,
-          ),
-        ),
+        ResponsiveRowColumnItem(child: TextNavigator(kPrivacyPolicy, child: GuestNamedRoutes.privacyPolicy)),
         ResponsiveRowColumnItem(child: ResponsiveDivider()),
-        ResponsiveRowColumnItem(
-          child: ClickableText(kPoweredBy, uri: kPoweredByUri),
-        ),
+        ResponsiveRowColumnItem(child: TextNavigator(kFAQ, child: GuestNamedRoutes.faq)),
       ],
     );
   }
