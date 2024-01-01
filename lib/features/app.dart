@@ -10,12 +10,15 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ThemeMode themeMode = ref.watch(themeProvider);
+
     Map<String, WidgetBuilder> routes = createRoutes(false, deviceType, null);
+
     return FluentApp(
       routes: routes,
       title: kAppName,
       initialRoute: kInitialRoute,
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       theme: LightTheme.themeData,
       darkTheme: DarkTheme.themeData,
       debugShowCheckedModeBanner: false,
