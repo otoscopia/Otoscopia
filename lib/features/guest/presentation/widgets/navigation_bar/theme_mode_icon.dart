@@ -21,6 +21,12 @@ class ThemeModeIcon extends ConsumerWidget {
     return IconButton(
       icon: Icon(iconData, size: 18),
       onPressed: () => ref.read(themeProvider.notifier).toggleTheme(),
+      style: ButtonStyle(
+        foregroundColor: ButtonState.resolveWith((states) {
+          if (states.isHovering) return FluentTheme.of(context).accentColor;
+          return FluentTheme.of(context).typography.body!.color;
+        }),
+      ),
     );
   }
 }

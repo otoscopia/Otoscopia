@@ -16,6 +16,12 @@ class GithubIcon extends StatelessWidget {
       target: LinkTarget.blank,
       builder: (context, followLink) {
         return IconButton(
+          style: ButtonStyle(
+            foregroundColor: ButtonState.resolveWith((states) {
+              if (states.isHovering) return FluentTheme.of(context).accentColor;
+              return FluentTheme.of(context).typography.body!.color;
+            }),
+          ),
           onPressed: followLink,
           icon: const Icon(Ionicons.logo_github, size: 18),
         );
