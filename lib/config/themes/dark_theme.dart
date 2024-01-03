@@ -13,5 +13,11 @@ class DarkTheme {
     dividerTheme: const DividerThemeData(
       decoration: BoxDecoration(color: dividerColor),
     ),
+    typography: Typography.fromBrightness(brightness: Brightness.dark).merge(
+      const Typography.raw(
+        display: TextStyle(fontSize: 56),
+        title: TextStyle(fontSize: 24, color: Colors.white),
+      ),
+    ),
   );
 }
