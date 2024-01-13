@@ -3,18 +3,20 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:otoscopia/core/core.dart';
 import 'package:otoscopia/features/guest/guest.dart';
 
-class GuestRoutes extends GuestNamedRoutes {
+class GuestRoutes extends NamedGuest {
   static Map<String, WidgetBuilder> getRoutes(DeviceType deviceType) {
+    final bool isDesktop = deviceType == DeviceType.desktop;
     return {
-      GuestNamedRoutes.about: (context) => const About("about"),
-      GuestNamedRoutes.docs: (context) => const Docs(),
-      GuestNamedRoutes.faq: (context) => const About("faq"),
-      GuestNamedRoutes.home: (context) => const Guest(),
-      GuestNamedRoutes.login: (context) => const SignIn(),
-      GuestNamedRoutes.news: (context) => const News(),
-      GuestNamedRoutes.privacyPolicy: (context) => const About("privacy_policy"),
-      GuestNamedRoutes.register: (context) => const SignUp(),
-      GuestNamedRoutes.termsAndConditions: (context) => const About("terms_and_conditions"),
+      NamedGuest.about: (context) => const About(),
+      NamedGuest.docs: (context) => const Docs(),
+      NamedGuest.faq: (context) => const About(),
+      NamedGuest.home: (context) => isDesktop ? const SignIn() : const Guest(),
+      NamedGuest.login: (context) => const SignIn(),
+      NamedGuest.news: (context) => const News(),
+      NamedGuest.privacyPolicy: (context) => const About(),
+      NamedGuest.register: (context) => const SignUp(),
+      NamedGuest.forgotPassword: (context) => const ForgotPassword(),
+      NamedGuest.termsAndConditions: (context) => const About(),
     };
   }
 }
