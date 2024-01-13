@@ -5,12 +5,15 @@ class TextNavigator extends StatelessWidget {
   const TextNavigator(
     this.text, {
     super.key,
-    required this.child,
+    this.child,
     this.bold = true,
+    this.pop = false,
   });
+
   final String text;
-  final String child;
+  final String? child;
   final bool bold;
+  final bool pop;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class TextNavigator extends StatelessWidget {
         }),
       ),
       child: Text(text).fontWeight(bold ? null : FontWeight.normal),
-      onPressed: () => Navigator.pushNamed(context, child),
+      onPressed: () => pop ? Navigator.pop(context) : Navigator.pushNamed(context, child!),
     );
   }
 }
