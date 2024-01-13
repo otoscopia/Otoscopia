@@ -10,21 +10,21 @@ class ApplicationContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ScaffoldPage(
-      padding: EdgeInsets.zero,
-      content: OfflineBuilder(
-        connectivityBuilder: (context, connectivity, child) {
-          final bool connected = connectivity != ConnectivityResult.none;
+    return OfflineBuilder(
+      connectivityBuilder: (context, connectivity, child) {
+        final bool connected = connectivity != ConnectivityResult.none;
 
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              child,
-              OfflineBottomBar(connected),
-            ],
-          );
-        },
-        child: child,
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            child,
+            OfflineBottomBar(connected),
+          ],
+        );
+      },
+      child: ScaffoldPage(
+        padding: EdgeInsets.zero,
+        content: child,
       ),
     );
   }
