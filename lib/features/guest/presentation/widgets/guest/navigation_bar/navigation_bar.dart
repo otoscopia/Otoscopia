@@ -22,13 +22,13 @@ class NavigationBar extends ConsumerWidget {
         if (responsive)
           const Row(
             children: [
-              TextNavigator(kSignIn, child: GuestNamedRoutes.login),
+              TextNavigator(kSignIn, child: NamedGuest.login),
               Gap(8),
               VerticalDivider(),
               Gap(8),
-              TextNavigator(kDocs, child: GuestNamedRoutes.docs),
+              TextNavigator(kDocsBtn, child: NamedGuest.docs),
               Gap(8),
-              TextNavigator(kNews, child: GuestNamedRoutes.news),
+              TextNavigator(kNewsBtn, child: NamedGuest.news),
               Gap(8),
               VerticalDivider(),
               Gap(8),
