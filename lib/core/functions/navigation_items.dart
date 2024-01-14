@@ -8,7 +8,7 @@ List<NavigationPaneItem> navigationItems(UserRole role) {
     PaneItem(
       icon: const Icon(FluentIcons.view_dashboard),
       title: const Text(kDashboard),
-      body: Container(),
+      body: const Dashboard(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.issue_tracking),
