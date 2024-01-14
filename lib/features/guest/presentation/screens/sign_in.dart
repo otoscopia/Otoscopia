@@ -20,58 +20,87 @@ class _SignInState extends ConsumerState<SignIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  String get email => emailController.text;
+  String get password => passwordController.text;
+
   @override
   Widget build(BuildContext context) {
     return ApplicationContainer(
-      child: Center(
-        child: Card(
-          padding: const EdgeInsets.all(44),
-          child: Form(
-            key: formKey,
-            child: SingleChildScrollView(
-              child: SizedBox(
-                width: 440,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+      child: CenterCard(
+        child: Form(
+          key: formKey,
+          child: SizedBox(
+            width: 440,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Logo(height: 32),
+                const Gap(16),
+                const Text(kSignIn).fontSize(24),
+                const Gap(12),
+                EmailTextInput(emailController: emailController),
+                const Gap(16),
+                PasswordFormBox(
+                  controller: passwordController,
+                  placeholder: kPassword,
+                ),
+                const Gap(16),
+                const TextNavigator(
+                  kNoAccount,
+                  bold: false,
+                  child: NamedGuest.register,
+                ),
+                const TextNavigator(
+                  kAccountNotAccessible,
+                  bold: false,
+                  child: NamedGuest.forgotPassword,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Logo(height: 32),
-                    const Gap(16),
-                    const Text(kSignIn).fontSize(24),
-                    const Gap(12),
-                    TextBox(
-                      controller: emailController,
-                      placeholder: kEmailAddress,
-                    ),
-                    const Gap(16),
-                    PasswordBox(
-                      controller: passwordController,
-                      placeholder: kPassword,
-                    ),
-                    const Gap(16),
-                    const TextNavigator(
-                      kNoAccount,
-                      bold: false,
-                      child: NamedGuest.register,
-                    ),
-                    const TextNavigator(
-                      kAccountNotAccessible,
-                      bold: false,
-                      child: NamedGuest.forgotPassword,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Button(child: const Text(kSignInBtn), onPressed: () {}),
-                      ],
-                    ),
+                    if (!isLoading) signInBtn() else const ProgressRing(),
                   ],
                 ),
-              ),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Button signInBtn() {
+    return Button(
+        child: const Text(kSignInBtn),
+        onPressed: () async {
+          await onClick();
+        });
+  }
+
+  Future<void> onClick() async {
+    setState(() => isLoading = true);
+    if (formKey.currentState!.validate()) {
+      try {
+        bool response = await ref
+            .read(authenticationProvider.notifier)
+            .login(email, password);
+
+        if (response) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+          });
+        }
+      } on Exception catch (error) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => popUpInfoBar(
+            "Log in failed",
+            error.toString(),
+            context,
+          ),
+        );
+      }
+    }
+    setState(() => isLoading = false);
   }
 }
