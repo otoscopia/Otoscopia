@@ -10,3 +10,7 @@ class NamedGuest {
   static const String forgotPassword = "forgot_password";
   static const String termsAndConditions = "about/terms_and_conditions";
 }
+
+class NamedDoctor {
+  static const String dashboard = "/";
+}
