@@ -12,7 +12,15 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ThemeMode themeMode = ref.watch(themeProvider);
 
-    Map<String, WidgetBuilder> routes = createRoutes(false, deviceType, null);
+    bool isAuthenticated = ref.watch(authenticationProvider);
+    UserEntity user = ref.watch(userProvider);
+    UserRole? role = isAuthenticated ? user.role : null;
+
+    Map<String, WidgetBuilder> routes = createRoutes(
+      isAuthenticated,
+      deviceType,
+      role,
+    );
 
     return FluentApp(
       routes: routes,

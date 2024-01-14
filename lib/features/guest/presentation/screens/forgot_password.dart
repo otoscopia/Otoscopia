@@ -18,30 +18,23 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return ApplicationContainer(
-      child: Center(
-        child: Card(
-          padding: const EdgeInsets.all(44),
-          child: SingleChildScrollView(
-            child: SizedBox(
-              width: 440,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Logo(height: 32),
-                  const Gap(16),
-                  const Text(kForgotPassword).fontSize(24),
-                  const Gap(12),
-                  const Text(kResetUnavailable).fontSize(16),
-                  const Text(kEmail)
-                      .textColor(AppColors.accentColor)
-                      .fontSize(16),
-                  const Gap(12),
-                  const CustomHyperLink(kEmailNowBtn, to: kMailToBtn),
-                  const TextNavigator(kGoBackBtn, pop: true, bold: false)
-                ],
-              ),
-            ),
+      child: CenterCard(
+        child: SizedBox(
+          width: 440,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Logo(height: 32),
+              const Gap(16),
+              const Text(kForgotPassword).fontSize(24),
+              const Gap(12),
+              const Text(kResetUnavailable).fontSize(16),
+              const Text(kEmail).textColor(AppColors.accentColor).fontSize(16),
+              const Gap(12),
+              const CustomHyperLink(kEmailNowBtn, to: kMailToBtn),
+              const TextNavigator(kGoBackBtn, pop: true, bold: false)
+            ],
           ),
         ),
       ),
