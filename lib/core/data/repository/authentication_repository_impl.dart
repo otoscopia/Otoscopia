@@ -3,8 +3,6 @@ import 'package:appwrite/models.dart';
 
 import 'package:otoscopia/config/config.dart';
 import 'package:otoscopia/core/core.dart';
-import 'package:otoscopia/features/guest/data/datasources/authentication_data_source.dart';
-import 'package:otoscopia/features/guest/domain/domain.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final Databases _database;
