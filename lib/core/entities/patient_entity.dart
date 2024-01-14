@@ -13,7 +13,6 @@ class PatientEntity {
   final String guardianPhone;
   final String creator;
   final String doctor;
-  final String nurse;
   final String code;
   final String? image;
   final DateTime updatedAt;
@@ -29,7 +28,6 @@ class PatientEntity {
     required this.guardianPhone,
     required this.creator,
     required this.doctor,
-    required this.nurse,
     required this.code,
     this.image,
     required this.updatedAt,
@@ -62,7 +60,6 @@ class PatientEntity {
       guardianPhone: guardianPhone ?? this.guardianPhone,
       creator: creator ?? this.creator,
       doctor: doctor ?? this.doctor,
-      nurse: nurse ?? this.nurse,
       code: code ?? this.code,
       image: image ?? this.image,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -81,7 +78,6 @@ class PatientEntity {
       'guardianPhone': guardianPhone,
       'creator': creator,
       'doctor': doctor,
-      'nurse': nurse,
       'code': code,
       'image': image,
       'updatedAt': updatedAt.millisecondsSinceEpoch,
@@ -102,7 +98,6 @@ class PatientEntity {
       guardianPhone: map['guardianPhone'] as String,
       creator: map['creator'] as String,
       doctor: map['doctor'] as String,
-      nurse: map['nurse'] as String,
       code: map['code'] as String,
       image: map['image'] != null ? map['image'] as String : null,
       updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
@@ -117,7 +112,7 @@ class PatientEntity {
 
   @override
   String toString() {
-    return 'PatientEntity(id: $id, name: $name, gender: $gender, birthDate: $birthDate, school: $school, guardian: $guardian, guardianPhone: $guardianPhone, creator: $creator, doctor: $doctor, nurse: $nurse, code: $code, image: $image, updatedAt: $updatedAt, createdAt: $createdAt)';
+    return 'PatientEntity(id: $id, name: $name, gender: $gender, birthDate: $birthDate, school: $school, guardian: $guardian, guardianPhone: $guardianPhone, creator: $creator, doctor: $doctor, code: $code, image: $image, updatedAt: $updatedAt, createdAt: $createdAt)';
   }
 
   @override
@@ -133,7 +128,6 @@ class PatientEntity {
         other.guardianPhone == guardianPhone &&
         other.creator == creator &&
         other.doctor == doctor &&
-        other.nurse == nurse &&
         other.code == code &&
         other.image == image &&
         other.updatedAt == updatedAt &&
@@ -151,7 +145,6 @@ class PatientEntity {
         guardianPhone.hashCode ^
         creator.hashCode ^
         doctor.hashCode ^
-        nurse.hashCode ^
         code.hashCode ^
         image.hashCode ^
         updatedAt.hashCode ^
