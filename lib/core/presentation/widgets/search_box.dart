@@ -13,16 +13,38 @@ class SearchBox extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return AutoSuggestBox(
-      controller: controller,
+    final List<SearchEntity> list = ref.watch(searchProvider);
+    final List<AutoSuggestBoxItem<SearchEntity>> items = list
+        .map((item) => AutoSuggestBoxItem(value: item, label: item.name))
+        .toList();
+
+    return AutoSuggestBox<SearchEntity>(
+      items: items,
       placeholder: kSearch,
+      controller: controller,
+      onSelected: (value) {
+        switch (value.value!.role) {
+          case SearchRole.patient:
+            break;
+          case SearchRole.nurse:
+            break;
+          case SearchRole.doctor:
+            break;
+          case SearchRole.schools:
+            break;
+          case SearchRole.settings:
+            break;
+          default:
+            //* default is profile.
+            break;
+        }
+      },
       trailingIcon: IgnorePointer(
         child: IconButton(
           icon: const Icon(FluentIcons.search),
           onPressed: () {},
         ),
       ),
-      items: const [],
     );
   }
 }
