@@ -1,8 +1,10 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:otoscopia/core/core.dart';
 
+late Client client;
 class DependencyInjection {
   static final DependencyInjection _singleton = DependencyInjection._internal();
 
@@ -12,13 +14,14 @@ class DependencyInjection {
 
   DependencyInjection._internal();
 
-  void init(DeviceType deviceType) {
+  Future<void> init(DeviceType deviceType) async {
+    appwriteInit();
     switch (deviceType) {
       case DeviceType.mobile:
         mobileInit();
         break;
       case DeviceType.desktop:
-        desktopInit();
+        await desktopInit();
         break;
       case DeviceType.web:
         webInit();
@@ -45,4 +48,9 @@ class DependencyInjection {
   void mobileInit() {}
 
   void webInit() {}
+
+  Future<void> appwriteInit() async {
+    client = Client();
+    client.setEndpoint(Env.endpoint).setProject(Env.project);
+  }
 }
