@@ -2,7 +2,6 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/core/core.dart';
-import 'package:otoscopia/features/guest/guest.dart';
 
 class AuthenticationNotifier extends StateNotifier<bool> {
   final StateNotifierProviderRef<AuthenticationNotifier, bool> ref;
