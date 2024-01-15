@@ -12,3 +12,5 @@ const String kEmailNowBtn = "Email Now.";
 const String kMailToBtn = "mailto:$kEmail";
 const String kNoAccount = "No account? Sign up";
 const String kAccountNotAccessible = "Can't access your account?";
+const String kUpdateBtn = "Update";
+const String kContinueBtn = "Continue";

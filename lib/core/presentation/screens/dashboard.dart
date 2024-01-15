@@ -11,6 +11,7 @@ class Dashboard extends ConsumerWidget {
     return TabView(
       closeDelayDuration: Duration.zero,
       tabs: ref.watch(dashboardTabProvider),
+      shortcutsEnabled: true,
       currentIndex: ref.watch(dashboardIndexProvider),
       closeButtonVisibility: CloseButtonVisibilityMode.onHover,
       onChanged: (index) {

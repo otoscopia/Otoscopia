@@ -14,3 +14,7 @@ class NamedGuest {
 class NamedDoctor {
   static const String dashboard = "/";
 }
+
+class NamedNurse {
+  static const String dashboard = "/";
+}
