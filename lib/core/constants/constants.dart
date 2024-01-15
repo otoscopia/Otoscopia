@@ -1,6 +1,7 @@
 export 'button_constants.dart';
 export 'guest_constants.dart';
 export 'named_routes_constants.dart';
+export 'nurse_constants.dart';
 
 const String kAppName = 'Otoscopia';
 const String kMultiPlatform = 'A Multi-Platform Application';
@@ -27,3 +28,6 @@ const String kPending = 'Pending';
 const String kFollowUp = 'Follow Up';
 const String kMedicalAttention = 'Medical Attention';
 const String kResolved = 'Resolved';
+const String kAddPatient = 'Add New Patient';
+const String kErrorTitle = 'Ohh oh!';
+const String kErrorMessage = 'Please input all data before proceeding to the next step.';

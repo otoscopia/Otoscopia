@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/core/core.dart';
+import 'package:otoscopia/features/nurse/nurse.dart';
 
 class DashboardTabNotifier extends StateNotifier<List<Tab>> {
   static final List<Tab> tabs = [
@@ -35,6 +36,33 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
       );
 
       state = [...state, tab];
+    } else {
+      ref.read(dashboardIndexProvider.notifier).setIndex(index);
+    }
+  }
+
+  void addPatient() {
+    final int index = state.indexWhere(
+      (Tab tab) => (tab.text as Text).data == kAddPatient,
+    );
+
+    if (!(index != -1)) {
+      late final Tab tab;
+      tab = Tab(
+        text: const Text(kAddPatient),
+        icon: const Icon(FluentIcons.add_friend),
+        semanticLabel: kAddPatient,
+        body: const AddPatient(),
+        onClosed: () {
+          state = state..remove(tab);
+          ref.read(addPatientTabProvider.notifier).resetTabs();
+          ref.read(addPatientIndexProvider.notifier).setIndex(0);
+          ref.read(addPatientInformationProvider.notifier).resetInformation();
+        },
+      );
+
+      state = [...state, tab];
+      ref.read(dashboardIndexProvider.notifier).setIndex(state.length - 1);
     } else {
       ref.read(dashboardIndexProvider.notifier).setIndex(index);
     }

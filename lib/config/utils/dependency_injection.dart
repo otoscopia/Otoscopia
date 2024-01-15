@@ -1,10 +1,13 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:otoscopia/core/core.dart';
 
 late Client client;
+late Uuid uuid;
+
 class DependencyInjection {
   static final DependencyInjection _singleton = DependencyInjection._internal();
 
@@ -15,6 +18,8 @@ class DependencyInjection {
   DependencyInjection._internal();
 
   Future<void> init(DeviceType deviceType) async {
+    uuid = const Uuid();
+
     appwriteInit();
     switch (deviceType) {
       case DeviceType.mobile:

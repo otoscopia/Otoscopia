@@ -21,23 +21,39 @@ class CustomTable extends ConsumerWidget {
 
     return Card(
       padding: EdgeInsets.zero,
-      child: PaginatedDataTable2(
-        dividerThickness: 0,
-        showCheckboxColumn: false,
-        minWidth: 1000,
-        empty: const Center(child: Text(kNoDataAvailable)),
-        headingRowColor: const m3.MaterialStatePropertyAll(Colors.transparent),
-        sortArrowAlwaysVisible: true,
-        rowsPerPage: 20,
-        columns: [
-          const DataColumn2(label: Text(kName)),
-          const DataColumn2(label: Text(kAgeAndGender), size: ColumnSize.S),
-          const DataColumn2(label: Text(kStatus), size: ColumnSize.S),
-          const DataColumn2(label: Text(kSchool)),
-          if (nurse) const DataColumn2(label: Text(kDoctor)),
-          if (doctor) const DataColumn2(label: Text(kNurse)),
+      child: Stack(
+        children: [
+          PaginatedDataTable2(
+            dividerThickness: 0,
+            showCheckboxColumn: false,
+            minWidth: 1000,
+            empty: const Center(child: Text(kNoDataAvailable)),
+            headingRowColor:
+                const m3.MaterialStatePropertyAll(Colors.transparent),
+            sortArrowAlwaysVisible: true,
+            rowsPerPage: 20,
+            columns: [
+              const DataColumn2(label: Text(kName)),
+              const DataColumn2(label: Text(kAgeAndGender), size: ColumnSize.S),
+              const DataColumn2(label: Text(kStatus), size: ColumnSize.S),
+              const DataColumn2(label: Text(kSchool)),
+              if (nurse) const DataColumn2(label: Text(kDoctor)),
+              if (doctor) const DataColumn2(label: Text(kNurse)),
+            ],
+            source: source,
+          ),
+          if (nurse)
+            Positioned(
+              bottom: 20,
+              right: 240,
+              child: HyperlinkButton(
+                child: const Text(kAddPatient),
+                onPressed: () {
+                  ref.read(dashboardTabProvider.notifier).addPatient();
+                },
+              ),
+            ),
         ],
-        source: source,
       ),
     );
   }
