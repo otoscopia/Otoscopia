@@ -21,6 +21,19 @@ class AuthenticationNotifier extends StateNotifier<bool> {
       throw Exception(error.message);
     }
   }
+
+  Future<void> logout() async {
+    UserEntity user = ref.read(userProvider);
+    try {
+      await _repository.logout(user.sessionId);
+      state = false;
+      ref.read(userProvider.notifier).setUser(UserEntity.initial());
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } catch (error) {
+      throw Exception(error.toString());
+    }
+  }
 }
 
 final authenticationProvider =
