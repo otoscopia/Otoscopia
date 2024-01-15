@@ -55,6 +55,9 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
         body: const AddPatient(),
         onClosed: () {
           state = state..remove(tab);
+          ref.read(addPatientTabProvider.notifier).resetTabs();
+          ref.read(addPatientIndexProvider.notifier).setIndex(0);
+          ref.read(addPatientInformationProvider.notifier).resetInformation();
         },
       );
 
