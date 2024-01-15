@@ -9,14 +9,15 @@ class PatientEntity {
   final Gender gender;
   final DateTime birthDate;
   final String school;
+  final String idNumber;
   final String guardian;
   final String guardianPhone;
   final String creator;
   final String doctor;
   final String code;
   final String? image;
-  final DateTime updatedAt;
-  final DateTime createdAt;
+  DateTime? updatedAt = DateTime.now();
+  DateTime? createdAt = DateTime.now();
 
   PatientEntity({
     required this.id,
@@ -24,14 +25,15 @@ class PatientEntity {
     required this.gender,
     required this.birthDate,
     required this.school,
+    required this.idNumber,
     required this.guardian,
     required this.guardianPhone,
     required this.creator,
     required this.doctor,
     required this.code,
     this.image,
-    required this.updatedAt,
-    required this.createdAt,
+    this.updatedAt,
+    this.createdAt,
   });
 
   PatientEntity copyWith({
@@ -40,11 +42,11 @@ class PatientEntity {
     Gender? gender,
     DateTime? birthDate,
     String? school,
+    String? idNumber,
     String? guardian,
     String? guardianPhone,
     String? creator,
     String? doctor,
-    String? nurse,
     String? code,
     String? image,
     DateTime? updatedAt,
@@ -56,6 +58,7 @@ class PatientEntity {
       gender: gender ?? this.gender,
       birthDate: birthDate ?? this.birthDate,
       school: school ?? this.school,
+      idNumber: idNumber ?? this.idNumber,
       guardian: guardian ?? this.guardian,
       guardianPhone: guardianPhone ?? this.guardianPhone,
       creator: creator ?? this.creator,
@@ -74,26 +77,29 @@ class PatientEntity {
       'gender': gender.toString(),
       'birthDate': birthDate.millisecondsSinceEpoch,
       'school': school,
+      'idNumber': idNumber,
       'guardian': guardian,
       'guardianPhone': guardianPhone,
       'creator': creator,
       'doctor': doctor,
       'code': code,
       'image': image,
-      'updatedAt': updatedAt.millisecondsSinceEpoch,
-      'createdAt': createdAt.millisecondsSinceEpoch,
+      'updatedAt': updatedAt!.millisecondsSinceEpoch,
+      'createdAt': createdAt!.millisecondsSinceEpoch,
     };
   }
 
   factory PatientEntity.fromMap(Map<String, dynamic> map) {
-  Gender gender =
+    Gender gender =
         map["gender"] == "Gender.male" ? Gender.male : Gender.female;
+
     return PatientEntity(
       id: map['id'] as String,
       name: map['name'] as String,
       gender: gender,
       birthDate: DateTime.fromMillisecondsSinceEpoch(map['birthDate'] as int),
       school: map['school'] as String,
+      idNumber: map['idNumber'] as String,
       guardian: map['guardian'] as String,
       guardianPhone: map['guardianPhone'] as String,
       creator: map['creator'] as String,
@@ -112,7 +118,7 @@ class PatientEntity {
 
   @override
   String toString() {
-    return 'PatientEntity(id: $id, name: $name, gender: $gender, birthDate: $birthDate, school: $school, guardian: $guardian, guardianPhone: $guardianPhone, creator: $creator, doctor: $doctor, code: $code, image: $image, updatedAt: $updatedAt, createdAt: $createdAt)';
+    return 'PatientEntity(id: $id, name: $name, gender: $gender, birthDate: $birthDate, school: $school, idNumber: $idNumber, guardian: $guardian, guardianPhone: $guardianPhone, creator: $creator, doctor: $doctor, code: $code, image: $image, updatedAt: $updatedAt, createdAt: $createdAt)';
   }
 
   @override
@@ -124,6 +130,7 @@ class PatientEntity {
         other.gender == gender &&
         other.birthDate == birthDate &&
         other.school == school &&
+        other.idNumber == idNumber &&
         other.guardian == guardian &&
         other.guardianPhone == guardianPhone &&
         other.creator == creator &&
@@ -141,6 +148,7 @@ class PatientEntity {
         gender.hashCode ^
         birthDate.hashCode ^
         school.hashCode ^
+        idNumber.hashCode ^
         guardian.hashCode ^
         guardianPhone.hashCode ^
         creator.hashCode ^
@@ -149,5 +157,23 @@ class PatientEntity {
         image.hashCode ^
         updatedAt.hashCode ^
         createdAt.hashCode;
+  }
+
+  factory PatientEntity.initial() {
+    return PatientEntity(
+      id: "",
+      name: "",
+      gender: Gender.unknown,
+      birthDate: DateTime.now(),
+      school: "",
+      idNumber: "",
+      guardian: "",
+      guardianPhone: "",
+      creator: "",
+      doctor: "",
+      code: "",
+      updatedAt: DateTime.now(),
+      createdAt: DateTime.now(),
+    );
   }
 }
