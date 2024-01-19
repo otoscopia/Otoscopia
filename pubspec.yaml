@@ -30,6 +30,7 @@ environment:
 dependencies:
   appwrite: ^11.0.1
   camera: ^0.10.5+9
+  camera_platform_interface: ^2.7.2
   camera_windows: ^0.2.1+9
   cupertino_icons: ^1.0.2
   data_table_2: ^2.5.10
@@ -42,6 +43,7 @@ dependencies:
   flutter_svg: ^2.0.9
   gap: ^3.0.1
   ionicons: ^0.2.2
+  path_provider: ^2.1.2
   responsive_framework: ^1.1.1
   styled_widget: ^0.4.1
   system_theme: ^2.3.1
