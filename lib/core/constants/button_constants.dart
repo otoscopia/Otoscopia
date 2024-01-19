@@ -14,3 +14,7 @@ const String kNoAccount = "No account? Sign up";
 const String kAccountNotAccessible = "Can't access your account?";
 const String kUpdateBtn = "Update";
 const String kContinueBtn = "Continue";
+const String kSwitchCameraBtn = 'Switch Camera';
+const String kCaptureBtn = 'Capture';
+const String kInitializeCamera = 'Initialize Camera';
+const String kRefreshBtn = 'Refresh';
