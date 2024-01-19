@@ -1,12 +1,17 @@
+import 'dart:io';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'package:otoscopia/core/core.dart';
 
-late Client client;
-late Uuid uuid;
+late final Client client;
+late final Uuid uuid;
+late final String applicationDirectory;
+late final String documentDirectory;
 
 class DependencyInjection {
   static final DependencyInjection _singleton = DependencyInjection._internal();
@@ -21,6 +26,7 @@ class DependencyInjection {
     uuid = const Uuid();
 
     appwriteInit();
+
     switch (deviceType) {
       case DeviceType.mobile:
         mobileInit();
@@ -48,6 +54,12 @@ class DependencyInjection {
       await windowManager.show();
       await windowManager.focus();
     });
+
+    Directory applicationSupport = await getApplicationSupportDirectory();
+    applicationDirectory = applicationSupport.path;
+
+    Directory applicationDocuments = await getApplicationDocumentsDirectory();
+    documentDirectory = applicationDocuments.path;
   }
 
   void mobileInit() {}
