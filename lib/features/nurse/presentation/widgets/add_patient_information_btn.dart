@@ -28,16 +28,18 @@ class AddPatientInformationBtn extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool hasValue = ref.read(addPatientInformationProvider).name.isNotEmpty;
-    bool hasError = name.isEmpty ||
-        gender == null ||
-        birthDate == DateTime.now() ||
-        school.isEmpty ||
-        idNumber.isEmpty ||
-        guardiansName.isEmpty ||
-        guardiansPhone.isEmpty;
 
     return Button(
       onPressed: () {
+        String birthdate = birthDate.toString().split(" ")[0];
+        String today = DateTime.now().toString().split(" ")[0];
+        bool hasError = name.isEmpty ||
+            gender == null ||
+            today.contains(birthdate) ||
+            school.isEmpty ||
+            idNumber.isEmpty ||
+            guardiansName.isEmpty ||
+            guardiansPhone.isEmpty;
         if (hasError) {
           popUpInfoBar(
             kErrorTitle,
@@ -47,6 +49,7 @@ class AddPatientInformationBtn extends ConsumerWidget {
           );
           return;
         }
+
         PatientEntity patient = PatientEntity(
           id: uuid.v4(),
           name: name,
