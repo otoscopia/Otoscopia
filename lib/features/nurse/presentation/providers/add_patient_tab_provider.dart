@@ -1,7 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:otoscopia/features/nurse/presentation/screens/screens.dart';
+import 'package:otoscopia/features/nurse/nurse.dart';
 
 class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
   static final tabs = [
@@ -24,7 +24,7 @@ class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
       late final Tab tab;
       tab = Tab(
         text: const Text("Left Camera"),
-        body: Container(),
+        body: const LeftCamera(),
       );
 
       state = [...state, tab];
@@ -43,7 +43,7 @@ class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
       late final Tab tab;
       tab = Tab(
         text: const Text("Right Camera"),
-        body: Container(),
+        body: const RightCamera(),
       );
 
       state = [...state, tab];
@@ -103,8 +103,8 @@ final addPatientTabProvider =
 );
 
 class AddPatientIndexNotifier extends StateNotifier<int> {
-  AddPatientIndexNotifier(): super(0);
-  
+  AddPatientIndexNotifier() : super(0);
+
   void setIndex(int index) => state = index;
 }
 
