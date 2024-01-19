@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
+import 'package:otoscopia/config/config.dart';
 import 'package:otoscopia/core/core.dart';
 import 'package:otoscopia/features/nurse/nurse.dart';
 
@@ -31,84 +32,95 @@ class _AddPatientInformationState extends ConsumerState<AddPatientInformation> {
         .toList();
 
     return Card(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextInputForm(kFullName, controller: nameController),
-            const Gap(16),
-            SizedBox(
-              width: 295,
-              child: InfoLabel(
-                label: kGender,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(2, (index) {
-                      String genders = Gender.values[index]
-                          .toString()
-                          .split(".")[1]
-                          .uppercaseFirst();
+      padding: const EdgeInsets.all(5),
+      child: Card(
+        borderColor: AppColors.accentColor.darkest.withOpacity(.1),
+        padding: const EdgeInsets.all(16),
+        backgroundColor: FluentTheme.of(context).cardColor.withOpacity(.05),
+        borderRadius: BorderRadius.circular(10),
+        child: Center(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                TextInputForm(kFullName, controller: nameController),
+                const Gap(16),
+                SizedBox(
+                  width: 295,
+                  child: InfoLabel(
+                    label: kGender,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(2, (index) {
+                          String genders = Gender.values[index]
+                              .toString()
+                              .split(".")[1]
+                              .uppercaseFirst();
 
-                      return RadioButton(
-                        content: Text(genders),
-                        checked: gender == index,
-                        onChanged: (value) {
-                          if (value) {
-                            setState(() => gender = index);
-                          }
-                        },
-                      );
-                    })),
-              ),
-            ),
-            const Gap(16),
-            InfoLabel(
-              label: kBirthDate,
-              child: DatePicker(
-                selected: birthDate,
-                endDate: DateTime.now(),
-                onChanged: (value) {
-                  setState(() => birthDate = value);
-                },
-              ),
-            ),
-            const Gap(16),
-            TextInputForm(kGuardianName, controller: guardianNameController),
-            const Gap(16),
-            TextInputForm(
-              kGuardianPhoneNumber,
-              controller: guardianPhoneNumberController,
-              phoneNumber: true,
-            ),
-            const Gap(16),
-            SizedBox(
-              width: 295,
-              child: InfoLabel(
-                label: kSchool,
-                child: AutoSuggestBox(
-                  controller: schoolController,
-                  items: items,
-                  onSelected: (value) =>
-                      setState(() => schoolController.text = value.value!.id),
+                          return RadioButton(
+                            content: Text(genders),
+                            checked: gender == index,
+                            onChanged: (value) {
+                              if (value) {
+                                setState(() => gender = index);
+                              }
+                            },
+                          );
+                        })),
+                  ),
                 ),
-              ),
+                const Gap(16),
+                InfoLabel(
+                  label: kBirthDate,
+                  child: DatePicker(
+                    selected: birthDate,
+                    endDate: DateTime.now(),
+                    onChanged: (value) {
+                      setState(() => birthDate = value);
+                    },
+                  ),
+                ),
+                const Gap(16),
+                TextInputForm(kGuardianName,
+                    controller: guardianNameController),
+                const Gap(16),
+                TextInputForm(
+                  kGuardianPhoneNumber,
+                  controller: guardianPhoneNumberController,
+                  phoneNumber: true,
+                ),
+                const Gap(16),
+                SizedBox(
+                  width: 295,
+                  child: InfoLabel(
+                    label: kSchool,
+                    child: AutoSuggestBox(
+                      controller: schoolController,
+                      items: items,
+                      onSelected: (value) => setState(
+                          () => schoolController.text = value.value!.id),
+                    ),
+                  ),
+                ),
+                const Gap(16),
+                TextInputForm(
+                  kIdNumber,
+                  controller: idNumberController,
+                  idNumber: true,
+                ),
+                const Gap(16),
+                AddPatientInformationBtn(
+                  name: nameController.text,
+                  gender: gender,
+                  birthDate: birthDate,
+                  school: guardianNameController.text,
+                  idNumber: guardianPhoneNumberController.text,
+                  guardiansName: schoolController.text,
+                  guardiansPhone: idNumberController.text,
+                )
+              ],
             ),
-            const Gap(16),
-            TextInputForm(
-              kIdNumber,
-              controller: idNumberController,
-              idNumber: true,
-            ),
-            const Gap(16),
-            AddPatientInformationBtn(
-              name: nameController.text,
-              gender: gender,
-              birthDate: birthDate,
-              school: guardianNameController.text,
-              idNumber: guardianPhoneNumberController.text,
-              guardiansName: schoolController.text,
-              guardiansPhone: idNumberController.text,
-            )
-          ],
+          ),
         ),
       ),
     );
