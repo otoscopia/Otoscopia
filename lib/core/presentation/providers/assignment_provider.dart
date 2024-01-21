@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/core/core.dart';
 
-class AssignmentNotifier extends StateNotifier<List<AssignmentEntity>> {
-  AssignmentNotifier() : super([]);
+class AssignmentsNotifier extends StateNotifier<List<AssignmentEntity>> {
+  AssignmentsNotifier() : super([]);
 
   void setAssignments(List<AssignmentEntity> assignments) {
     state = assignments;
@@ -16,7 +16,7 @@ class AssignmentNotifier extends StateNotifier<List<AssignmentEntity>> {
   }
 }
 
-final assignmentProvider =
-    StateNotifierProvider<AssignmentNotifier, List<AssignmentEntity>>(
-  (ref) => AssignmentNotifier(),
+final assignmentsProvider =
+    StateNotifierProvider<AssignmentsNotifier, List<AssignmentEntity>>(
+  (ref) => AssignmentsNotifier(),
 );
