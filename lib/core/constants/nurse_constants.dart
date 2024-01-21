@@ -27,6 +27,7 @@ const String kSurgicalProcedureRemarks = "Surgical Procedure Remarks";
 const String kMedication = "Does the patient currently taking any medication?";
 const String kMedicationRemarks = "Medication Remarks";
 const List<String> yesNo = ["Yes", "No"];
+const List<String> kGenders = ["Male", "Female"];
 const List<String> complains = [
    "Ear Pain",
    "Hearing Loss",

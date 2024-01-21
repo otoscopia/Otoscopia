@@ -44,7 +44,7 @@ class SchoolEntity {
 
   factory SchoolEntity.fromMap(Map<String, dynamic> map) {
     return SchoolEntity(
-      id: map['id'] as String,
+      id: map['\$id'] as String,
       name: map['name'] as String,
       abbr: map['abbr'] as String,
       code: map['code'] as String,

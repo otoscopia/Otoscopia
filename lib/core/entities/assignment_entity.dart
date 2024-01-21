@@ -49,12 +49,12 @@ class AssignmentEntity {
 
   factory AssignmentEntity.fromMap(Map<String, dynamic> map) {
     return AssignmentEntity(
-      id: map['id'] as String,
-      nurse: map['nurse'] as String,
-      school: map['school'] as String,
+      id: map['\$id'] as String,
+      nurse: map['users']["\$id"] as String,
+      school: map['schools']["\$id"] as String,
       isActive: map['isActive'] as bool,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
+      createdAt: DateTime.parse(map['\$createdAt']),
+      updatedAt: DateTime.parse(map['\$updatedAt']),
     );
   }
 
