@@ -62,7 +62,7 @@ class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
       late final Tab tab;
       tab = Tab(
         text: const Text("Screening Information"),
-        body: Container(),
+        body: const ScreeningInformation(),
       );
 
       state = [...state, tab];
