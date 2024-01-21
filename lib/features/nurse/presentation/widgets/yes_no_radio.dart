@@ -9,11 +9,15 @@ class YesNoRadio extends ConsumerStatefulWidget {
     this._index, {
     super.key,
     required this.onChanged,
+    this.content = yesNo,
+    this.mainAxisAlignment,
   });
 
   final String _label;
   final int _index;
+  final List<String> content;
   final ValueChanged<int> onChanged;
+  final MainAxisAlignment? mainAxisAlignment;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _YesNoRadioState();
@@ -27,6 +31,7 @@ class _YesNoRadioState extends ConsumerState<YesNoRadio> {
     return InfoLabel(
       label: widget._label,
       child: Row(
+        mainAxisAlignment: widget.mainAxisAlignment ?? MainAxisAlignment.start,
         children: List.generate(
           2,
           (index) {
@@ -34,7 +39,7 @@ class _YesNoRadioState extends ConsumerState<YesNoRadio> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: RadioButton(
                   checked: value == index,
-                  content: Text(yesNo[index]),
+                  content: Text(widget.content[index]),
                   onChanged: (changed) {
                     if (changed) {
                       setState(() => value = index);

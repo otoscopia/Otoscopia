@@ -12,6 +12,8 @@ class TextFormInput extends ConsumerWidget {
     this.booleanFilter = false,
     this.isTemperature = false,
     this.maxLength,
+    this.idNumber = false,
+    this.phoneNumber = false,
   });
 
   final String _label;
@@ -20,12 +22,17 @@ class TextFormInput extends ConsumerWidget {
   final int? maxLength;
   final bool booleanFilter;
   final bool isTemperature;
+  final bool idNumber;
+  final bool phoneNumber;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final booleanFormat = FilteringTextInputFormatter.allow(RegExp(r'[0-9\.]'));
     final temperatureFormat =
         FilteringTextInputFormatter.allow(RegExp(r'^\d{0,3}(\.\d{0,1})?'));
+    final idFilter = FilteringTextInputFormatter.allow(RegExp(r'[0-9\-]'));
+    final phoneFilter = FilteringTextInputFormatter.allow(RegExp(r'[0-9\+]'));
+
     return InfoLabel(
       label: _label,
       child: TextFormBox(
@@ -38,10 +45,12 @@ class TextFormInput extends ConsumerWidget {
           if (booleanFilter) booleanFormat,
           if (isTemperature) temperatureFormat,
           if (isTemperature) TemperatureFormatter(),
+          if (idNumber) idFilter,
+          if (phoneNumber) phoneFilter,
         ],
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return "The field $_label is required";
+            return "The field ${_label.toLowerCase()} is required";
           }
           return null;
         },

@@ -6,41 +6,19 @@ import 'package:otoscopia/core/core.dart';
 import 'package:otoscopia/features/nurse/nurse.dart';
 
 class AddPatientInformationBtn extends ConsumerWidget {
-  const AddPatientInformationBtn({
-    super.key,
-    required this.name,
-    required this.gender,
-    required this.birthDate,
-    required this.school,
-    required this.idNumber,
-    required this.guardiansName,
-    required this.guardiansPhone,
-  });
+  const AddPatientInformationBtn(this._form, {super.key});
 
-  final String name;
-  final int? gender;
-  final DateTime? birthDate;
-  final String school;
-  final String idNumber;
-  final String guardiansName;
-  final String guardiansPhone;
+  final PatientFormEntity _form;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool hasValue = ref.read(addPatientInformationProvider).name.isNotEmpty;
+    bool hasValue = ref.read(patientProvider).id.isNotEmpty;
 
     return Button(
       onPressed: () {
-        String birthdate = birthDate.toString().split(" ")[0];
-        String today = DateTime.now().toString().split(" ")[0];
-        bool hasError = name.isEmpty ||
-            gender == null ||
-            today.contains(birthdate) ||
-            school.isEmpty ||
-            idNumber.isEmpty ||
-            guardiansName.isEmpty ||
-            guardiansPhone.isEmpty;
-        if (hasError) {
+        bool isValid = _form.isValid;
+
+        if (!isValid) {
           popUpInfoBar(
             kErrorTitle,
             kErrorMessage,
@@ -50,21 +28,7 @@ class AddPatientInformationBtn extends ConsumerWidget {
           return;
         }
 
-        PatientEntity patient = PatientEntity(
-          id: uuid.v4(),
-          name: name,
-          gender: Gender.values[gender!],
-          birthDate: birthDate!,
-          school: school,
-          idNumber: idNumber,
-          guardian: guardiansName,
-          guardianPhone: guardiansPhone,
-          creator: ref.read(userProvider).id,
-          doctor: shuffleDoctor(ref).id,
-          code: generateCode(name, birthDate!),
-        );
-
-        ref.read(addPatientInformationProvider.notifier).setPatient(patient);
+        ref.read(patientProvider.notifier).setPatient(ref, _form);
         ref.read(addPatientTabProvider.notifier).addLeftCamera();
       },
       style: ButtonStyle(

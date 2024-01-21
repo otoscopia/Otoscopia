@@ -13,6 +13,7 @@ class LoadingWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        SizedBox(width: double.infinity),
         Logo(),
         Gap(8),
         ProgressBar(),
