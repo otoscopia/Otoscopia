@@ -31,3 +31,6 @@ const String kResolved = 'Resolved';
 const String kAddPatient = 'Add New Patient';
 const String kErrorTitle = 'Ohh oh!';
 const String kErrorMessage = 'Please input all data before proceeding to the next step.';
+const String kWorkAddress = "Work Address";
+const String kAbbr = "Abbr.";
+const String kAddress = "Address";
