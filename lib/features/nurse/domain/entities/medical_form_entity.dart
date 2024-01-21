@@ -21,7 +21,7 @@ class MedicalFormEntity {
 
   String get historyOfIllness => historyOfIllnessController.text;
   String get remarks => remarksController.text;
-  double get temperature => double.parse(temperatureController.text);
+  double get temperature => heightController.text.isEmpty ? 0 : double.parse(temperatureController.text);
   double get height => heightController.text.isEmpty ? 0 : double.parse(heightController.text);
   double get weight => weightController.text.isEmpty ? 0 : double.parse(weightController.text);
   String get chiefComplaintRemarks => chiefComplainsRemarksController.text;
