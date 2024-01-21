@@ -11,6 +11,11 @@ class PatientsNotifier extends StateNotifier<List<PatientEntity>> {
     final patients = state.where((patient) => patient.creator == doctorId);
     return patients.toList();
   }
+
+  List<PatientEntity> findBySchoolId(String schoolId) {
+    final patients = state.where((patient) => patient.school == schoolId);
+    return patients.toList();
+  }
 }
 
 final patientsProvider =
