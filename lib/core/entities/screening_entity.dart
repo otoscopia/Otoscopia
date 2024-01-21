@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 
+import 'package:otoscopia/config/config.dart';
 import 'package:otoscopia/core/core.dart';
+import 'package:otoscopia/features/nurse/domain/domain.dart';
 
 class ScreeningEntity {
   final String id;
@@ -15,7 +17,7 @@ class ScreeningEntity {
   final double weight;
   final double height;
   final bool similarCondition;
-  final String chiefComplaint;
+  final List<bool> chiefComplaint;
   final String chiefComplaintRemarks;
   final bool allergy;
   final String allergyRemarks;
@@ -62,7 +64,7 @@ class ScreeningEntity {
     double? weight,
     double? height,
     bool? similarCondition,
-    String? chiefComplaint,
+    List<bool>? chiefComplaint,
     String? chiefComplaintRemarks,
     bool? allergy,
     String? allergyRemarks,
@@ -147,7 +149,7 @@ class ScreeningEntity {
       weight: map['weight'] as double,
       height: map['height'] as double,
       similarCondition: map['similarCondition'] as bool,
-      chiefComplaint: map['chiefComplaint'] as String,
+      chiefComplaint: map['chiefComplaint'] as List<bool>,
       chiefComplaintRemarks: map['chiefComplaintRemarks'] as String,
       allergy: map['allergy'] as bool,
       allergyRemarks: map['allergyRemarks'] as String,
@@ -223,5 +225,58 @@ class ScreeningEntity {
         createdAt.hashCode ^
         updatedAt.hashCode ^
         status.hashCode;
+  }
+
+  factory ScreeningEntity.initial() {
+    return ScreeningEntity(
+      id: '',
+      patient: '',
+      assignment: '',
+      historyOfIllness: '',
+      remarks: '',
+      temperature: 0.0,
+      weight: 0.0,
+      height: 0.0,
+      similarCondition: false,
+      chiefComplaint: List.generate(complains.length, (index) => false),
+      chiefComplaintRemarks: '',
+      allergy: false,
+      allergyRemarks: '',
+      undergoneSurgery: false,
+      undergoneSurgeryRemarks: '',
+      medication: false,
+      medicationRemarks: '',
+      images: <String>[],
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      status: RecordStatus.pending,
+    );
+  }
+
+  factory ScreeningEntity.fromMedical(
+      MedicalFormEntity medical, String patient, String assignment) {
+    return ScreeningEntity(
+      id: uuid.v4(),
+      patient: patient,
+      assignment: assignment,
+      historyOfIllness: medical.historyOfIllness,
+      remarks: medical.remarks,
+      temperature: medical.temperature,
+      weight: medical.weight,
+      height: medical.height,
+      similarCondition: medical.isSimilarCondition,
+      chiefComplaint: medical.chiefComplains,
+      chiefComplaintRemarks: medical.chiefComplaintRemarks,
+      allergy: medical.isAllergy,
+      allergyRemarks: medical.allergyRemarks,
+      undergoneSurgery: medical.isUndergoneSurgery,
+      undergoneSurgeryRemarks: medical.undergoneSurgeryRemarks,
+      medication: medical.isMedication,
+      medicationRemarks: medical.medicationRemarks,
+      images: [],
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      status: RecordStatus.pending,
+    );
   }
 }
