@@ -18,7 +18,7 @@ List<NavigationPaneItem> navigationItems(UserRole role) {
     PaneItem(
       icon: const Icon(FluentIcons.e_discovery),
       title: const Text(kSchools),
-      body: Container(),
+      body: const Schools(),
     ),
     if (role == UserRole.doctor)
       PaneItem(
