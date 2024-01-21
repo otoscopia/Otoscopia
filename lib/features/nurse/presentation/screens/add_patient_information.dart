@@ -14,101 +14,75 @@ class AddPatientInformation extends ConsumerStatefulWidget {
 }
 
 class _AddPatientInformationState extends ConsumerState<AddPatientInformation> {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController nameController = TextEditingController();
-  int? gender;
-  DateTime? birthDate;
-  TextEditingController guardianNameController = TextEditingController();
-  TextEditingController guardianPhoneNumberController = TextEditingController();
-  TextEditingController schoolController = TextEditingController();
-  TextEditingController idNumberController = TextEditingController();
+  final _form = PatientFormEntity();
 
   @override
   Widget build(BuildContext context) {
     final List<SchoolEntity> schools = ref.read(schoolsProvider);
     final List<AutoSuggestBoxItem<SchoolEntity>> items = schools
-        .map((item) => AutoSuggestBoxItem(value: item, label: item.name))
+        .map((item) => AutoSuggestBoxItem(value: item, label: item.abbr))
         .toList();
 
-    return Card(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextInputForm(kFullName, controller: nameController),
-            const Gap(16),
-            SizedBox(
-              width: 295,
-              child: InfoLabel(
-                label: kGender,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(2, (index) {
-                      String genders = Gender.values[index]
-                          .toString()
-                          .split(".")[1]
-                          .uppercaseFirst();
-
-                      return RadioButton(
-                        content: Text(genders),
-                        checked: gender == index,
-                        onChanged: (value) {
-                          if (value) {
-                            setState(() => gender = index);
-                          }
-                        },
-                      );
-                    })),
-              ),
-            ),
-            const Gap(16),
-            InfoLabel(
-              label: kBirthDate,
-              child: DatePicker(
-                selected: birthDate,
-                endDate: DateTime.now(),
-                onChanged: (value) {
-                  setState(() => birthDate = value);
-                },
-              ),
-            ),
-            const Gap(16),
-            TextInputForm(kGuardianName, controller: guardianNameController),
-            const Gap(16),
-            TextInputForm(
-              kGuardianPhoneNumber,
-              controller: guardianPhoneNumberController,
-              phoneNumber: true,
-            ),
-            const Gap(16),
-            SizedBox(
-              width: 295,
-              child: InfoLabel(
-                label: kSchool,
-                child: AutoSuggestBox(
-                  controller: schoolController,
-                  items: items,
-                  onSelected: (value) =>
-                      setState(() => schoolController.text = value.value!.id),
+    return DoubleCard(
+      child: Center(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: SizedBox(
+            width: 295,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextFormInput(kFullName, _form.nameController),
+                const Gap(16),
+                YesNoRadio(
+                  kGender,
+                  _form.gender,
+                  content: kGenders,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  onChanged: (value) => setState(() => _form.gender = value),
                 ),
-              ),
+                const Gap(16),
+                InfoLabel(
+                  label: kBirthDate,
+                  child: DatePicker(
+                    selected: _form.birthDate,
+                    endDate: DateTime.now(),
+                    onChanged: (value) {
+                      setState(() => _form.birthDate = value);
+                    },
+                  ),
+                ),
+                const Gap(16),
+                TextFormInput(kGuardianName, _form.guardianNameController),
+                const Gap(16),
+                TextFormInput(
+                  kGuardianPhoneNumber,
+                  _form.guardianPhoneNumberController,
+                  phoneNumber: true,
+                ),
+                const Gap(16),
+                InfoLabel(
+                  label: kSchool,
+                  child: AutoSuggestBox(
+                    controller: _form.schoolController,
+                    items: items,
+                    onSelected: (value) {
+                      setState(
+                          () => _form.schoolController.text = value.value!.id);
+                    },
+                  ),
+                ),
+                const Gap(16),
+                TextFormInput(
+                  kIdNumber,
+                  _form.idNumberController,
+                  idNumber: true,
+                ),
+                const Gap(16),
+                AddPatientInformationBtn(_form)
+              ],
             ),
-            const Gap(16),
-            TextInputForm(
-              kIdNumber,
-              controller: idNumberController,
-              idNumber: true,
-            ),
-            const Gap(16),
-            AddPatientInformationBtn(
-              name: nameController.text,
-              gender: gender,
-              birthDate: birthDate,
-              school: guardianNameController.text,
-              idNumber: guardianPhoneNumberController.text,
-              guardiansName: schoolController.text,
-              guardiansPhone: idNumberController.text,
-            )
-          ],
+          ),
         ),
       ),
     );
@@ -116,14 +90,17 @@ class _AddPatientInformationState extends ConsumerState<AddPatientInformation> {
 
   @override
   void initState() {
-    PatientEntity patient = ref.read(addPatientInformationProvider);
-    nameController.text = patient.name;
-    gender = patient.gender.index;
-    birthDate = patient.birthDate;
-    guardianNameController.text = patient.guardian;
-    guardianPhoneNumberController.text = patient.guardianPhone;
-    schoolController.text = patient.school;
-    idNumberController.text = patient.idNumber;
+    PatientEntity patient = ref.read(patientProvider);
+    if (patient.id.isNotEmpty) {
+      final school = ref.read(schoolsProvider.notifier).findById(patient.school);
+      _form.nameController.text = patient.name;
+      _form.gender = patient.gender.index;
+      _form.birthDate = patient.birthDate;
+      _form.guardianNameController.text = patient.guardian;
+      _form.guardianPhoneNumberController.text = patient.guardianPhone;
+      _form.schoolController.text = school.abbr;
+      _form.idNumberController.text = patient.idNumber;
+    }
     super.initState();
   }
 }

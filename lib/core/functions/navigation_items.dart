@@ -30,7 +30,7 @@ List<NavigationPaneItem> navigationItems(UserRole role) {
       PaneItem(
         icon: const Icon(Ionicons.git_network_outline),
         title: const Text(kDoctor),
-        body: Container(),
+        body: const Doctors(),
       ),
   ];
 }

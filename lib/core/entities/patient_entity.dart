@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:otoscopia/config/config.dart';
 import 'package:otoscopia/core/core.dart';
+import 'package:otoscopia/features/nurse/nurse.dart';
 
 class PatientEntity {
   final String id;
@@ -16,8 +18,8 @@ class PatientEntity {
   final String doctor;
   final String code;
   final String? image;
-  DateTime? updatedAt = DateTime.now();
-  DateTime? createdAt = DateTime.now();
+  final DateTime updatedAt;
+  final DateTime createdAt;
 
   PatientEntity({
     required this.id,
@@ -32,8 +34,8 @@ class PatientEntity {
     required this.doctor,
     required this.code,
     this.image,
-    this.updatedAt,
-    this.createdAt,
+    required this.updatedAt,
+    required this.createdAt,
   });
 
   PatientEntity copyWith({
@@ -84,8 +86,8 @@ class PatientEntity {
       'doctor': doctor,
       'code': code,
       'image': image,
-      'updatedAt': updatedAt!.millisecondsSinceEpoch,
-      'createdAt': createdAt!.millisecondsSinceEpoch,
+      'updatedAt': updatedAt.millisecondsSinceEpoch,
+      'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 
@@ -94,7 +96,7 @@ class PatientEntity {
         map["gender"] == "Gender.male" ? Gender.male : Gender.female;
 
     return PatientEntity(
-      id: map['id'] as String,
+      id: map['\$id'] as String,
       name: map['name'] as String,
       gender: gender,
       birthDate: DateTime.fromMillisecondsSinceEpoch(map['birthDate'] as int),
@@ -172,6 +174,28 @@ class PatientEntity {
       creator: "",
       doctor: "",
       code: "",
+      updatedAt: DateTime.now(),
+      createdAt: DateTime.now(),
+    );
+  }
+
+  factory PatientEntity.fromFormEntity(
+    PatientFormEntity form,
+    String creatorId,
+    List<UsersEntity> doctors,
+  ) {
+    return PatientEntity(
+      id: uuid.v4(),
+      name: form.name,
+      gender: Gender.values[form.gender],
+      birthDate: form.birthDate,
+      school: form.school,
+      idNumber: form.idNumber,
+      guardian: form.guardianName,
+      guardianPhone: form.guardianPhone,
+      creator: creatorId,
+      doctor: shuffleDoctor(doctors).id,
+      code: generateCode(form.name, form.birthDate),
       updatedAt: DateTime.now(),
       createdAt: DateTime.now(),
     );
