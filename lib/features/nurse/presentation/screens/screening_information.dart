@@ -14,104 +14,100 @@ class ScreeningInformation extends ConsumerStatefulWidget {
 }
 
 class _ScreeningInformationState extends ConsumerState<ScreeningInformation> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   MedicalFormEntity medical = MedicalFormEntity();
 
   @override
   Widget build(BuildContext context) {
     return DoubleCard(
       scroll: true,
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            TextFormInput(
-              kHistoryOfIllness,
-              medical.historyOfIllnessController,
+      child: Column(
+        children: [
+          TextFormInput(
+            kHistoryOfIllness,
+            medical.historyOfIllnessController,
+            maxLines: 5,
+          ),
+          const Gap(16),
+          InfoLabel(
+            label: kRemarks,
+            child: TextFormBox(
+              controller: medical.remarksController,
+              minLines: 1,
               maxLines: 5,
             ),
-            const Gap(16),
-            InfoLabel(
-              label: kRemarks,
-              child: TextFormBox(
-                controller: medical.remarksController,
-                minLines: 1,
-                maxLines: 5,
+          ),
+          const Gap(16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: TextFormInput(
+                  kTemperature,
+                  medical.temperatureController,
+                  isTemperature: true,
+                  maxLength: 4,
+                ),
               ),
-            ),
-            const Gap(16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: TextFormInput(
-                    kTemperature,
-                    medical.temperatureController,
-                    isTemperature: true,
-                    maxLength: 4,
-                  ),
+              const Gap(16),
+              Expanded(
+                child: TextFormInput(
+                  kHeight,
+                  medical.heightController,
+                  booleanFilter: true,
+                  maxLength: 6,
                 ),
-                const Gap(16),
-                Expanded(
-                  child: TextFormInput(
-                    kHeight,
-                    medical.heightController,
-                    booleanFilter: true,
-                    maxLength: 6,
-                  ),
+              ),
+              const Gap(16),
+              Expanded(
+                child: TextFormInput(
+                  kWeight,
+                  medical.weightController,
+                  booleanFilter: true,
+                  maxLength: 4,
                 ),
-                const Gap(16),
-                Expanded(
-                  child: TextFormInput(
-                    kWeight,
-                    medical.weightController,
-                    booleanFilter: true,
-                    maxLength: 4,
-                  ),
-                ),
-              ],
-            ),
-            const Gap(16),
-            ChiefComplains(
-              medical.chiefComplains,
-              medical.chiefComplainsRemarksController,
-            ),
-            const Gap(16),
-            YesNoRadio(
-              kSimilarCondition,
-              medical.similarCondition,
-              onChanged: (value) =>
-                  setState(() => medical.similarCondition = value),
-            ),
-            const Gap(16),
-            YesNoRadioInput(
-              radioLabel: kAllergy,
-              value: medical.allergy,
-              inputLabel: kAllergyRemarks,
-              controller: medical.allergyRemarksController,
-              onChanged: (value) => setState(() => medical.allergy = value),
-            ),
-            const Gap(16),
-            YesNoRadioInput(
-              radioLabel: kSurgicalProcedure,
-              value: medical.undergoneSurgery,
-              inputLabel: kSurgicalProcedureRemarks,
-              controller: medical.undergoneSurgeryRemarksController,
-              onChanged: (value) =>
-                  setState(() => medical.undergoneSurgery = value),
-            ),
-            const Gap(16),
-            YesNoRadioInput(
-              radioLabel: kMedication,
-              value: medical.medication,
-              inputLabel: kMedicationRemarks,
-              controller: medical.medicationRemarksController,
-              onChanged: (value) => setState(() => medical.medication = value),
-            ),
-            const Gap(16),
-            ScreeningInformationBtn(medical: medical),
-          ],
-        ),
+              ),
+            ],
+          ),
+          const Gap(16),
+          ChiefComplains(
+            medical.chiefComplains,
+            medical.chiefComplainsRemarksController,
+          ),
+          const Gap(16),
+          YesNoRadio(
+            kSimilarCondition,
+            medical.similarCondition,
+            onChanged: (value) =>
+                setState(() => medical.similarCondition = value),
+          ),
+          const Gap(16),
+          YesNoRadioInput(
+            radioLabel: kAllergy,
+            value: medical.allergy,
+            inputLabel: kAllergyRemarks,
+            controller: medical.allergyRemarksController,
+            onChanged: (value) => setState(() => medical.allergy = value),
+          ),
+          const Gap(16),
+          YesNoRadioInput(
+            radioLabel: kSurgicalProcedure,
+            value: medical.undergoneSurgery,
+            inputLabel: kSurgicalProcedureRemarks,
+            controller: medical.undergoneSurgeryRemarksController,
+            onChanged: (value) =>
+                setState(() => medical.undergoneSurgery = value),
+          ),
+          const Gap(16),
+          YesNoRadioInput(
+            radioLabel: kMedication,
+            value: medical.medication,
+            inputLabel: kMedicationRemarks,
+            controller: medical.medicationRemarksController,
+            onChanged: (value) => setState(() => medical.medication = value),
+          ),
+          const Gap(16),
+          ScreeningInformationBtn(medical: medical),
+        ],
       ),
     );
   }
