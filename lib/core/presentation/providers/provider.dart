@@ -1,3 +1,4 @@
+export 'assignment_provider.dart';
 export 'authentication_provider.dart';
 export 'dashboard_tabs_provider.dart';
 export 'doctors_provider.dart';
