@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 
 import 'package:otoscopia/core/core.dart';
 import 'package:otoscopia/features/nurse/nurse.dart';
-import 'package:otoscopia/features/nurse/presentation/widgets/yes_no_radio.dart';
 
 class ScreeningInformation extends ConsumerStatefulWidget {
   const ScreeningInformation({super.key});

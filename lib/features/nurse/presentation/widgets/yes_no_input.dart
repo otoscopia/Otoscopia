@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:otoscopia/features/nurse/nurse.dart';
-import 'package:otoscopia/features/nurse/presentation/widgets/yes_no_radio.dart';
 
 class YesNoRadioInput extends ConsumerStatefulWidget {
   const YesNoRadioInput({
