@@ -10,5 +10,4 @@ export 'schools_provider.dart';
 export 'schools_tabs_provider.dart';
 export 'screenings_provider.dart';
 export 'search_provider.dart';
-export 'theme_provider.dart';
 export 'user_provider.dart';

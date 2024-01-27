@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
+import 'package:otoscopia/src/features/settings/settings.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp(this.deviceType, {super.key});
