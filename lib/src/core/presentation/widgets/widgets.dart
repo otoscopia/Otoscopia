@@ -9,6 +9,7 @@ export 'responsive_builder.dart';
 export 'schools_patients_table.dart';
 export 'schools_table.dart';
 export 'search_box.dart';
+export 'text.dart';
 
 export 'text/display_text.dart';
 export 'text/title_text.dart';
