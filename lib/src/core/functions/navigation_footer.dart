@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/core/core.dart';
+import 'package:otoscopia/src/features/settings/settings.dart';
 
 List<NavigationPaneItem> footerItems(WidgetRef ref, BuildContext context) {
   return [
@@ -9,7 +10,7 @@ List<NavigationPaneItem> footerItems(WidgetRef ref, BuildContext context) {
     PaneItem(
       icon: const Icon(FluentIcons.settings),
       title: const Text(kSettings),
-      body: Container(),
+      body: const Settings(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.player_settings),
