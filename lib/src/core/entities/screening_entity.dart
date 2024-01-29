@@ -2,6 +2,8 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:ionicons/ionicons.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
@@ -53,6 +55,51 @@ class ScreeningEntity {
     required this.updatedAt,
     required this.status,
   });
+
+  IoniconsData get statusIcon {
+    switch (status) {
+      case RecordStatus.pending:
+        return Ionicons.time_outline;
+      case RecordStatus.followUp:
+        return Ionicons.repeat_outline;
+      case RecordStatus.medicalAttention:
+        return Ionicons.warning_sharp;
+      case RecordStatus.resolved:
+        return Ionicons.checkmark_circle;
+      default:
+        return Ionicons.time_outline;
+    }
+  }
+
+  Color get statusColor {
+    switch (status) {
+      case RecordStatus.pending:
+        return Colors.yellow;
+      case RecordStatus.followUp:
+        return Colors.blue;
+      case RecordStatus.medicalAttention:
+        return Colors.red;
+      case RecordStatus.resolved:
+        return Colors.green;
+      default:
+        return AppColors.accentColor.darkest;
+    }
+  }
+
+  String get statusString {
+    switch (status) {
+      case RecordStatus.pending:
+        return 'Pending';
+      case RecordStatus.followUp:
+        return 'Follow Up';
+      case RecordStatus.medicalAttention:
+        return 'Medical Attention';
+      case RecordStatus.resolved:
+        return 'Resolved';
+      default:
+        return 'Pending';
+    }
+  }
 
   ScreeningEntity copyWith({
     String? id,
@@ -106,8 +153,7 @@ class ScreeningEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
-      'patient': patient,
+      'patients': patient,
       'assignment': assignment,
       'historyOfIllness': historyOfIllness,
       'remarks': remarks,
@@ -124,32 +170,39 @@ class ScreeningEntity {
       'medication': medication,
       'medicationRemarks': medicationRemarks,
       'images': images,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'updatedAt': updatedAt.millisecondsSinceEpoch,
       'status': status.toString(),
     };
   }
 
+  static RecordStatus getStatus(String status) {
+    switch (status) {
+      case "RecordStatus.pending":
+        return RecordStatus.pending;
+      case "RecordStatus.followUp":
+        return RecordStatus.followUp;
+      case "RecordStatus.medicalAttention":
+        return RecordStatus.medicalAttention;
+      case "RecordStatus.resolved":
+        return RecordStatus.resolved;
+      default:
+        return RecordStatus.pending;
+    }
+  }
+
   factory ScreeningEntity.fromMap(Map<String, dynamic> map) {
-    RecordStatus status = map['status'] == 'RecordStatus.pending'
-        ? RecordStatus.pending
-        : map['status'] == 'RecordStatus.followUp'
-            ? RecordStatus.followUp
-            : map['status'] == 'RecordStatus.medicalAttention'
-                ? RecordStatus.medicalAttention
-                : RecordStatus.resolved;
+    RecordStatus status = getStatus(map['status']);
 
     return ScreeningEntity(
-      id: map['id'] as String,
-      patient: map['patient'] as String,
-      assignment: map['assignment'] as String,
+      id: map['\$id'] as String,
+      patient: map['patients']['\$id'] as String,
+      assignment: map['assignment']['\$id'] as String,
       historyOfIllness: map['historyOfIllness'] as String,
       remarks: map['remarks'] as String,
-      temperature: map['temperature'] as double,
-      weight: map['weight'] as double,
-      height: map['height'] as double,
+      temperature: double.parse(map['temperature']),
+      weight: double.parse(map['weight']),
+      height: double.parse(map['height']),
       similarCondition: map['similarCondition'] as bool,
-      chiefComplaint: map['chiefComplaint'] as List<bool>,
+      chiefComplaint: List<bool>.from(map['chiefComplaint']),
       chiefComplaintRemarks: map['chiefComplaintRemarks'] as String,
       allergy: map['allergy'] as bool,
       allergyRemarks: map['allergyRemarks'] as String,
@@ -157,9 +210,9 @@ class ScreeningEntity {
       undergoneSurgeryRemarks: map['undergoneSurgeryRemarks'] as String,
       medication: map['medication'] as bool,
       medicationRemarks: map['medicationRemarks'] as String,
-      images: List<String>.from((map['images'] as List<String>)),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
+      images: List<String>.from((map['images'])),
+      createdAt: DateTime.parse(map['\$createdAt'] as String),
+      updatedAt: DateTime.parse(map['\$updatedAt'] as String),
       status: status,
     );
   }
@@ -253,8 +306,8 @@ class ScreeningEntity {
     );
   }
 
-  factory ScreeningEntity.fromMedical(
-      MedicalFormEntity medical, String patient, String assignment) {
+  factory ScreeningEntity.fromMedical(MedicalFormEntity medical, String patient,
+      String assignment, List<String> images) {
     return ScreeningEntity(
       id: uuid.v4(),
       patient: patient,
@@ -273,10 +326,53 @@ class ScreeningEntity {
       undergoneSurgeryRemarks: medical.undergoneSurgeryRemarks,
       medication: medical.isMedication,
       medicationRemarks: medical.medicationRemarks,
-      images: [],
+      images: images,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       status: RecordStatus.pending,
     );
+  }
+
+  String get chiefComplaintString {
+    final chiefComplainString = List.generate(chiefComplaint.length, (index) {
+      if (chiefComplaint[index]) {
+        switch (index) {
+          case 0:
+            return 'Ear Pain';
+          case 1:
+            return 'Hearing Loss';
+          case 2:
+            return 'Tinnitus';
+          case 3:
+            return 'Ear Discharge';
+          case 4:
+            return 'Others';
+          default:
+            return '';
+        }
+      } else {
+        return '';
+      }
+    }).toString();
+
+    final arrayComplains = chiefComplainString
+        .substring(1, chiefComplainString.length - 1)
+        .split(', ');
+    final nonEmptyComplains =
+        arrayComplains.where((element) => element.isNotEmpty).toList();
+    final joinedComplains = nonEmptyComplains.asMap().entries.map((entry) {
+      final index = entry.key;
+      final complain = entry.value;
+
+      if (index == nonEmptyComplains.length - 1) {
+        return complain;
+      } else if (index == nonEmptyComplains.length - 2) {
+        return '$complain and ';
+      } else {
+        return '$complain, ';
+      }
+    }).join();
+
+    return joinedComplains;
   }
 }
