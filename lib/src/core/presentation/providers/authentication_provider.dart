@@ -11,12 +11,12 @@ class AuthenticationNotifier extends StateNotifier<bool> {
   final AuthenticationRepository _repository =
       AuthenticationRepositoryImpl(_source);
 
-  Future<bool> login(String email, String password) async {
+  Future<UserEntity> login(String email, String password) async {
     try {
       UserEntity user = await _repository.login(email, password);
       state = true;
       ref.read(userProvider.notifier).setUser(user);
-      return true;
+      return user;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     }

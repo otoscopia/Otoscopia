@@ -18,3 +18,4 @@ const String kSwitchCameraBtn = 'Switch Camera';
 const String kCaptureBtn = 'Capture';
 const String kInitializeCamera = 'Initialize Camera';
 const String kRefreshBtn = 'Refresh';
+const String kAddPatientBtn = 'Add Patient';

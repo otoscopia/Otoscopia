@@ -14,6 +14,7 @@ class TextFormInput extends ConsumerWidget {
     this.maxLength,
     this.idNumber = false,
     this.phoneNumber = false,
+    this.suffix,
   });
 
   final String _label;
@@ -24,6 +25,7 @@ class TextFormInput extends ConsumerWidget {
   final bool isTemperature;
   final bool idNumber;
   final bool phoneNumber;
+  final Widget? suffix;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,8 +41,12 @@ class TextFormInput extends ConsumerWidget {
         controller: _controller,
         minLines: 1,
         maxLines: maxLines,
-        maxLength: maxLength,
+        maxLength: phoneNumber ? 11 : maxLength,
         autovalidateMode: AutovalidateMode.onUserInteraction,
+        suffix: Padding(
+          padding: const EdgeInsets.only(right: 5.0),
+          child: suffix,
+        ),
         inputFormatters: [
           if (booleanFilter) booleanFormat,
           if (isTemperature) temperatureFormat,

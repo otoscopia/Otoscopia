@@ -13,7 +13,7 @@ List<NavigationPaneItem> navigationItems(UserRole role) {
     PaneItem(
       icon: const Icon(FluentIcons.issue_tracking),
       title: const Text(kPatients),
-      body: Container(),
+      body: const Patients(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.e_discovery),

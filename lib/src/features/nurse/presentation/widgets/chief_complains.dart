@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/nurse/nurse.dart';
 
 class ChiefComplains extends ConsumerStatefulWidget {
   const ChiefComplains(

@@ -10,8 +10,14 @@ class ScreeningInformationNotifier extends StateNotifier<ScreeningEntity> {
     final user = ref.read(userProvider);
     final patient = ref.read(patientProvider);
     final assignment = ref.read(assignmentsProvider.notifier).findByNurseAndSchool(user.id, patient.school);
-    state = ScreeningEntity.fromMedical(medical, patient.id, assignment.id);
+    state = ScreeningEntity.fromMedical(medical, patient.id, assignment.id, state.images);
   }
+
+  void setImage(String image) {
+    state = state.copyWith(images: [...state.images, image]);
+  }
+
+  void resetInformation() => state = ScreeningEntity.initial();
 }
 
 final screeningInformationProvider =
