@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/nurse/nurse.dart';
 
@@ -26,9 +29,23 @@ class ScreeningInformationBtn extends ConsumerWidget {
           return;
         }
 
+        final patient = ref.read(patientProvider);
+        final path = "$applicationDirectory\\${patient.id}";
+        final directory = Directory(path);
+        final earImages = directory
+            .listSync()
+            .where((element) => element.path.contains('jpeg'))
+            .toList();
+        
+        final List<String> images = [];
+
+        for(final image in earImages) {
+          images.add(image.path);
+        }
+
         ref
             .read(screeningInformationProvider.notifier)
-            .setScreening(ref, medical);
+            .setScreening(ref, medical, images);
         ref.read(addPatientTabProvider.notifier).addReview();
       },
     );
