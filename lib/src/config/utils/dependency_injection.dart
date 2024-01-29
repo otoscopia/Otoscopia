@@ -9,6 +9,7 @@ import 'package:window_manager/window_manager.dart';
 import 'package:otoscopia/src/core/core.dart';
 
 late final Client client;
+late final Realtime realtime;
 late final Uuid uuid;
 late final String applicationDirectory;
 late final String documentDirectory;
@@ -69,5 +70,6 @@ class DependencyInjection {
   Future<void> appwriteInit() async {
     client = Client();
     client.setEndpoint(Env.endpoint).setProject(Env.project);
+    realtime = Realtime(client);
   }
 }
