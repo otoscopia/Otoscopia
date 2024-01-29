@@ -25,16 +25,18 @@ class PostDataDataSource {
   }
 
   Future<void> postScreening(ScreeningEntity screening) async {
+    final bucketId = Env.screeningBucket;
     try {
       List<String> images = [];
 
       for (int i = 0; i < screening.images.length; i++) {
+        final fileName = screening.images[i].split("\\").last;
         final file = await _storage.createFile(
           fileId: ID.unique(),
-          bucketId: Env.screeningBucket,
+          bucketId: bucketId,
           file: InputFile.fromPath(
             path: screening.images[i],
-            filename: screening.images[i].split("/").last,
+            filename: fileName,
             contentType: "image/jpeg",
           ),
         );
