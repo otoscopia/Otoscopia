@@ -38,12 +38,9 @@ class AssignmentEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'nurse': nurse,
       'school': school,
       'isActive': isActive,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'updatedAt': updatedAt.millisecondsSinceEpoch,
     };
   }
 

@@ -2,6 +2,7 @@ export 'button_constants.dart';
 export 'guest_constants.dart';
 export 'named_routes_constants.dart';
 export 'nurse_constants.dart';
+export 'settings_constants.dart';
 
 const String kAppName = 'Otoscopia';
 const String kMultiPlatform = 'A Multi-Platform Application';
