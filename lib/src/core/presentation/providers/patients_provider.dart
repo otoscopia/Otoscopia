@@ -7,6 +7,17 @@ class PatientsNotifier extends StateNotifier<List<PatientEntity>> {
 
   void setPatients(List<PatientEntity> patients) => state = patients;
 
+  void removePatient(int index) => state.removeAt(index);
+
+  void addPatient(PatientEntity patient) {
+    final index = state.indexWhere((element) => element.id == patient.id);
+    if (index >= 0) {
+      removePatient(index);
+    }
+
+    state = [...state, patient];
+  }
+
   List<PatientEntity> findByDoctorId(String doctorId) {
     final patients = state.where((patient) => patient.creator == doctorId);
     return patients.toList();
