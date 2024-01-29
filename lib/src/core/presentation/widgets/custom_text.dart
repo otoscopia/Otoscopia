@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:otoscopia/src/features/settings/settings.dart';
 
 class CustomText extends ConsumerWidget {
-  const CustomText(this._text, {super.key, this.style = 6});
+  const CustomText(this._text, {super.key, this.style = 7});
 
   final String _text;
 
-  /// 1: title, 2: subtitle, 3: caption, 4: body Large, 5: body Strong, 6: body
+  /// 1: title, 2: subtitle, 3: caption, 4: body Large, 5: body Strong, 6: bold caption
   final int style;
 
   @override
@@ -45,6 +45,14 @@ class CustomText extends ConsumerWidget {
         return Text(
           _text,
           style: theme.typography.bodyStrong,
+          textScaler: TextScaler.linear(fontSize),
+        );
+      case 6:
+        return Text(
+          _text,
+          style: theme.typography.caption?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
           textScaler: TextScaler.linear(fontSize),
         );
       default:

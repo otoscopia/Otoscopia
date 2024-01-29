@@ -7,8 +7,22 @@ String generateCode(String name, DateTime birthDate) {
   if (words.length < 4) {
     String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     Random random = Random();
-    for (int i = 0; i < 4; i++) {
-      initials += alphabet[random.nextInt(alphabet.length)];
+    switch (words.length) {
+      case 1:
+        for (int i = 0; i < 3; i++) {
+          initials += alphabet[random.nextInt(alphabet.length)];
+        }
+        break;
+      case 2:
+        for (int i = 0; i < 2; i++) {
+          initials += alphabet[random.nextInt(alphabet.length)];
+        }
+        break;
+      case 3:
+        for (int i = 0; i < 1; i++) {
+          initials += alphabet[random.nextInt(alphabet.length)];
+        }
+        break;
     }
   }
 

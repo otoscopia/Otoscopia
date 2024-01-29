@@ -5,7 +5,6 @@ import 'package:styled_widget/styled_widget.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/guest/guest.dart';
 
 class ForgotPassword extends ConsumerStatefulWidget {
   const ForgotPassword({super.key});

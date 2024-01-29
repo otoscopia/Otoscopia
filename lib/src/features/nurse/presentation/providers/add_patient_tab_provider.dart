@@ -17,13 +17,13 @@ class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
 
   void addLeftCamera() {
     final int index = state.indexWhere(
-      (Tab tab) => (tab.text as Text).data == "Left Camera",
+      (Tab tab) => (tab.text as Text).data == "Left Ear",
     );
 
     if (!(index != -1)) {
       late final Tab tab;
       tab = Tab(
-        text: const Text("Left Camera"),
+        text: const Text("Left Ear"),
         body: const LeftCamera(),
       );
 
@@ -36,13 +36,13 @@ class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
 
   void addRightCamera() {
     final int index = state.indexWhere(
-      (Tab tab) => (tab.text as Text).data == "Right Camera",
+      (Tab tab) => (tab.text as Text).data == "Right Ear",
     );
 
     if (!(index != -1)) {
       late final Tab tab;
       tab = Tab(
-        text: const Text("Right Camera"),
+        text: const Text("Right Ear"),
         body: const RightCamera(),
       );
 
@@ -81,7 +81,7 @@ class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
       late final Tab tab;
       tab = Tab(
         text: const Text("Review"),
-        body: Container(),
+        body: const Reviews(),
       );
 
       state = [...state, tab];

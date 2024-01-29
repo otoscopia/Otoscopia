@@ -28,7 +28,7 @@ class AddPatientInformationBtn extends ConsumerWidget {
           return;
         }
 
-        ref.read(patientProvider.notifier).setPatient(ref, _form);
+        ref.read(patientProvider.notifier).setPatient(ref, _form, hasValue);
         ref.read(addPatientTabProvider.notifier).addLeftCamera();
       },
       style: ButtonStyle(

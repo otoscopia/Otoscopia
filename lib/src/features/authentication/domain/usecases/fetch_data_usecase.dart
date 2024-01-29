@@ -1,5 +1,5 @@
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/guest/guest.dart';
+import 'package:otoscopia/src/features/authentication/authentication.dart';
 
 class FetchDataUseCase {
   final FetchDataRepository _fetchDataRepository;

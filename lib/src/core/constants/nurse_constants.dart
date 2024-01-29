@@ -29,9 +29,23 @@ const String kMedicationRemarks = "Medication Remarks";
 const List<String> yesNo = ["Yes", "No"];
 const List<String> kGenders = ["Male", "Female"];
 const List<String> complains = [
-   "Ear Pain",
-   "Hearing Loss",
-   "Tinnittus",
-   "Ear Discharge",
-   "Others"
- ];
+  "Ear Pain",
+  "Hearing Loss",
+  "Tinnittus",
+  "Ear Discharge",
+  "Others"
+];
+const String kUploadedAt = "Uploaded At";
+const String kModifiedAt = "Modified At";
+const String kScreeningInformation = "Screening Information";
+const String kAllergyRreview = "Allergy";
+const String kUndergoneSurgeryReview = "Undergone Surgery";
+const String kMedicationReview = "Medication";
+const String kNone = "None";
+
+const String kUploadingPatient = "Uploading Patient";
+const String kUploadingPatientMessage =
+    "Please wait while we upload the patient to the server.";
+const String kUploadingScreening = "Uploading Screening";
+const String kUploadingScreeningMessage =
+    "Please wait while we upload the screening to the server.";
