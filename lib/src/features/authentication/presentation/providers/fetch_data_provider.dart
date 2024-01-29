@@ -2,7 +2,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/guest/guest.dart';
+import 'package:otoscopia/src/features/authentication/authentication.dart';
 
 class FetchDataNotifier extends StateNotifier<void> {
   StateNotifierProviderRef<FetchDataNotifier, void> ref;

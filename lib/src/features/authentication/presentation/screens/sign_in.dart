@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:styled_widget/styled_widget.dart';
 
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/guest/guest.dart';
+import 'package:otoscopia/src/features/authentication/authentication.dart';
 
 class SignIn extends ConsumerStatefulWidget {
   const SignIn({super.key});
