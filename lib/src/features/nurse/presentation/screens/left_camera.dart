@@ -54,11 +54,8 @@ class _CameraState extends ConsumerState<LeftCamera> {
 
     return Card(
       padding: const EdgeInsets.all(5),
-      child: Card(
-        borderColor: AppColors.accentColor.darkest.withOpacity(.1),
+      child: CardOpacity(
         padding: const EdgeInsets.all(16),
-        backgroundColor: FluentTheme.of(context).cardColor.withOpacity(.05),
-        borderRadius: BorderRadius.circular(10),
         child: _initialised
             ? Camera(
                 cameraId: _cameraId,
