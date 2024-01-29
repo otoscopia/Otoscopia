@@ -46,8 +46,6 @@ class VitalsCard extends ConsumerWidget {
               const Gap(16),
               VitalRow(Ionicons.thermometer, kTemperature, temperature),
               const Gap(16),
-              VitalRow(Ionicons.thermometer, kTemperature, temperature),
-              const Gap(16),
               VitalRow(Ionicons.barbell, kWeight, weight),
               const Gap(16),
               VitalRow(Ionicons.body, kHeight, height),
