@@ -2,18 +2,26 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 
 import 'package:otoscopia/src/core/core.dart';
+import 'package:otoscopia/src/features/guest/guest.dart';
 
 class FetchDataRepositoryImpl implements FetchDataRepository {
   final FetchDataDataSource _source;
 
   FetchDataRepositoryImpl(this._source);
   @override
-  Future<List<AssignmentEntity>> getAssignments() async {
+  Future<List<AssignmentEntity>> getAssignments(UserEntity user) async {
+    List<AssignmentEntity> assignments;
     try {
       DocumentList result = await _source.getAssignments();
-      final assignments = result.documents
+      assignments = result.documents
           .map((e) => AssignmentEntity.fromMap(e.data))
           .toList();
+
+      if (user.role == UserRole.nurse) {
+        return assignments
+            .where((element) => element.nurse == user.id)
+            .toList();
+      }
 
       return assignments;
     } on AppwriteException catch (error) {

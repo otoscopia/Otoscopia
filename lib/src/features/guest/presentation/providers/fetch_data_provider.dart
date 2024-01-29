@@ -2,6 +2,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/core/core.dart';
+import 'package:otoscopia/src/features/guest/guest.dart';
 
 class FetchDataNotifier extends StateNotifier<void> {
   StateNotifierProviderRef<FetchDataNotifier, void> ref;
@@ -9,9 +10,9 @@ class FetchDataNotifier extends StateNotifier<void> {
   static final FetchDataDataSource _source = FetchDataDataSource();
   final FetchDataRepository _repository = FetchDataRepositoryImpl(_source);
 
-  Future<void> getAssignments() async {
+  Future<void> getAssignments(UserEntity user) async {
     try {
-      final result = await _repository.getAssignments();
+      final result = await _repository.getAssignments(user);
       ref.read(assignmentsProvider.notifier).setAssignments(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
@@ -53,10 +54,24 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
-  Future<void> getSchools() async {
+  Future<void> getSchools(UserEntity user) async {
+    List<SchoolEntity> schools;
     try {
       final result = await _repository.getSchools();
-      ref.read(schoolsProvider.notifier).setSchools(result);
+
+      if (user.role == UserRole.nurse) {
+        final assignments = ref.read(assignmentsProvider);
+
+        schools = result.where((school) {
+          return assignments.where((assignment) {
+            return assignment.school == school.id;
+          }).isNotEmpty;
+        }).toList();
+      } else {
+        schools = result;
+      }
+
+      ref.read(schoolsProvider.notifier).setSchools(schools);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -75,13 +90,20 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
-  Future<void> fetch() async {
-    await getAssignments();
+  Future<void> setTableData() async {
+    final patients = ref.read(patientsProvider);
+    final screenings = ref.read(screeningsProvider);
+    ref.read(tableProvider.notifier).setTable(patients, screenings);
+  }
+
+  Future<void> fetch(UserEntity user) async {
+    await getAssignments(user);
     await getPatients();
     await getDoctors();
     await getNurses();
-    await getSchools();
+    await getSchools(user);
     await getScreenings();
+    await setTableData();
   }
 }
 

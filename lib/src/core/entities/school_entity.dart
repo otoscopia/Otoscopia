@@ -34,7 +34,6 @@ class SchoolEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'name': name,
       'abbr': abbr,
       'code': code,
