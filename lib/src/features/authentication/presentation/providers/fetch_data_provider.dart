@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,7 +10,10 @@ class FetchDataNotifier extends StateNotifier<void> {
   StateNotifierProviderRef<FetchDataNotifier, void> ref;
   FetchDataNotifier(this.ref) : super(null);
   static final FetchDataDataSource _source = FetchDataDataSource();
+  static final FetchImageDataSource _imageSource = FetchImageDataSource();
   final FetchDataRepository _repository = FetchDataRepositoryImpl(_source);
+  final FetchImageRepository _imageRepository =
+      FetchImageRepositoryImpl(_imageSource);
 
   Future<void> getAssignments(UserEntity user) async {
     try {
@@ -83,6 +88,17 @@ class FetchDataNotifier extends StateNotifier<void> {
     try {
       final result = await _repository.getScreenings();
       ref.read(screeningsProvider.notifier).setScreenings(result);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  Future<List<Uint8List>> getImages(String path, List<String> ids) async {
+    try {
+      final result = await _imageRepository.getImages(path, ids);
+      return result;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
