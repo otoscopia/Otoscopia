@@ -44,6 +44,7 @@ class _SignInState extends ConsumerState<SignIn> {
                 PasswordFormBox(
                   controller: passwordController,
                   placeholder: kPassword,
+                  onEditingComplete: onClick,
                 ),
                 const Gap(16),
                 const TextNavigator(
@@ -82,11 +83,13 @@ class _SignInState extends ConsumerState<SignIn> {
     setState(() => isLoading = true);
     if (formKey.currentState!.validate()) {
       try {
-        bool response = await ref
+        final response = await ref
             .read(authenticationProvider.notifier)
             .login(email, password);
 
-        if (response) {
+        if (response.id.isNotEmpty) {
+          await ref.read(fetchDataProvider.notifier).fetch(response);
+
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           });
@@ -99,8 +102,9 @@ class _SignInState extends ConsumerState<SignIn> {
             context,
           ),
         );
+      } finally {
+        setState(() => isLoading = false);
       }
     }
-    setState(() => isLoading = false);
   }
 }
