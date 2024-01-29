@@ -6,6 +6,10 @@ class DoctorsNotifier extends StateNotifier<List<UsersEntity>> {
   DoctorsNotifier() : super([]);
 
   void setDoctors(List<UsersEntity> users) => state = users;
+
+  UsersEntity findById(String id) {
+    return state.firstWhere((user) => user.id == id);
+  }
 }
 
 final doctorsProvider =
