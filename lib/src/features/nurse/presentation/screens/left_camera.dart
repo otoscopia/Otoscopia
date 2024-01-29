@@ -260,6 +260,8 @@ class _CameraState extends ConsumerState<LeftCamera> {
     final String finalFilePath = "$filePath\\$filePosition";
 
     await sourceFile.rename(finalFilePath);
+
+    ref.read(screeningInformationProvider.notifier).setImage(finalFilePath);
   }
 
   /// This switches camera provided the device is connected to multiple cameras.
