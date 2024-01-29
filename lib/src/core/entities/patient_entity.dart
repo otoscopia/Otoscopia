@@ -74,11 +74,10 @@ class PatientEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
       'name': name,
       'gender': gender.toString(),
-      'birthDate': birthDate.millisecondsSinceEpoch,
-      'school': school,
+      'birthDate': birthDate.toIso8601String(),
+      'schools': school,
       'idNumber': idNumber,
       'guardian': guardian,
       'guardianPhone': guardianPhone,
@@ -86,8 +85,6 @@ class PatientEntity {
       'doctor': doctor,
       'code': code,
       'image': image,
-      'updatedAt': updatedAt.millisecondsSinceEpoch,
-      'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 
@@ -99,8 +96,8 @@ class PatientEntity {
       id: map['\$id'] as String,
       name: map['name'] as String,
       gender: gender,
-      birthDate: DateTime.fromMillisecondsSinceEpoch(map['birthDate'] as int),
-      school: map['school'] as String,
+      birthDate: DateTime.parse(map['birthDate'] as String),
+      school: map['schools']['\$id'] as String,
       idNumber: map['idNumber'] as String,
       guardian: map['guardian'] as String,
       guardianPhone: map['guardianPhone'] as String,
@@ -108,8 +105,8 @@ class PatientEntity {
       doctor: map['doctor'] as String,
       code: map['code'] as String,
       image: map['image'] != null ? map['image'] as String : null,
-      updatedAt: DateTime.fromMillisecondsSinceEpoch(map['updatedAt'] as int),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+      updatedAt: DateTime.parse(map['\$updatedAt'] as String),
+      createdAt: DateTime.parse(map['\$createdAt'] as String),
     );
   }
 
@@ -198,6 +195,27 @@ class PatientEntity {
       code: generateCode(form.name, form.birthDate),
       updatedAt: DateTime.now(),
       createdAt: DateTime.now(),
+    );
+  }
+
+  factory PatientEntity.copyFromForm(
+    PatientEntity patient,
+    PatientFormEntity form,
+  ) {
+    return PatientEntity(
+      id: patient.id,
+      name: form.name,
+      gender: Gender.values[form.gender],
+      birthDate: form.birthDate,
+      school: form.school,
+      idNumber: form.idNumber,
+      guardian: form.guardianName,
+      guardianPhone: form.guardianPhone,
+      creator: patient.creator,
+      doctor: patient.doctor,
+      code: generateCode(form.name, form.birthDate),
+      updatedAt: patient.updatedAt,
+      createdAt: patient.createdAt,
     );
   }
 }
