@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import 'package:otoscopia/src/core/core.dart';
+import 'package:otoscopia/src/features/authentication/authentication.dart';
 import 'package:otoscopia/src/features/guest/guest.dart';
 
 class GuestRoutes extends NamedGuest {
