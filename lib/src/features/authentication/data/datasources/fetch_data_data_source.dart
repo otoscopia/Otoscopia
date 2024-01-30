@@ -35,6 +35,20 @@ class FetchDataDataSource {
     }
   }
 
+  Future<DocumentList> getPatientsByDoctor(String id) async {
+    try {
+      DocumentList result = await _databases.listDocuments(
+        databaseId: Env.database,
+        collectionId: Env.patientCollection,
+        queries: [Query.equal('doctor', id), Query.limit(100)],
+      );
+
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
   Future<DocumentList> getDoctors() async {
     try {
       DocumentList result = await _databases.listDocuments(

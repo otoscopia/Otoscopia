@@ -5,6 +5,8 @@ abstract class FetchDataRepository {
 
   Future<List<PatientEntity>> getPatients();
 
+  Future<List<PatientEntity>> getPatientsByDoctor(String id);
+
   Future<List<UsersEntity>> getDoctors();
 
   Future<List<UsersEntity>> getNurses();

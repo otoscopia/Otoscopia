@@ -37,6 +37,17 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
+  Future<void> getPatientsByDoctor(String id) async {
+    try {
+      final result = await _repository.getPatientsByDoctor(id);
+      ref.read(patientsProvider.notifier).setPatients(result);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
   Future<void> getDoctors() async {
     try {
       final result = await _repository.getDoctors();
@@ -113,8 +124,13 @@ class FetchDataNotifier extends StateNotifier<void> {
   }
 
   Future<void> fetch(UserEntity user) async {
+    if (user.role == UserRole.doctor) {
+      await getPatientsByDoctor(user.id);
+    } else {
+      await getPatients();
+    }
+
     await getAssignments(user);
-    await getPatients();
     await getDoctors();
     await getNurses();
     await getSchools(user);
