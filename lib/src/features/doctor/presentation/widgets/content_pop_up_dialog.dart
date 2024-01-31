@@ -5,16 +5,16 @@ import 'package:gap/gap.dart';
 import 'package:otoscopia/src/core/core.dart';
 
 class ContentPopUpDialog extends ConsumerStatefulWidget {
-  const ContentPopUpDialog(
-    this.remarksController,
-    this.onStatusChanged,
-    this.onFollowUpDateChanged, {
+  const ContentPopUpDialog({
     super.key,
+    required this.controller,
+    required this.status,
+    required this.followUpDate,
   });
 
-  final TextEditingController remarksController;
-  final void Function(RecordStatus) onStatusChanged;
-  final void Function(DateTime?) onFollowUpDateChanged;
+  final TextEditingController controller;
+  final void Function(RecordStatus) status;
+  final void Function(DateTime?) followUpDate;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -34,13 +34,7 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const InfoBar(
-          title: Text(kNote),
-          content: Text(kNotice),
-          severity: InfoBarSeverity.warning,
-          isLong: false,
-        ),
-        TextFormInput(kRemarks, widget.remarksController, maxLines: 3),
+        TextFormInput(kRemarks, widget.controller, maxLines: 3),
         const Gap(8),
         InfoLabel(
           label: kMedicalRecordStatus,
@@ -60,7 +54,8 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
                           recordIndex = index;
                           recordStatus = RecordStatus.values[index + 1];
                         });
-                        widget.onStatusChanged(recordStatus!);
+
+                        widget.status(recordStatus!);
                       }
                     },
                   ),
@@ -68,7 +63,17 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
               },
             ),
           ),
-        )
+        ),
+        const Gap(8),
+        if (recordIndex == 0)
+          InfoLabel(
+            label: kFollowUpDate,
+            child: DatePicker(
+              selected: followUpDate,
+              startDate: DateTime.now(),
+              onChanged: widget.followUpDate,
+            ),
+          ),
       ],
     );
   }
