@@ -13,13 +13,24 @@ class ScreeningsNotifier extends StateNotifier<List<ScreeningEntity>> {
     return state.where((screening) => screening.patient == patientId).toList();
   }
 
+  int findByScreeningId(String screeningId) {
+    return state.indexWhere((screening) => screening.id == screeningId);
+  }
+
   void addScreening(ScreeningEntity screening) {
-    final index = state.indexWhere((element) => element.id == screening.id);
+    final index = findByScreeningId(screening.id);
     if (index >= 0) {
       removeScreening(index);
     }
 
     state = [...state, screening];
+  }
+
+  updateStatus(ScreeningEntity screening) {
+    final index = findByScreeningId(screening.id);
+    if (index >= 0) {
+      state[index] = screening;
+    }
   }
 }
 
