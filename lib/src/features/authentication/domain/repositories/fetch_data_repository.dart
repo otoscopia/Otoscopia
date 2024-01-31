@@ -14,4 +14,6 @@ abstract class FetchDataRepository {
   Future<List<SchoolEntity>> getSchools();
 
   Future<List<ScreeningEntity>> getScreenings();
+
+  Future<RemarksEntity> getRemarks(String screeningId);
 }

@@ -102,4 +102,18 @@ class FetchDataDataSource {
       throw Exception(error.message);
     }
   }
+
+  Future<DocumentList> getRemarks(String screeningId) async {
+    try {
+      DocumentList result = await _databases.listDocuments(
+        databaseId: Env.database,
+        collectionId: Env.remarksCollection,
+        queries: [Query.equal('screening', screeningId)],
+      );
+
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
 }

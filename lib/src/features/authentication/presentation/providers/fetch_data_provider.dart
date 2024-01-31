@@ -106,6 +106,17 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
+  Future<RemarksEntity> getRemarks(String screeningId) async {
+    try {
+      final result = await _repository.getRemarks(screeningId);
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
   Future<List<Uint8List>> getImages(String path, List<String> ids) async {
     try {
       final result = await _imageRepository.getImages(path, ids);
