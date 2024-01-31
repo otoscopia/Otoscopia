@@ -17,14 +17,23 @@ class TableNotifier extends StateNotifier<List<TableEntity>> {
     state = tables;
   }
 
+  int findTableByPatientId(String id) =>
+      state.indexWhere((element) => element.patient.id == id);
+
   void addTable(TableEntity table) {
-    final index =
-        state.indexWhere((element) => element.patient.id == table.patient.id);
+    final index = findTableByPatientId(table.patient.id);
     if (index >= 0) {
       removeTable(index);
     }
 
     state = [...state, table];
+  }
+
+  void updateTable(TableEntity table) {
+    final index = findTableByPatientId(table.patient.id);
+    if (index >= 0) {
+      state[index] = table;
+    }
   }
 
   void removeTable(int index) => state.removeAt(index);
