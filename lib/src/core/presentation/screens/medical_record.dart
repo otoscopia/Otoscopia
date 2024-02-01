@@ -84,7 +84,10 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
                 text: const Text(kModifyBtn),
                 onPressed: () async {
                   Flyout.of(context).close();
-                  await showEditContent();
+                  WidgetsFlutterBinding.ensureInitialized()
+                      .addPostFrameCallback((timeStamp) async {
+                    await showEditContent();
+                  });
                 },
               ),
             MenuFlyoutItem(
