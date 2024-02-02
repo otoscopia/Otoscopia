@@ -77,6 +77,21 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
   }
 
   @override
+  Future<List<PatientEntity>> getPatientsByDoctor(String id) async {
+    try {
+      DocumentList result = await _source.getPatientsByDoctor(id);
+      final patients =
+          result.documents.map((e) => PatientEntity.fromMap(e.data)).toList();
+
+      return patients;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  @override
   Future<List<SchoolEntity>> getSchools() async {
     try {
       DocumentList result = await _source.getSchools();
@@ -99,6 +114,21 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
           result.documents.map((e) => ScreeningEntity.fromMap(e.data)).toList();
 
       return screenings;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  @override
+  Future<RemarksEntity> getRemarks(String screeningId) async {
+    try {
+      DocumentList result = await _source.getRemarks(screeningId);
+      final remarks =
+          result.documents.map((e) => RemarksEntity.fromMap(e.data)).toList();
+
+      return remarks.first;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {

@@ -15,6 +15,7 @@ class MedicalRecord extends ConsumerStatefulWidget {
 }
 
 class _MedicalRecordState extends ConsumerState<MedicalRecord> {
+  TableEntity? table;
   final controller = FlyoutController();
   final contextAttacKey = GlobalKey();
   final remarksController = TextEditingController();
@@ -26,12 +27,13 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
   void initState() {
     super.initState();
     recordStatus = widget._table.screening.status;
+    table = widget._table;
   }
 
   @override
   Widget build(BuildContext context) {
-    final patient = widget._table.patient;
-    final screening = widget._table.screening;
+    final patient = table!.patient;
+    final screening = table!.screening;
 
     return GestureDetector(
       onSecondaryTapUp: (details) {
@@ -51,9 +53,9 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
               const Gap(8),
               ScreeningInformationCard(screening),
               const Gap(8),
-              EarImages("$kLeftEar:", widget._table.screening.images),
+              EarImages("$kLeftEar:", table!.screening.images),
               const Gap(8),
-              EarImages("$kRightEar:", widget._table.screening.images),
+              EarImages("$kRightEar:", table!.screening.images),
             ],
           ),
         ),
@@ -79,29 +81,29 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
             if (isDoctor)
               MenuFlyoutItem(
                 leading: const Icon(FluentIcons.edit),
-                text: const Text("Modify"),
+                text: const Text(kModifyBtn),
                 onPressed: () async {
-                  await showEditContent();
+                  Flyout.of(context).close();
                   WidgetsFlutterBinding.ensureInitialized()
-                      .addPostFrameCallback((timeStamp) {
-                    Flyout.of(context).close();
+                      .addPostFrameCallback((timeStamp) async {
+                    await showEditContent();
                   });
                 },
               ),
             MenuFlyoutItem(
               leading: const Icon(FluentIcons.print),
-              text: const Text("Print"),
+              text: const Text(kPrintBtn),
               onPressed: () {
                 Flyout.of(context).close();
               },
             ),
             MenuFlyoutItem(
               leading: const Icon(FluentIcons.contact_card),
-              text: const Text("Patient Details"),
+              text: const Text(kPatientDetails),
               onPressed: () {
                 ref
                     .read(appIndexProvider.notifier)
-                    .visitPatient(widget._table.patient);
+                    .visitPatient(table!.patient);
               },
             )
           ],
@@ -112,46 +114,70 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
 
   Future<void> showEditContent() async {
     await showDialog(
+      dismissWithEsc: false,
       context: context,
       builder: (context) {
         return ContentDialog(
-          title: const Text("Modify Medical Record Status"),
+          title: const Text(kModifyMedicalRecordStatus),
           content: ContentPopUpDialog(
-            remarksController,
-            (value) => setState(() => recordStatus = value),
-            (value) => setState(() => followUpDate = value),
+            controller: remarksController,
+            followUpDate: (value) => setState(() => followUpDate = value),
+            status: (value) => setStatus(value),
           ),
           actions: [
             if (isUploading)
               const Center(child: ProgressRing())
             else
               Button(
-                child: const Text("Save"),
+                child: const Text(kSaveBtn),
                 onPressed: () async {
-                  widget._table.screening.copyWith(status: recordStatus);
-                  await ref.read(postRemarkProvider.notifier).postRemark(
-                        remarksController.text,
-                        followUpDate,
-                        widget._table.screening.id,
-                        recordStatus!,
-                      );
-
-                  WidgetsFlutterBinding.ensureInitialized()
-                      .addPostFrameCallback((timeStamp) {
-                    Navigator.of(context).pop();
-                  });
-
-                  setState(() {});
+                  onSave();
                 },
               ),
             FilledButton(
-              child: const Text("Cancel"),
-              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(kCancelBtn),
+              onPressed: () {
+                table = widget._table;
+                Navigator.of(context).pop();
+              },
             ),
           ],
         );
       },
     );
     setState(() {});
+  }
+
+  void setStatus(RecordStatus value) {
+    setState(() => recordStatus = value);
+
+    final record = table!.screening;
+
+    final updatedScreening = record.copyWith(status: value);
+
+    final updatedTable = table!.copyWith(screening: updatedScreening);
+
+    table = updatedTable;
+
+    ref.read(screeningsProvider.notifier).updateStatus(updatedScreening);
+
+    ref.read(tableProvider.notifier).updateTable(updatedTable);
+  }
+
+  void onSave() async {
+    if (recordStatus == RecordStatus.followUp && followUpDate == null) {
+      popUpInfoBar(kErrorTitle, kFollowUpDateEmpty, context);
+    }
+
+    await ref.read(postRemarkProvider.notifier).postRemark(
+          remarksController.text,
+          followUpDate,
+          table!.screening.id,
+          recordStatus!,
+        );
+
+    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
+      Navigator.of(context).pop();
+    });
   }
 }
