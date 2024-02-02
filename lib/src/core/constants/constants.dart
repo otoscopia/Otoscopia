@@ -1,4 +1,5 @@
 export 'button_constants.dart';
+export 'doctor_constants.dart';
 export 'guest_constants.dart';
 export 'named_routes_constants.dart';
 export 'nurse_constants.dart';
@@ -35,3 +36,10 @@ const String kErrorMessage = 'Please input all data before proceeding to the nex
 const String kWorkAddress = "Work Address";
 const String kAbbr = "Abbr.";
 const String kAddress = "Address";
+const String kAssignedNurse = "Assigned Nurse:";
+const String kAssignedDoctor = "Assigned Doctor:";
+const String kPatientCode = "Patient Code:";
+const String kLeftEar = "Left Ear";
+const String kRightEar = "Right Ear";
+const String kMedicalRecord = "Medical Record";
+const String kFollowUpDate = "Follow Up Date";
