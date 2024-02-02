@@ -45,14 +45,17 @@ class Settings extends ConsumerWidget {
                   divisions: 10,
                 ),
                 const Gap(12),
-                const CustomText(kLG),
+                Text(
+                  kLG,
+                  style: FluentTheme.of(context).typography.body,
+                  textScaler: const TextScaler.linear(2),
+                ),
               ],
             ),
           ),
           const ListTile(
             title: CustomText(kApplicationStorage),
-            subtitle:
-                CustomText(kChangeApplicationStorage, style: 3),
+            subtitle: CustomText(kChangeApplicationStorage, style: 3),
             // trailing: IconButton(
             //   icon: const Icon(Icons.folder),
             //   onPressed: () => ref
