@@ -1,0 +1,14 @@
+export 'assignment_provider.dart';
+export 'authentication_provider.dart';
+export 'app_index_provider.dart';
+export 'dashboard_tabs_provider.dart';
+export 'doctors_provider.dart';
+export 'nurses_provider.dart';
+export 'patients_provider.dart';
+export 'patients_tabs_provider.dart';
+export 'schools_provider.dart';
+export 'schools_tabs_provider.dart';
+export 'screenings_provider.dart';
+export 'search_provider.dart';
+export 'table_provider.dart';
+export 'user_provider.dart';
