@@ -71,7 +71,10 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
             child: DatePicker(
               selected: followUpDate,
               startDate: DateTime.now(),
-              onChanged: widget.followUpDate,
+              onChanged: (date) {
+                setState(() => followUpDate = date);
+                widget.followUpDate(date);
+              },
             ),
           ),
       ],
