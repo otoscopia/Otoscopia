@@ -19,8 +19,8 @@ const RESOURCES = {"assets/shaders/ink_sparkle.frag": "4096b5150bac93c41cbc9b452
 "assets/packages/window_manager/images/ic_chrome_unmaximize.png": "4a90c1909cb74e8f0d35794e2f61d8bf",
 "assets/packages/window_manager/images/ic_chrome_minimize.png": "4282cd84cb36edf2efb950ad9269ca62",
 "assets/FontManifest.json": "f1d16d680a5f89f53057dde8b56fba9d",
-"index.html": "eaf86ddcb4d1f3759a0b80452f9d9165",
-"/": "eaf86ddcb4d1f3759a0b80452f9d9165",
+"index.html": "7c5915185e12ef72a921d7d8a28eda1d",
+"/": "7c5915185e12ef72a921d7d8a28eda1d",
 "canvaskit/canvaskit.wasm": "73584c1a3367e3eaf757647a8f5c5989",
 "canvaskit/skwasm.js": "87063acf45c5e1ab9565dcf06b0c18b8",
 "canvaskit/canvaskit.js": "eb8797020acdbdf96a12fb0405582c1b",
@@ -37,7 +37,7 @@ const RESOURCES = {"assets/shaders/ink_sparkle.frag": "4096b5150bac93c41cbc9b452
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "style.css": "e086a4ff03c945ac9ae15bbc040238d6",
 "manifest.json": "83a3f54c5ebd484e7706337dfdd91add",
-"main.dart.js": "8e277fa2388fdf503bcdab83da0a0aed"};
+"main.dart.js": "c69a377edd0d7f3a0d02d2809cb4f270"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",
