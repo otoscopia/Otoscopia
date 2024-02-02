@@ -34,6 +34,7 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
   Widget build(BuildContext context) {
     final patient = table!.patient;
     final screening = table!.screening;
+    final bool modified = screening.status != RecordStatus.pending;
 
     return GestureDetector(
       onSecondaryTapUp: (details) {
@@ -49,6 +50,8 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
             children: [
               PatientInformationCard(patient),
               const Gap(8),
+              if (modified) DoctorsRemarkCard(screening),
+              if (modified) const Gap(8),
               VitalsCard(screening),
               const Gap(8),
               ScreeningInformationCard(screening),
