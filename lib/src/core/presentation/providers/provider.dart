@@ -3,7 +3,6 @@ export 'authentication_provider.dart';
 export 'app_index_provider.dart';
 export 'dashboard_tabs_provider.dart';
 export 'doctors_provider.dart';
-export 'doctors_tabs_provider.dart';
 export 'nurses_provider.dart';
 export 'patients_provider.dart';
 export 'patients_tabs_provider.dart';
