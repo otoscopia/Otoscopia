@@ -42,3 +42,4 @@ const String kPatientCode = "Patient Code:";
 const String kLeftEar = "Left Ear";
 const String kRightEar = "Right Ear";
 const String kMedicalRecord = "Medical Record";
+const String kFollowUpDate = "Follow Up Date";
