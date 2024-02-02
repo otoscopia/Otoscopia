@@ -2,7 +2,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/core/presentation/screens/medical_record.dart';
 import 'package:otoscopia/src/features/nurse/nurse.dart';
 
 class DashboardTabNotifier extends StateNotifier<List<Tab>> {
@@ -20,9 +19,13 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
 
   DashboardTabNotifier(this.ref) : super(tabs);
 
+  int findByPatient(PatientEntity patient) {
+    return state
+        .indexWhere((Tab tab) => (tab.text as Text).data == patient.name);
+  }
+
   void addTab(TableEntity table) {
-    final int index = state
-        .indexWhere((Tab tab) => (tab.text as Text).data == table.patient.name);
+    final int index = findByPatient(table.patient);
 
     if (!(index != -1)) {
       late final Tab tab;
@@ -44,9 +47,8 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
   }
 
   void addPatient() {
-    final int index = state.indexWhere(
-      (Tab tab) => (tab.text as Text).data == kAddPatient,
-    );
+    final int index =
+        state.indexWhere((Tab tab) => (tab.text as Text).data == kAddPatient);
 
     if (!(index != -1)) {
       late final Tab tab;
@@ -79,6 +81,19 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
       ref.read(addPatientTabProvider.notifier).resetTabs();
       ref.read(patientProvider.notifier).resetInformation();
       ref.read(screeningInformationProvider.notifier).resetInformation();
+    }
+  }
+
+  void viewRecord(ScreeningEntity screening) {
+    final patient =
+        ref.read(patientsProvider.notifier).findById(screening.patient);
+
+    final int index = findByPatient(patient);
+
+    if (index != -1) {
+      ref.read(dashboardIndexProvider.notifier).setIndex(index);
+    } else {
+      addTab(TableEntity(patient: patient, screening: screening));
     }
   }
 }
