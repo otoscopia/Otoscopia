@@ -77,10 +77,10 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
     );
 
     if (index != -1) {
-      state = state..removeAt(index);
-      ref.read(addPatientTabProvider.notifier).resetTabs();
       ref.read(patientProvider.notifier).resetInformation();
       ref.read(screeningInformationProvider.notifier).resetInformation();
+      ref.read(addPatientTabProvider.notifier).resetTabs();
+      state = state..removeAt(index);
     }
   }
 

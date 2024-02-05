@@ -45,9 +45,9 @@ class _ReviewsState extends ConsumerState<Reviews> {
                 const Gap(8),
                 ScreeningInformationCard(screening),
                 const Gap(8),
-                EarImages("$kLeftEar:", screening.images, isNetwork: false),
+                EarImages("$kLeftEar:", screening.images),
                 const Gap(8),
-                EarImages("$kRightEar:", screening.images, isNetwork: false),
+                EarImages("$kRightEar:", screening.images),
                 const Gap(8),
                 FilledButton(
                   child: const Text(kAddPatientBtn),

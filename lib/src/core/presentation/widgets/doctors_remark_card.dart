@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/authentication/authentication.dart';
@@ -27,17 +28,20 @@ class DoctorsRemarkCard extends ConsumerWidget {
               }
 
               final remark = snapshot.data as RemarksEntity;
+
+              late final String followUpDate;
+
+              if (screening.status == RecordStatus.followUp) {
+                followUpDate = DateFormat.yMMMMd().format(remark.followUpDate!);
+              }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(width: double.infinity),
                   CustomText("Remarks: ${remark.remarks}"),
                   if (screening.status != RecordStatus.followUp) const Gap(8),
-                  if (screening.status != RecordStatus.followUp)
-                    CustomText(
-                      "Follow up date: ${remark.followUpDate}",
-                      style: 3,
-                    ),
+                  if (screening.status == RecordStatus.followUp)
+                    CustomText("Follow up date: $followUpDate"),
                 ],
               );
             },

@@ -15,5 +15,5 @@ abstract class FetchDataRepository {
 
   Future<List<ScreeningEntity>> getScreenings();
 
-  Future<RemarksEntity> getRemarks(String screeningId);
+  Future<RemarksEntity?> getRemarks(String screeningId);
 }

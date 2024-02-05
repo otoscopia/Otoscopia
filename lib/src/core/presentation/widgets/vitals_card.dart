@@ -42,7 +42,8 @@ class VitalsCard extends ConsumerWidget {
               if (updated)
                 VitalRow(Ionicons.cloud_upload, kModifiedAt, uploadedAt)
               else if (isReview || !updated)
-                VitalRow(Ionicons.cloud_upload, kUploadedAt, updatedAt),
+                VitalRow(Ionicons.cloud_upload,
+                    isReview ? "Screened at" : kUploadedAt, updatedAt),
               const Gap(16),
               VitalRow(Ionicons.thermometer, kTemperature, temperature),
               const Gap(16),

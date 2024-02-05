@@ -122,11 +122,15 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
   }
 
   @override
-  Future<RemarksEntity> getRemarks(String screeningId) async {
+  Future<RemarksEntity?> getRemarks(String screeningId) async {
     try {
       DocumentList result = await _source.getRemarks(screeningId);
       final remarks =
           result.documents.map((e) => RemarksEntity.fromMap(e.data)).toList();
+
+      if (remarks.isEmpty) {
+        return null;
+      }
 
       return remarks.first;
     } on AppwriteException catch (error) {

@@ -13,7 +13,7 @@ class EarImages extends ConsumerWidget {
     this._name,
     this._earPath, {
     super.key,
-    this.isNetwork = true,
+    this.isNetwork = false,
   });
 
   final String _name;
@@ -25,9 +25,13 @@ class EarImages extends ConsumerWidget {
     List images = [];
     final earPosition = _name.split(" ").first.toLowerCase();
 
-    if (!isNetwork) {
+    if (isNetwork) {
       images =
           _earPath.where((element) => element.contains(earPosition)).toList();
+    } else {
+      images = _earPath.where((element) {
+        return element.split("\\").last.toLowerCase().contains(earPosition);
+      }).toList();
     }
 
     return CardOpacity(
@@ -42,7 +46,9 @@ class EarImages extends ConsumerWidget {
           const Gap(8),
           FutureBuilder(
             future: isNetwork
-                ? ref.read(fetchDataProvider.notifier).getImages(earPosition, _earPath)
+                ? ref
+                    .read(fetchDataProvider.notifier)
+                    .getImages(earPosition, _earPath)
                 : null,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

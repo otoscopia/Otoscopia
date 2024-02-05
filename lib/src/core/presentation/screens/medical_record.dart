@@ -56,9 +56,10 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
               const Gap(8),
               ScreeningInformationCard(screening),
               const Gap(8),
-              EarImages("$kLeftEar:", table!.screening.images),
+              EarImages("$kLeftEar:", table!.screening.images, isNetwork: true),
               const Gap(8),
-              EarImages("$kRightEar:", table!.screening.images),
+              EarImages("$kRightEar:", table!.screening.images,
+                  isNetwork: true),
             ],
           ),
         ),
@@ -125,7 +126,7 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
           content: ContentPopUpDialog(
             controller: remarksController,
             followUpDate: (value) => setState(() => followUpDate = value),
-            status: (value) => setStatus(value),
+            status: (value) => setState(() => recordStatus = value),
           ),
           actions: [
             if (isUploading)
@@ -151,12 +152,31 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
     setState(() {});
   }
 
-  void setStatus(RecordStatus value) {
-    setState(() => recordStatus = value);
+  void onSave() async {
+    if (remarksController.text.isEmpty && recordStatus == RecordStatus.pending) {
+      popUpInfoBar(kErrorTitle, "Please modify the record or select cancel to exit.", context);
+      return;
+    }
+
+    if (remarksController.text.isEmpty) {
+      popUpInfoBar(kErrorTitle, "Remarks must not be empty.", context);
+    }
+
+    if (recordStatus == RecordStatus.pending) {
+      popUpInfoBar(kErrorTitle, "Please select a status before continuing", context);
+      return;
+    }
+    
+    if (recordStatus ==
+            RecordStatus.followUp &&
+        followUpDate == null) {
+      popUpInfoBar(kErrorTitle, kFollowUpDateEmpty, context);
+      return;
+    }
 
     final record = table!.screening;
 
-    final updatedScreening = record.copyWith(status: value);
+    final updatedScreening = record.copyWith(status: recordStatus);
 
     final updatedTable = table!.copyWith(screening: updatedScreening);
 
@@ -165,17 +185,11 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
     ref.read(screeningsProvider.notifier).updateStatus(updatedScreening);
 
     ref.read(tableProvider.notifier).updateTable(updatedTable);
-  }
-
-  void onSave() async {
-    if (recordStatus == RecordStatus.followUp && followUpDate == null) {
-      popUpInfoBar(kErrorTitle, kFollowUpDateEmpty, context);
-    }
 
     await ref.read(postRemarkProvider.notifier).postRemark(
           remarksController.text,
           followUpDate,
-          table!.screening.id,
+          record.id,
           recordStatus!,
         );
 

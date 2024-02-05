@@ -30,7 +30,7 @@ class FetchDataUseCase {
     return await _fetchDataRepository.getScreenings();
   }
 
-  Future<RemarksEntity> getRemarks(String screeningId) async {
+  Future<RemarksEntity?> getRemarks(String screeningId) async {
     return await _fetchDataRepository.getRemarks(screeningId);
   }
 }
