@@ -12,7 +12,10 @@ class MedicalRecordCard extends ConsumerWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () => print('ad'),
+        onTap: () {
+          ref.read(appIndexProvider.notifier).setIndex(0);
+          ref.read(dashboardTabProvider.notifier).viewRecord(_record);
+        },
         child: VitalsCard(_record),
       ),
     );

@@ -56,10 +56,10 @@ class PatientsTableSource extends m3.DataTableSource {
         ref.read(doctorsProvider.notifier).findById(patient.doctor).name;
     return DataRow2(
       cells: [
-        m3.DataCell(Text(patient.name)),
-        m3.DataCell(Text("$age/$gender")),
-        m3.DataCell(Text(school)),
-        m3.DataCell(Text(doctor)),
+        m3.DataCell(CustomText(patient.name)),
+        m3.DataCell(CustomText("$age/$gender")),
+        m3.DataCell(CustomText(school)),
+        m3.DataCell(CustomText(doctor)),
       ],
       onSelectChanged: (value) {
         ref.read(patientsTabProvider.notifier).addTab(patient);
