@@ -44,9 +44,9 @@ class SchoolTableSource extends m3.DataTableSource {
   m3.DataRow? getRow(int index) {
     return DataRow2(
       cells: [
-        m3.DataCell(Text(_schools[index].abbr)),
-        m3.DataCell(Text(_schools[index].name)),
-        m3.DataCell(Text(_schools[index].address)),
+        m3.DataCell(CustomText(_schools[index].abbr)),
+        m3.DataCell(CustomText(_schools[index].name)),
+        m3.DataCell(CustomText(_schools[index].address)),
       ],
       onSelectChanged: (value) {
         ref.read(schoolsTabProvider.notifier).addTab(_schools[index]);

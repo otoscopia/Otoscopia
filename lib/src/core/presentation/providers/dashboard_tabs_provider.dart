@@ -19,32 +19,36 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
 
   DashboardTabNotifier(this.ref) : super(tabs);
 
+  int findByPatient(PatientEntity patient) {
+    return state
+        .indexWhere((Tab tab) => (tab.text as Text).data == patient.name);
+  }
+
   void addTab(TableEntity table) {
-    final int index = state
-        .indexWhere((Tab tab) => (tab.text as Text).data == table.patient.name);
+    final int index = findByPatient(table.patient);
 
     if (!(index != -1)) {
       late final Tab tab;
       tab = Tab(
         text: Text(table.patient.name),
-        icon: const Icon(FluentIcons.home),
+        icon: const Icon(FluentIcons.contact_heart),
         semanticLabel: table.patient.name,
-        body: Container(),
+        body: MedicalRecord(table),
         onClosed: () {
           state = state..remove(tab);
         },
       );
 
       state = [...state, tab];
+      ref.read(dashboardIndexProvider.notifier).setIndex(state.length - 1);
     } else {
       ref.read(dashboardIndexProvider.notifier).setIndex(index);
     }
   }
 
   void addPatient() {
-    final int index = state.indexWhere(
-      (Tab tab) => (tab.text as Text).data == kAddPatient,
-    );
+    final int index =
+        state.indexWhere((Tab tab) => (tab.text as Text).data == kAddPatient);
 
     if (!(index != -1)) {
       late final Tab tab;
@@ -64,6 +68,32 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
       ref.read(dashboardIndexProvider.notifier).setIndex(state.length - 1);
     } else {
       ref.read(dashboardIndexProvider.notifier).setIndex(index);
+    }
+  }
+
+  void removePatientTab() {
+    final int index = state.indexWhere(
+      (Tab tab) => (tab.text as Text).data == kAddPatient,
+    );
+
+    if (index != -1) {
+      state = state..removeAt(index);
+      ref.read(addPatientTabProvider.notifier).resetTabs();
+      ref.read(patientProvider.notifier).resetInformation();
+      ref.read(screeningInformationProvider.notifier).resetInformation();
+    }
+  }
+
+  void viewRecord(ScreeningEntity screening) {
+    final patient =
+        ref.read(patientsProvider.notifier).findById(screening.patient);
+
+    final int index = findByPatient(patient);
+
+    if (index != -1) {
+      ref.read(dashboardIndexProvider.notifier).setIndex(index);
+    } else {
+      addTab(TableEntity(patient: patient, screening: screening));
     }
   }
 }

@@ -35,6 +35,20 @@ class FetchDataDataSource {
     }
   }
 
+  Future<DocumentList> getPatientsByDoctor(String id) async {
+    try {
+      DocumentList result = await _databases.listDocuments(
+        databaseId: Env.database,
+        collectionId: Env.patientCollection,
+        queries: [Query.equal('doctor', id), Query.limit(100)],
+      );
+
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
   Future<DocumentList> getDoctors() async {
     try {
       DocumentList result = await _databases.listDocuments(
@@ -81,6 +95,20 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.screeningCollection,
+      );
+
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
+  Future<DocumentList> getRemarks(String screeningId) async {
+    try {
+      DocumentList result = await _databases.listDocuments(
+        databaseId: Env.database,
+        collectionId: Env.remarksCollection,
+        queries: [Query.equal('screening', screeningId)],
       );
 
       return result;

@@ -86,12 +86,12 @@ class TableSource extends m3.DataTableSource {
         ref.read(dashboardTabProvider.notifier).addTab(table);
       },
       cells: [
-        m3.DataCell(Text(patient.name)),
-        m3.DataCell(Text("$age/$gender")),
-        m3.DataCell(Text(status)),
-        m3.DataCell(Text(school.name)),
-        if (role) m3.DataCell(Text(doctor.name)),
-        if (!role) m3.DataCell(Text(nurse.name)),
+        m3.DataCell(CustomText(patient.name)),
+        m3.DataCell(CustomText("$age/$gender")),
+        m3.DataCell(CustomText(status)),
+        m3.DataCell(CustomText(school.name)),
+        if (role) m3.DataCell(CustomText(doctor.name)),
+        if (!role) m3.DataCell(CustomText(nurse.name)),
       ],
     );
   }
