@@ -18,14 +18,22 @@ class PostRemarkNotifier extends StateNotifier<void> {
     String id,
     RecordStatus status,
   ) async {
-    final hasRemarks =
+    final response =
         await ref.read(fetchDataProvider.notifier).getRemarks(id);
+    final hasRemarks = response?.id.isNotEmpty ?? false;
+    
 
     try {
-      if (hasRemarks.id.isNotEmpty) {
-        _repository.updateRemark(hasRemarks, status);
+      if (hasRemarks) {
+        final entity = RemarksEntity(
+          id: response!.id,
+          remarks: remarks,
+          screening: response.id,
+          followUpDate: followUpDate,
+        );
+        _repository.updateRemark(entity, status);
       } else {
-        final entity = RemarksEntity(id: id, remarks: remarks, screening: id);
+        final entity = RemarksEntity(id: id, remarks: remarks, screening: id, followUpDate: followUpDate);
 
         await _repository.postRemark(entity, status);
       }
