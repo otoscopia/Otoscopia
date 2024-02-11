@@ -65,7 +65,7 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
           ),
         ),
         const Gap(8),
-        if (recordIndex == 0)
+        if (recordIndex != 2)
           InfoLabel(
             label: kFollowUpDate,
             child: DatePicker(
