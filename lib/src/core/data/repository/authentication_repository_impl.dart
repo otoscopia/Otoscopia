@@ -3,6 +3,7 @@ import 'package:appwrite/models.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
+import 'package:otoscopia/src/features/authentication/authentication.dart';
 
 class AuthenticationRepositoryImpl implements AuthenticationRepository {
   final Databases _database;
@@ -24,6 +25,17 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       );
 
       return UserEntity.fromMap(result.data, session.$id);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  @override
+  Future<bool> signUp(SignUpFormEntity form) {
+    try {
+      return _source.signUp(form);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
