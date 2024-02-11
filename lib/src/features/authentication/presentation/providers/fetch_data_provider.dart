@@ -15,9 +15,20 @@ class FetchDataNotifier extends StateNotifier<void> {
   final FetchImageRepository _imageRepository =
       FetchImageRepositoryImpl(_imageSource);
 
-  Future<void> getAssignments(UserEntity user) async {
+  Future<void> getSchools() async {
     try {
-      final result = await _repository.getAssignments(user);
+      final result = await _repository.getSchools();
+      ref.read(schoolsProvider.notifier).setSchools(result);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  Future<void> getAssignments() async {
+    try {
+      final result = await _repository.getAssignments();
       ref.read(assignmentsProvider.notifier).setAssignments(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
@@ -26,9 +37,33 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
-  Future<void> getPatients() async {
+  Future<void> getAssignmentsByNurse(UserEntity user) async {
     try {
-      final result = await _repository.getPatients();
+      final result = await _repository.getAssignmentsByNurse(user.id);
+      ref.read(assignmentsProvider.notifier).setAssignments(result);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  Future<void> getPatientsBySchools() async {
+    final schools =
+        ref.read(schoolsProvider).map((school) => school.id).toList();
+    try {
+      final result = await _repository.getPatientsBySchools(schools);
+      ref.read(patientsProvider.notifier).setPatients(result);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  Future<void> getPatientsByDoctor(String id) async {
+    try {
+      final result = await _repository.getPatientsByDoctor(id);
       ref.read(patientsProvider.notifier).setPatients(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
@@ -59,24 +94,11 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
-  Future<void> getSchools(UserEntity user) async {
-    List<SchoolEntity> schools;
+  Future<void> getScreeningsByPatient() async {
+    final patients = ref.read(patientsProvider).map((e) => e.id).toList();
     try {
-      final result = await _repository.getSchools();
-
-      if (user.role == UserRole.nurse) {
-        final assignments = ref.read(assignmentsProvider);
-
-        schools = result.where((school) {
-          return assignments.where((assignment) {
-            return assignment.school == school.id;
-          }).isNotEmpty;
-        }).toList();
-      } else {
-        schools = result;
-      }
-
-      ref.read(schoolsProvider.notifier).setSchools(schools);
+      final result = await _repository.getScreeningsByPatient(patients);
+      ref.read(screeningsProvider.notifier).setScreenings(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -84,10 +106,10 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
-  Future<void> getScreenings() async {
+  Future<RemarksEntity?> getRemarks(String screening) async {
     try {
-      final result = await _repository.getScreenings();
-      ref.read(screeningsProvider.notifier).setScreenings(result);
+      final result = await _repository.getRemarksByScreening(screening);
+      return result;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -112,13 +134,31 @@ class FetchDataNotifier extends StateNotifier<void> {
     ref.read(tableProvider.notifier).setTable(patients, screenings);
   }
 
+  Future<void> filterSchoolsByUser(UserEntity user) async {
+    final schools = ref.read(schoolsProvider);
+    final assignments = ref.read(assignmentsProvider);
+    final filteredSchools = schools.where((school) {
+      return assignments.where((assignment) {
+        return assignment.school == school.id;
+      }).isNotEmpty;
+    }).toList();
+    ref.read(schoolsProvider.notifier).setSchools(filteredSchools);
+  }
+
   Future<void> fetch(UserEntity user) async {
-    await getAssignments(user);
-    await getPatients();
+    await getSchools();
     await getDoctors();
     await getNurses();
-    await getSchools(user);
-    await getScreenings();
+
+    if (user.role == UserRole.nurse) {
+      await getAssignmentsByNurse(user);
+      await filterSchoolsByUser(user);
+      await getPatientsBySchools();
+    } else {
+      await getAssignments();
+      await getPatientsByDoctor(user.id);
+    }
+    await getScreeningsByPatient();
     await setTableData();
   }
 }

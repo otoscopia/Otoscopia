@@ -3,8 +3,8 @@ const String kDarkMode = 'Dark Mode';
 const String kToggleDarkMode = 'Toggle dark mode';
 const String kFontSize = 'Font Size';
 const String kChangeFontSize = 'Change font size';
-const String kSM = 'SM';
-const String kLG = 'LG';
+const String kSM = 'Aa';
+const String kLG = 'Aa';
 const String kApplicationStorage = 'Application Storage';
 const String kChangeApplicationStorage =
     'Change application storage location';

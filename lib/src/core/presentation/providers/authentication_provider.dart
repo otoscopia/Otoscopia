@@ -2,6 +2,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/core/core.dart';
+import 'package:otoscopia/src/features/authentication/authentication.dart';
 
 class AuthenticationNotifier extends StateNotifier<bool> {
   final StateNotifierProviderRef<AuthenticationNotifier, bool> ref;
@@ -17,6 +18,17 @@ class AuthenticationNotifier extends StateNotifier<bool> {
       state = true;
       ref.read(userProvider.notifier).setUser(user);
       return user;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
+  Future<bool> signUp(
+    SignUpFormEntity form,
+  ) async {
+    try {
+      await _repository.signUp(form);
+      return true;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     }
