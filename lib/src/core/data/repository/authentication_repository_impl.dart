@@ -12,9 +12,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   AuthenticationRepositoryImpl(this._source) : _database = Databases(client);
 
   @override
-  Future<UserEntity> login(String email, String password) async {
+  Future<UserEntity> login(SignInFormEntity form) async {
     try {
-      List response = await _source.login(email, password);
+      List response = await _source.login(form);
       Session session = response[0];
       User user = response[1];
 

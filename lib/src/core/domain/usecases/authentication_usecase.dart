@@ -6,8 +6,8 @@ class AuthenticationUseCase {
 
   AuthenticationUseCase(this._authenticationRepository);
 
-  Future<UserEntity> login(String email, String password) async {
-    return await _authenticationRepository.login(email, password);
+  Future<UserEntity> login(SignInFormEntity form) async {
+    return await _authenticationRepository.login(form);
   }
 
   Future<bool> signUp(SignUpFormEntity form) async {

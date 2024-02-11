@@ -15,10 +15,12 @@ class AuthenticationDataSource {
       : _account = Account(client),
         _function = Functions(client);
 
-  Future<List> login(String email, String password) async {
+  Future<List> login(SignInFormEntity form) async {
     try {
-      Session session =
-          await _account.createEmailSession(email: email, password: password);
+      Session session = await _account.createEmailSession(
+        email: form.email,
+        password: form.password,
+      );
       User user = await _account.get();
 
       return [session, user];
