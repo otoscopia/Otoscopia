@@ -108,7 +108,15 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
                     .read(appIndexProvider.notifier)
                     .visitPatient(table!.patient);
               },
-            )
+            ),
+            if (!isDoctor)
+              MenuFlyoutItem(
+                leading: const Icon(FluentIcons.add),
+                text: const Text("Add New Record"),
+                onPressed: () {
+                  Flyout.of(context).close();
+                },
+              ),
           ],
         );
       },
@@ -168,7 +176,8 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
   }
 
   void onSave() async {
-    if (recordStatus == RecordStatus.followUp && followUpDate == null) {
+    if (recordStatus == RecordStatus.followUp ||
+        recordStatus == RecordStatus.medicalAttention && followUpDate == null) {
       popUpInfoBar(kErrorTitle, kFollowUpDateEmpty, context);
     }
 
