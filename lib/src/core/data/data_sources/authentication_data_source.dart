@@ -23,6 +23,12 @@ class AuthenticationDataSource {
       );
       User user = await _account.get();
 
+      final verified = user.emailVerification && user.phoneVerification;
+
+      if (!verified) {
+        throw Exception(kAccountNotVerified);
+      }
+
       return [session, user];
     } on AppwriteException catch (error) {
       throw Exception(error.message);
