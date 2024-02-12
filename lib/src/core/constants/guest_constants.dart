@@ -18,3 +18,5 @@ const String kFillAllFields = "Please fill all the fields";
 
 const kAccountCreated = "Account created";
 const kCheckEmail = "Please check your email and wait for the confirmation";
+
+const kAccountNotVerified = "Account not verified, please wait for the admins' approval to access your account.";
