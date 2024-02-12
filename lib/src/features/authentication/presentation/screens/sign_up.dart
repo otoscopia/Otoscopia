@@ -131,13 +131,15 @@ class _SignUpState extends ConsumerState<SignUp> {
             await ref.read(authenticationProvider.notifier).signUp(_form);
 
         if (response) {
-          // ignore: use_build_context_synchronously
-          popUpInfoBar(
-            kAccountCreated,
-            kCheckEmail,
-            context,
-            barSeverity: InfoBarSeverity.success,
-          );
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pop(context);
+            popUpInfoBar(
+              kAccountCreated,
+              kCheckEmail,
+              context,
+              barSeverity: InfoBarSeverity.success,
+            );
+          });
         }
       } on Exception catch (error) {
         WidgetsBinding.instance.addPostFrameCallback(
