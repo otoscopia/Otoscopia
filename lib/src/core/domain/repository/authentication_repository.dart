@@ -2,7 +2,7 @@ import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/authentication/authentication.dart';
 
 abstract class AuthenticationRepository {
-  Future<UserEntity> login(String email, String password);
+  Future<UserEntity> login(SignInFormEntity form);
 
   Future<bool> signUp(SignUpFormEntity form);
 
