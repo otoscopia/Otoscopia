@@ -13,6 +13,9 @@ abstract class Env {
   @EnviedField(varName: 'DATABASE', obfuscate: true)
   static final String database = _Env.database;
 
+  @EnviedField(varName: 'FUNCTION_ID', obfuscate: true)
+  static final String function = _Env.function;
+
   @EnviedField(varName: 'SCREENING_BUCKET', obfuscate: true)
   static final String screeningBucket = _Env.screeningBucket;
 

@@ -43,3 +43,9 @@ const String kLeftEar = "Left Ear";
 const String kRightEar = "Right Ear";
 const String kMedicalRecord = "Medical Record";
 const String kFollowUpDate = "Follow Up Date";
+
+const accountRole = ["Nurse", "Doctor"];
+const kFullName = 'Full Name';
+const kPhoneNumber = "Phone Number";
+const kCountryCode = "+63";
+const kRole = "Role";
