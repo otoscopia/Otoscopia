@@ -42,7 +42,7 @@ class SignUpFormEntity {
       'name': name,
       'phone': "+63$phone",
       'workAddress': address,
-      'school': school,
+      'schools': school,
       'role': role!.toLowerCase(),
       'publicKey': "--",
     };
