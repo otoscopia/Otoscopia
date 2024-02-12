@@ -104727,7 +104727,7 @@ return A.r(n.a.Do(0,j,h.a.a,i,"unique()"),$async$jY)
 case 7:m=c
 i=$.ba6()
 s=8
-return A.r(n.b.Ds(B.at.fB(A.a4(["userId",m.a,"email",k.a.a,"name",h.a.a,"phone","+63"+a.d.a.a,"address",a.e.a.a,"school",a.f.a.a,"role",a.r.toLowerCase(),"publicKey","--"],t.N,t.z)),i,"POST","/"),$async$jY)
+return A.r(n.b.Ds(B.at.fB(A.a4(["userId",m.a,"email",k.a.a,"name",h.a.a,"phone","+63"+a.d.a.a,"workAddress",a.e.a.a,"school",a.f.a.a,"role",a.r.toLowerCase(),"publicKey","--"],t.N,t.z)),i,"POST","/"),$async$jY)
 case 8:q=!0
 s=1
 break
