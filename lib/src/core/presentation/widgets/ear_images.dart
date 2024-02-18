@@ -31,11 +31,7 @@ class _EarImagesState extends ConsumerState<EarImages> {
     List images = [];
     final earPosition = widget._name.split(" ").first.toLowerCase();
 
-    if (widget.isNetwork) {
-      images = widget._earPath
-          .where((element) => element.contains(earPosition))
-          .toList();
-    } else {
+    if (!widget.isNetwork) {
       images = widget._earPath.where((element) {
         return element.split("\\").last.toLowerCase().contains(earPosition);
       }).toList();
@@ -61,9 +57,9 @@ class _EarImagesState extends ConsumerState<EarImages> {
                 return const LoadingWidget();
               }
 
-              if (widget.isNetwork) {
-                images = snapshot.data as List<Uint8List>;
-              }
+                if (widget.isNetwork) {
+                  images = snapshot.data as List<Uint8List>;
+                }
 
               return GridView.builder(
                 shrinkWrap: true,

@@ -30,7 +30,7 @@ class Camera extends ConsumerStatefulWidget {
 }
 
 class _CameraState extends ConsumerState<Camera> {
-  bool _invert = false;
+  bool _invert = true;
 
   @override
   Widget build(BuildContext context) {
