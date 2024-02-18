@@ -19,14 +19,17 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
   final controller = FlyoutController();
   final contextAttacKey = GlobalKey();
   final remarksController = TextEditingController();
+  final location = TextEditingController();
   final bool isUploading = false;
-  DateTime? followUpDate;
+  DateTime? date;
   RecordStatus? recordStatus;
 
   @override
   void initState() {
     super.initState();
-    recordStatus = widget._table.screening.status;
+    recordStatus = widget._table.remarks != null
+        ? widget._table.remarks!.status
+        : RecordStatus.pending;
     table = widget._table;
   }
 
@@ -34,7 +37,10 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
   Widget build(BuildContext context) {
     final patient = table!.patient;
     final screening = table!.screening;
-    final bool modified = screening.status != RecordStatus.pending;
+    final remarks = table?.remarks;
+    final hasRemarks = remarks != null;
+    final bool modified =
+        hasRemarks ? remarks.status != RecordStatus.pending : false;
 
     return GestureDetector(
       onSecondaryTapUp: (details) {
@@ -56,9 +62,10 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
               const Gap(8),
               ScreeningInformationCard(screening),
               const Gap(8),
-              EarImages("$kLeftEar:", table!.screening.images),
+              EarImages("$kLeftEar:", table!.screening.images, isNetwork: true),
               const Gap(8),
-              EarImages("$kRightEar:", table!.screening.images),
+              EarImages("$kRightEar:", table!.screening.images,
+                  isNetwork: true),
             ],
           ),
         ),
@@ -132,8 +139,9 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
           title: const Text(kModifyMedicalRecordStatus),
           content: ContentPopUpDialog(
             controller: remarksController,
-            followUpDate: (value) => setState(() => followUpDate = value),
-            status: (value) => setStatus(value),
+            location: location,
+            date: (value) => setState(() => date = value),
+            status: (value) => setState(() => recordStatus = value),
           ),
           actions: [
             if (isUploading)
@@ -159,37 +167,31 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
     setState(() {});
   }
 
-  void setStatus(RecordStatus value) {
-    setState(() => recordStatus = value);
-
-    final record = table!.screening;
-
-    final updatedScreening = record.copyWith(status: value);
-
-    final updatedTable = table!.copyWith(screening: updatedScreening);
-
-    table = updatedTable;
-
-    ref.read(screeningsProvider.notifier).updateStatus(updatedScreening);
-
-    ref.read(tableProvider.notifier).updateTable(updatedTable);
-  }
-
   void onSave() async {
-    if (recordStatus == RecordStatus.followUp ||
-        recordStatus == RecordStatus.medicalAttention && followUpDate == null) {
-      popUpInfoBar(kErrorTitle, kFollowUpDateEmpty, context);
+    final isResolved = recordStatus == RecordStatus.resolved;
+    final isMedicalAttention = (recordStatus == RecordStatus.medicalAttention &&
+        (date != null && location.text != ""));
+    final isFollowUp = recordStatus == RecordStatus.followUp &&
+        (date != null && location.text != "");
+
+    if (isResolved || isMedicalAttention || isFollowUp) {
+      await ref.read(postRemarkProvider.notifier).postRemark(
+            remarksController.text,
+            date,
+            table!.screening.id,
+            location.text,
+            recordStatus!,
+          );
+
+      WidgetsFlutterBinding.ensureInitialized()
+          .addPostFrameCallback((timeStamp) {
+        Navigator.of(context).pop();
+      });
+    } else {
+      popUpInfoBar(
+          kErrorTitle,
+          "Inputs are required and must be completed before submission.",
+          context);
     }
-
-    await ref.read(postRemarkProvider.notifier).postRemark(
-          remarksController.text,
-          followUpDate,
-          table!.screening.id,
-          recordStatus!,
-        );
-
-    WidgetsFlutterBinding.ensureInitialized().addPostFrameCallback((timeStamp) {
-      Navigator.of(context).pop();
-    });
   }
 }
