@@ -7,6 +7,7 @@ class SchoolEntity {
   final String abbr;
   final String code;
   final String address;
+  final bool isActive;
 
   SchoolEntity({
     required this.id,
@@ -14,6 +15,7 @@ class SchoolEntity {
     required this.abbr,
     required this.code,
     required this.address,
+    required this.isActive,
   });
 
   SchoolEntity copyWith({
@@ -22,6 +24,7 @@ class SchoolEntity {
     String? abbr,
     String? code,
     String? address,
+    bool? isActive,
   }) {
     return SchoolEntity(
       id: id ?? this.id,
@@ -29,6 +32,7 @@ class SchoolEntity {
       abbr: abbr ?? this.abbr,
       code: code ?? this.code,
       address: address ?? this.address,
+      isActive: isActive ?? this.isActive,
     );
   }
 
@@ -38,6 +42,7 @@ class SchoolEntity {
       'abbr': abbr,
       'code': code,
       'address': address,
+      'isActive': isActive,
     };
   }
 
@@ -48,6 +53,7 @@ class SchoolEntity {
       abbr: map['abbr'] as String,
       code: map['code'] as String,
       address: map['address'] as String,
+      isActive: map['isActive'] as bool,
     );
   }
 
@@ -58,7 +64,7 @@ class SchoolEntity {
 
   @override
   String toString() {
-    return 'SchoolEntity(id: $id, name: $name, abbr: $abbr, code: $code, address: $address)';
+    return 'SchoolEntity(id: $id, name: $name, abbr: $abbr, code: $code, address: $address, isActive: $isActive)';
   }
 
   @override
@@ -69,7 +75,8 @@ class SchoolEntity {
         other.name == name &&
         other.abbr == abbr &&
         other.code == code &&
-        other.address == address;
+        other.address == address &&
+        other.isActive == isActive;
   }
 
   @override
@@ -78,6 +85,7 @@ class SchoolEntity {
         name.hashCode ^
         abbr.hashCode ^
         code.hashCode ^
-        address.hashCode;
+        address.hashCode ^
+        isActive.hashCode;
   }
 }
