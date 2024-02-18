@@ -38,7 +38,7 @@ class FetchDataUseCase {
     return await _fetchDataRepository.getScreeningsByPatient(patients);
   }
 
-  Future<RemarksEntity?> getRemarksByScreening(String screening) async {
+  Future<List<RemarksEntity>> getRemarksByScreening(String screening) async {
     return await _fetchDataRepository.getRemarksByScreening(screening);
   }
 }

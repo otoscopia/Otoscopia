@@ -11,20 +11,23 @@ class RemarksEntity {
   final String? location;
   final RecordStatus status;
   final DateTime? date;
+  final DateTime? createdAt;
 
-  RemarksEntity({
-    required this.id,
-    required this.remarks,
-    required this.screening,
-    required this.status,
-    this.location,
-    this.date,
-  });
+  RemarksEntity(
+      {required this.id,
+      required this.remarks,
+      required this.screening,
+      required this.status,
+      this.location,
+      this.date,
+      this.createdAt});
 
   factory RemarksEntity.fromMap(Map<String, dynamic> json) {
     RecordStatus status = getStatus(json['status']);
     DateTime? date =
         json['date'] != null ? DateTime.parse(json['date'] as String) : null;
+    DateTime createdAt = DateTime.parse(json['\$createdAt'] as String);
+
     return RemarksEntity(
       id: json['\$id'] as String,
       remarks: json['remarks'] as String,
@@ -32,6 +35,7 @@ class RemarksEntity {
       screening: json['screening']['\$id'] as String,
       status: status,
       date: date,
+      createdAt: createdAt,
     );
   }
 

@@ -106,7 +106,7 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
-  Future<RemarksEntity?> getRemarks(String screening) async {
+  Future<List<RemarksEntity>> getRemarks(String screening) async {
     try {
       final result = await _repository.getRemarksByScreening(screening);
       return result;
