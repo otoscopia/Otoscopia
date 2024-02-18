@@ -14,7 +14,28 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.schoolCollection,
-        queries: [Query.limit(100)],
+        queries: [
+          Query.limit(100),
+          Query.equal('isActive', true),
+        ],
+      );
+
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
+  Future<DocumentList> getUnAssignedSchools() async {
+    try {
+      DocumentList result = await _databases.listDocuments(
+        databaseId: Env.database,
+        collectionId: Env.schoolCollection,
+        queries: [
+          Query.limit(100),
+          Query.equal('isAssigned', false),
+          Query.equal('isActive', true),
+        ],
       );
 
       return result;

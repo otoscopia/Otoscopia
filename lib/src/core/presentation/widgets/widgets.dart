@@ -7,6 +7,7 @@ export 'custom_text.dart';
 export 'doctors_remark_card.dart';
 export 'ear_images.dart';
 export 'loading_widget.dart';
+export 'local_ear_images.dart';
 export 'logo.dart';
 export 'patient_information_card.dart';
 export 'patients_table.dart';

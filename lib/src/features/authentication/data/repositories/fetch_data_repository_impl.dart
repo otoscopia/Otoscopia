@@ -25,6 +25,21 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
   }
 
   @override
+  Future<List<SchoolEntity>> getUnAssignedSchools() async {
+    try {
+      DocumentList result = await _source.getUnAssignedSchools();
+      final schools =
+          result.documents.map((e) => SchoolEntity.fromMap(e.data)).toList();
+
+      return schools;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  @override
   Future<List<AssignmentEntity>> getAssignments() async {
     List<AssignmentEntity> assignments;
     try {

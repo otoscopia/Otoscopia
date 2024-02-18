@@ -21,56 +21,47 @@ class _SignInState extends ConsumerState<SignIn> {
   @override
   Widget build(BuildContext context) {
     return ApplicationContainer(
-        child: FutureBuilder(
-      future: getSchools(ref),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingWidget();
-        }
-
-        return CenterCard(
-          child: Form(
-            key: formKey,
-            child: SizedBox(
-              width: 440,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
+        child: CenterCard(
+      child: Form(
+        key: formKey,
+        child: SizedBox(
+          width: 440,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Logo(height: 32),
+              const Gap(16),
+              const Text(kSignIn).fontSize(24),
+              const Gap(12),
+              EmailTextInput(emailController: _form.emailController),
+              const Gap(16),
+              PasswordFormBox(
+                controller: _form.passwordController,
+                placeholder: kPassword,
+                onEditingComplete: onClick,
+              ),
+              const Gap(16),
+              const TextNavigator(
+                kNoAccount,
+                bold: false,
+                child: NamedGuest.register,
+              ),
+              const TextNavigator(
+                kAccountNotAccessible,
+                bold: false,
+                child: NamedGuest.forgotPassword,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Logo(height: 32),
-                  const Gap(16),
-                  const Text(kSignIn).fontSize(24),
-                  const Gap(12),
-                  EmailTextInput(emailController: _form.emailController),
-                  const Gap(16),
-                  PasswordFormBox(
-                    controller: _form.passwordController,
-                    placeholder: kPassword,
-                    onEditingComplete: onClick,
-                  ),
-                  const Gap(16),
-                  const TextNavigator(
-                    kNoAccount,
-                    bold: false,
-                    child: NamedGuest.register,
-                  ),
-                  const TextNavigator(
-                    kAccountNotAccessible,
-                    bold: false,
-                    child: NamedGuest.forgotPassword,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (!isLoading) signInBtn() else const ProgressRing(),
-                    ],
-                  ),
+                  if (!isLoading) signInBtn() else const ProgressRing(),
                 ],
               ),
-            ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     ));
   }
 
@@ -107,15 +98,6 @@ class _SignInState extends ConsumerState<SignIn> {
       } finally {
         setState(() => isLoading = false);
       }
-    }
-  }
-
-  Future<bool> getSchools(WidgetRef ref) async {
-    try {
-      ref.read(fetchDataProvider.notifier).getSchools();
-      return true;
-    } catch (e) {
-      return false;
     }
   }
 }
