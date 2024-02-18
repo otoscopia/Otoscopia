@@ -9,18 +9,18 @@ class PostRemarkRepositoryImpl implements PostRemarkRepository {
   PostRemarkRepositoryImpl(this._source);
 
   @override
-  Future<void> postRemark(RemarksEntity remark, RecordStatus status) async {
+  Future<void> postRemark(RemarksEntity remark) async {
     try {
-      return await _source.postRemark(remark, status);
+      return await _source.postRemark(remark);
     } on AppwriteException catch (e) {
       throw Exception(e.message);
     }
   }
 
   @override
-  Future<void> updateRemark(RemarksEntity remark, RecordStatus status) async {
+  Future<void> updateRemark(RemarksEntity remark) async {
     try {
-      return await _source.updateRemark(remark, status);
+      return await _source.updateRemark(remark);
     } on AppwriteException catch (e) {
       throw Exception(e.message);
     }

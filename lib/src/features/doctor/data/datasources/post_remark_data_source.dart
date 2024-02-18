@@ -8,7 +8,7 @@ class PostRemarkDataSource {
 
   PostRemarkDataSource() : _database = Databases(client);
 
-  Future<void> postRemark(RemarksEntity remarks, RecordStatus status) async {
+  Future<void> postRemark(RemarksEntity remarks) async {
     try {
       await _database.createDocument(
         databaseId: Env.database,
@@ -16,23 +16,12 @@ class PostRemarkDataSource {
         documentId: remarks.id,
         data: remarks.toMap(),
       );
-
-      await updateScreening(remarks.screening, status.toString());
     } on AppwriteException catch (e) {
       throw Exception(e.message);
     }
   }
 
-  Future<void> updateScreening(String id, String status) async {
-    await _database.updateDocument(
-      databaseId: Env.database,
-      collectionId: Env.screeningCollection,
-      documentId: id,
-      data: {'status': status},
-    );
-  }
-
-  Future<void> updateRemark(RemarksEntity remarks, RecordStatus status) async {
+  Future<void> updateRemark(RemarksEntity remarks) async {
     try {
       await _database.updateDocument(
         databaseId: Env.database,
@@ -40,8 +29,6 @@ class PostRemarkDataSource {
         documentId: remarks.id,
         data: remarks.toMap(),
       );
-
-      await updateScreening(remarks.screening, status.toString());
     } on AppwriteException catch (e) {
       throw Exception(e.message);
     }

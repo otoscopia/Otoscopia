@@ -8,13 +8,15 @@ class ContentPopUpDialog extends ConsumerStatefulWidget {
   const ContentPopUpDialog({
     super.key,
     required this.controller,
+    required this.location,
     required this.status,
-    required this.followUpDate,
+    required this.date,
   });
 
   final TextEditingController controller;
+  final TextEditingController location;
   final void Function(RecordStatus) status;
-  final void Function(DateTime?) followUpDate;
+  final void Function(DateTime?) date;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -64,7 +66,7 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
             ),
           ),
         ),
-        const Gap(8),
+        if (recordIndex != 2) const Gap(8),
         if (recordIndex != 2)
           InfoLabel(
             label: kFollowUpDate,
@@ -73,10 +75,13 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
               startDate: DateTime.now(),
               onChanged: (date) {
                 setState(() => followUpDate = date);
-                widget.followUpDate(date);
+                widget.date(date);
               },
             ),
           ),
+        if (recordIndex != null && recordIndex != 2) const Gap(8),
+        if (recordIndex != null && recordIndex != 2)
+          TextFormInput(kLocation, widget.location),
       ],
     );
   }
