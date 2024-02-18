@@ -45,14 +45,20 @@ class _ReviewsState extends ConsumerState<Reviews> {
                 const Gap(8),
                 ScreeningInformationCard(screening),
                 const Gap(8),
-                EarImages("$kLeftEar:", screening.images, isNetwork: false),
+                EarImages("$kLeftEar:", screening.images),
                 const Gap(8),
-                EarImages("$kRightEar:", screening.images, isNetwork: false),
+                EarImages("$kRightEar:", screening.images),
                 const Gap(8),
                 FilledButton(
                   child: const Text(kSubmitBtn),
                   onPressed: () async {
-                    await onPressed(patient, screening);
+                    final complete = await onPressed(patient, screening);
+
+                    if (complete) {
+                      ref
+                          .read(dashboardTabProvider.notifier)
+                          .removePatientTab();
+                    }
                   },
                 ),
               ],
@@ -60,7 +66,7 @@ class _ReviewsState extends ConsumerState<Reviews> {
     );
   }
 
-  Future<void> onPressed(
+  Future<bool> onPressed(
       PatientEntity patient, ScreeningEntity screening) async {
     setState(() {
       isUploading = true;
@@ -77,20 +83,17 @@ class _ReviewsState extends ConsumerState<Reviews> {
       });
 
       await notifier.postScreening(screening);
-
-      ref.read(tableProvider.notifier).addTable(
-            TableEntity(patient: patient, screening: screening),
-          );
-      ref.read(dashboardTabProvider.notifier).removePatientTab();
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         popUpInfoBar(kErrorTitle, e.toString(), context);
       });
+      return false;
     } finally {
       setState(() {
         isScreeningUploading = false;
         isUploading = false;
       });
     }
+    return true;
   }
 }

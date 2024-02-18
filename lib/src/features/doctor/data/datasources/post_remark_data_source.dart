@@ -20,17 +20,4 @@ class PostRemarkDataSource {
       throw Exception(e.message);
     }
   }
-
-  Future<void> updateRemark(RemarksEntity remarks) async {
-    try {
-      await _database.updateDocument(
-        databaseId: Env.database,
-        collectionId: Env.remarksCollection,
-        documentId: remarks.id,
-        data: remarks.toMap(),
-      );
-    } on AppwriteException catch (e) {
-      throw Exception(e.message);
-    }
-  }
 }

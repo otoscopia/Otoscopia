@@ -16,13 +16,4 @@ class PostRemarkRepositoryImpl implements PostRemarkRepository {
       throw Exception(e.message);
     }
   }
-
-  @override
-  Future<void> updateRemark(RemarksEntity remark) async {
-    try {
-      return await _source.updateRemark(remark);
-    } on AppwriteException catch (e) {
-      throw Exception(e.message);
-    }
-  }
 }

@@ -3,6 +3,8 @@ import 'package:otoscopia/src/core/core.dart';
 abstract class FetchDataRepository {
   Future<List<SchoolEntity>> getSchools();
 
+  Future<List<SchoolEntity>> getUnAssignedSchools();
+
   Future<List<AssignmentEntity>> getAssignments();
 
   Future<List<AssignmentEntity>> getAssignmentsByNurse(String user);
@@ -17,5 +19,5 @@ abstract class FetchDataRepository {
 
   Future<List<ScreeningEntity>> getScreeningsByPatient(List<String> patients);
 
-  Future<RemarksEntity?> getRemarksByScreening(String screening);
+  Future<List<RemarksEntity>> getRemarksByScreening(String screening);
 }

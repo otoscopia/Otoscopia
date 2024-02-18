@@ -30,7 +30,7 @@ class Camera extends ConsumerStatefulWidget {
 }
 
 class _CameraState extends ConsumerState<Camera> {
-  bool _invert = false;
+  bool _invert = true;
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +47,11 @@ class _CameraState extends ConsumerState<Camera> {
             borderRadius: BorderRadius.circular(8),
             child: AspectRatio(
               aspectRatio: aspectRatio,
-              child: Transform(
+              child: _invert ? Transform(
                 alignment: Alignment.center,
                 transform: Matrix4.rotationY(math.pi),
                 child: CameraPlatform.instance.buildPreview(widget.cameraId),
-              ),
+              ) : CameraPlatform.instance.buildPreview(widget.cameraId),
             ),
           ),
         ),
@@ -72,8 +72,9 @@ class _CameraState extends ConsumerState<Camera> {
               child: const Text(kContinueBtn),
               onPressed: () => widget.continueButton(context),
             ),
+            const Gap(16),
             FilledButton(
-              child: const Text(kContinueBtn),
+              child: const Text("Invert Camera"),
               onPressed: () => setState(() => _invert = !_invert),
             ),
           ],
