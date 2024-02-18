@@ -58,9 +58,7 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
         semanticLabel: kAddPatient,
         body: const AddPatient(),
         onClosed: () {
-          state = state..remove(tab);
-          ref.read(addPatientTabProvider.notifier).resetTabs();
-          ref.read(patientProvider.notifier).resetInformation();
+          removePatientTab();
         },
       );
 
@@ -77,10 +75,11 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
     );
 
     if (index != -1) {
-      state = state..removeAt(index);
-      ref.read(addPatientTabProvider.notifier).resetTabs();
-      ref.read(patientProvider.notifier).resetInformation();
       ref.read(screeningInformationProvider.notifier).resetInformation();
+      ref.read(patientProvider.notifier).resetInformation();
+      ref.read(addPatientTabProvider.notifier).resetTabs();
+      state = state..removeAt(index);
+      ref.read(dashboardIndexProvider.notifier).setIndex(0);
     }
   }
 
