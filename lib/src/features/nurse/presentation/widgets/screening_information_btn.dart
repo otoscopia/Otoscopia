@@ -13,7 +13,7 @@ class ScreeningInformationBtn extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool hasValue = ref.read(screeningInformationProvider).id.isNotEmpty;
     return FilledButton(
-      child: Text(hasValue ? kUpdateBtn : kContinueBtn),
+      child: Text(hasValue ? kUpdateBtn : kProceedBtn),
       onPressed: () {
         final bool isValid = medical.isValid;
         if (!isValid) {

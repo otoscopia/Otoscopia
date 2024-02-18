@@ -45,7 +45,7 @@ class AuthenticationDataSource {
       );
 
       await _function.createExecution(
-        functionId: Env.function,
+        functionId: Env.accountCreation,
         body: json.encode(form.toMap(user.$id)),
         path: '/',
         method: 'POST',

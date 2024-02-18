@@ -50,7 +50,7 @@ class _ReviewsState extends ConsumerState<Reviews> {
                 EarImages("$kRightEar:", screening.images, isNetwork: false),
                 const Gap(8),
                 FilledButton(
-                  child: const Text(kAddPatientBtn),
+                  child: const Text(kSubmitBtn),
                   onPressed: () async {
                     await onPressed(patient, screening);
                   },
