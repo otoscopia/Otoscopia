@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:ionicons/ionicons.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 
@@ -20,17 +19,5 @@ List<NavigationPaneItem> navigationItems(UserRole role) {
       title: const Text(kSchools),
       body: const Schools(),
     ),
-    if (role == UserRole.doctor)
-      PaneItem(
-        icon: const Icon(Ionicons.git_network_outline),
-        title: const Text(kNurse),
-        body: Container(),
-      ),
-    if (role == UserRole.nurse)
-      PaneItem(
-        icon: const Icon(Ionicons.git_network_outline),
-        title: const Text(kDoctor),
-        body: const Doctors(),
-      ),
   ];
 }
