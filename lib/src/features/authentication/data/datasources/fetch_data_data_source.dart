@@ -41,7 +41,7 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.assignmentCollection,
-        queries: [Query.equal("users", id)],
+        queries: [Query.equal("nurse", id)],
       );
 
       return result;
@@ -56,7 +56,7 @@ class FetchDataDataSource {
         databaseId: Env.database,
         collectionId: Env.patientCollection,
         queries: [
-          if (schools.isNotEmpty) Query.equal('schools', schools),
+          if (schools.isNotEmpty) Query.equal('school', schools),
           Query.limit(100)
         ],
       );
@@ -115,7 +115,7 @@ class FetchDataDataSource {
         databaseId: Env.database,
         collectionId: Env.screeningCollection,
         queries: [
-          if (patients.isNotEmpty) Query.equal('patients', patients),
+          if (patients.isNotEmpty) Query.equal('patient', patients),
           Query.limit(100)
         ],
       );

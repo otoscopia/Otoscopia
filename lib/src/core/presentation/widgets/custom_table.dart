@@ -72,13 +72,13 @@ class TableSource extends m3.DataTableSource {
     final role = ref.read(userProvider).role == UserRole.nurse;
     final table = _data[index];
     final patient = table.patient;
-    final screening = table.screening;
+    
     final school = ref.read(schoolsProvider.notifier).findById(patient.school);
-    final assignment = ref.read(assignmentsProvider.notifier).findById(screening.assignment);
+    final assignment = ref.read(assignmentsProvider.notifier).findBySchool(school.id);
     final nurse = ref.read(nursesProvider.notifier).findById(assignment.nurse);
     final doctor = ref.read(doctorsProvider.notifier).findById(patient.doctor);
     final age = DateTime.now().difference(patient.birthDate).inDays ~/ 365;
-    final status = convertRecordStatus(screening.status);
+    final status = table.remarks?.statusString ?? "Pending";
     final gender = patient.gender == Gender.male ? "Male" : "Female";
 
     return DataRow2(
