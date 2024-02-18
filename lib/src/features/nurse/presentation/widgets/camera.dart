@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,7 +7,7 @@ import 'package:gap/gap.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 
-class Camera extends ConsumerWidget {
+class Camera extends ConsumerStatefulWidget {
   const Camera({
     required this.previewSize,
     required this.cameraId,
@@ -24,7 +26,16 @@ class Camera extends ConsumerWidget {
   final void Function(BuildContext context) continueButton;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _CameraState();
+}
+
+class _CameraState extends ConsumerState<Camera> {
+  bool _invert = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final aspectRatio = widget.previewSize!.width / widget.previewSize!.height;
+
     return Column(
       children: [
         Container(
@@ -35,8 +46,12 @@ class Camera extends ConsumerWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: AspectRatio(
-              aspectRatio: previewSize!.width / previewSize!.height,
-              child: CameraPlatform.instance.buildPreview(cameraId),
+              aspectRatio: aspectRatio,
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.rotationY(math.pi),
+                child: CameraPlatform.instance.buildPreview(widget.cameraId),
+              ),
             ),
           ),
         ),
@@ -44,19 +59,23 @@ class Camera extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (hasMultipleCameras)
+            if (widget.hasMultipleCameras)
               FilledButton(
-                onPressed: switchCamera,
+                onPressed: widget.switchCamera,
                 child: const Text(kSwitchCameraBtn),
               ),
             const Gap(16),
             FilledButton(
-                onPressed: takePicture, child: const Text(kCaptureBtn)),
+                onPressed: widget.takePicture, child: const Text(kCaptureBtn)),
             const Gap(16),
             FilledButton(
               child: const Text(kContinueBtn),
-              onPressed: () => continueButton(context),
-            )
+              onPressed: () => widget.continueButton(context),
+            ),
+            FilledButton(
+              child: const Text(kContinueBtn),
+              onPressed: () => setState(() => _invert = !_invert),
+            ),
           ],
         ),
       ],

@@ -24,7 +24,7 @@ class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
       late final Tab tab;
       tab = Tab(
         text: const Text("Left Ear"),
-        body: const LeftCamera(),
+        body: const CameraScreen(0),
       );
 
       state = [...state, tab];
@@ -43,7 +43,7 @@ class AddPatientTabNotifier extends StateNotifier<List<Tab>> {
       late final Tab tab;
       tab = Tab(
         text: const Text("Right Ear"),
-        body: const RightCamera(),
+        body: const CameraScreen(1),
       );
 
       state = [...state, tab];
