@@ -9,6 +9,10 @@ class FetchDataUseCase {
   Future<List<SchoolEntity>> getSchools() async {
     return await _fetchDataRepository.getSchools();
   }
+  
+  Future<List<SchoolEntity>> getUnAssignedSchools() async {
+    return await _fetchDataRepository.getUnAssignedSchools();
+  }
 
   Future<List<AssignmentEntity>> getAssignments() async {
     return await _fetchDataRepository.getAssignments();

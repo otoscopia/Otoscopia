@@ -26,6 +26,17 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
+  Future<void> getUnAssignedSchools() async {
+    try {
+      final result = await _repository.getUnAssignedSchools();
+      ref.read(schoolsProvider.notifier).setSchools(result);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
   Future<void> getAssignments() async {
     try {
       final result = await _repository.getAssignments();

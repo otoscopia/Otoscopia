@@ -259,6 +259,12 @@ class _CameraState extends ConsumerState<CameraScreen> {
     CameraPlatform.instance.takePicture(_cameraId).then((value) async {
       var fileName = value.name;
 
+      await CameraPlatform.instance.pausePreview(_cameraId);
+
+      Future.delayed(const Duration(milliseconds: 500), () async {
+        await CameraPlatform.instance.resumePreview(_cameraId);
+      });
+
       moveFile(File.fromUri(Uri.file(value.path)), fileName);
     });
   }
