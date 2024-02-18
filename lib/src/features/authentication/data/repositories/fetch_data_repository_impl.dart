@@ -25,6 +25,21 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
   }
 
   @override
+  Future<List<SchoolEntity>> getUnAssignedSchools() async {
+    try {
+      DocumentList result = await _source.getUnAssignedSchools();
+      final schools =
+          result.documents.map((e) => SchoolEntity.fromMap(e.data)).toList();
+
+      return schools;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  @override
   Future<List<AssignmentEntity>> getAssignments() async {
     List<AssignmentEntity> assignments;
     try {
@@ -134,17 +149,13 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
   }
 
   @override
-  Future<RemarksEntity?> getRemarksByScreening(String screening) async {
+  Future<List<RemarksEntity>> getRemarksByScreening(String screening) async {
     try {
       DocumentList result = await _source.getRemarksByScreening(screening);
       final remarks =
           result.documents.map((e) => RemarksEntity.fromMap(e.data)).toList();
 
-      if (remarks.isEmpty) {
-        return null;
-      }
-
-      return remarks.first;
+      return remarks;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {

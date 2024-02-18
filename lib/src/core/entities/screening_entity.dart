@@ -2,8 +2,6 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:ionicons/ionicons.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
@@ -12,7 +10,6 @@ import 'package:otoscopia/src/features/nurse/nurse.dart';
 class ScreeningEntity {
   final String id;
   final String patient;
-  final String assignment;
   final String historyOfIllness;
   final String remarks;
   final double temperature;
@@ -30,12 +27,10 @@ class ScreeningEntity {
   final List<String> images;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final RecordStatus status;
 
   ScreeningEntity({
     required this.id,
     required this.patient,
-    required this.assignment,
     required this.historyOfIllness,
     required this.remarks,
     required this.temperature,
@@ -53,58 +48,11 @@ class ScreeningEntity {
     required this.images,
     required this.createdAt,
     required this.updatedAt,
-    required this.status,
   });
-
-  IoniconsData get statusIcon {
-    switch (status) {
-      case RecordStatus.pending:
-        return Ionicons.time_outline;
-      case RecordStatus.followUp:
-        return Ionicons.repeat_outline;
-      case RecordStatus.medicalAttention:
-        return Ionicons.warning_sharp;
-      case RecordStatus.resolved:
-        return Ionicons.checkmark_circle;
-      default:
-        return Ionicons.time_outline;
-    }
-  }
-
-  Color get statusColor {
-    switch (status) {
-      case RecordStatus.pending:
-        return Colors.yellow;
-      case RecordStatus.followUp:
-        return Colors.blue;
-      case RecordStatus.medicalAttention:
-        return Colors.red;
-      case RecordStatus.resolved:
-        return Colors.green;
-      default:
-        return AppColors.accentColor.darkest;
-    }
-  }
-
-  String get statusString {
-    switch (status) {
-      case RecordStatus.pending:
-        return 'Pending';
-      case RecordStatus.followUp:
-        return 'Follow Up';
-      case RecordStatus.medicalAttention:
-        return 'Medical Attention';
-      case RecordStatus.resolved:
-        return 'Resolved';
-      default:
-        return 'Pending';
-    }
-  }
 
   ScreeningEntity copyWith({
     String? id,
     String? patient,
-    String? assignment,
     String? historyOfIllness,
     String? remarks,
     double? temperature,
@@ -122,12 +70,10 @@ class ScreeningEntity {
     List<String>? images,
     DateTime? createdAt,
     DateTime? updatedAt,
-    RecordStatus? status,
   }) {
     return ScreeningEntity(
       id: id ?? this.id,
       patient: patient ?? this.patient,
-      assignment: assignment ?? this.assignment,
       historyOfIllness: historyOfIllness ?? this.historyOfIllness,
       remarks: remarks ?? this.remarks,
       temperature: temperature ?? this.temperature,
@@ -147,14 +93,12 @@ class ScreeningEntity {
       images: images ?? this.images,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      status: status ?? this.status,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'patients': patient,
-      'assignment': assignment,
+      'patient': patient,
       'historyOfIllness': historyOfIllness,
       'remarks': remarks,
       'temperature': temperature,
@@ -170,32 +114,13 @@ class ScreeningEntity {
       'medication': medication,
       'medicationRemarks': medicationRemarks,
       'images': images,
-      'status': status.toString(),
     };
   }
 
-  static RecordStatus getStatus(String status) {
-    switch (status) {
-      case "RecordStatus.pending":
-        return RecordStatus.pending;
-      case "RecordStatus.followUp":
-        return RecordStatus.followUp;
-      case "RecordStatus.medicalAttention":
-        return RecordStatus.medicalAttention;
-      case "RecordStatus.resolved":
-        return RecordStatus.resolved;
-      default:
-        return RecordStatus.pending;
-    }
-  }
-
   factory ScreeningEntity.fromMap(Map<String, dynamic> map) {
-    RecordStatus status = getStatus(map['status']);
-
     return ScreeningEntity(
       id: map['\$id'] as String,
-      patient: map['patients']['\$id'] as String,
-      assignment: map['assignment']['\$id'] as String,
+      patient: map['patient']['\$id'] as String,
       historyOfIllness: map['historyOfIllness'] as String,
       remarks: map['remarks'] as String,
       temperature: double.parse(map['temperature'].toString()),
@@ -213,7 +138,6 @@ class ScreeningEntity {
       images: List<String>.from((map['images'])),
       createdAt: DateTime.parse(map['\$createdAt'] as String),
       updatedAt: DateTime.parse(map['\$updatedAt'] as String),
-      status: status,
     );
   }
 
@@ -224,7 +148,7 @@ class ScreeningEntity {
 
   @override
   String toString() {
-    return 'ScreeningEntity(id: $id, patient: $patient, assignment: $assignment, historyOfIllness: $historyOfIllness, remarks: $remarks, temperature: $temperature, weight: $weight, height: $height, similarCondition: $similarCondition, chiefComplaint: $chiefComplaint, chiefComplaintRemarks: $chiefComplaintRemarks, allergy: $allergy, allergyRemarks: $allergyRemarks, undergoneSurgery: $undergoneSurgery, undergoneSurgeryRemarks: $undergoneSurgeryRemarks, medication: $medication, medicationRemarks: $medicationRemarks, images: $images, createdAt: $createdAt, updatedAt: $updatedAt, status: $status)';
+    return 'ScreeningEntity(id: $id, patient: $patient, historyOfIllness: $historyOfIllness, remarks: $remarks, temperature: $temperature, weight: $weight, height: $height, similarCondition: $similarCondition, chiefComplaint: $chiefComplaint, chiefComplaintRemarks: $chiefComplaintRemarks, allergy: $allergy, allergyRemarks: $allergyRemarks, undergoneSurgery: $undergoneSurgery, undergoneSurgeryRemarks: $undergoneSurgeryRemarks, medication: $medication, medicationRemarks: $medicationRemarks, images: $images, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -234,7 +158,6 @@ class ScreeningEntity {
 
     return other.id == id &&
         other.patient == patient &&
-        other.assignment == assignment &&
         other.historyOfIllness == historyOfIllness &&
         other.remarks == remarks &&
         other.temperature == temperature &&
@@ -251,15 +174,13 @@ class ScreeningEntity {
         other.medicationRemarks == medicationRemarks &&
         listEquals(other.images, images) &&
         other.createdAt == createdAt &&
-        other.updatedAt == updatedAt &&
-        other.status == status;
+        other.updatedAt == updatedAt;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
         patient.hashCode ^
-        assignment.hashCode ^
         historyOfIllness.hashCode ^
         remarks.hashCode ^
         temperature.hashCode ^
@@ -276,15 +197,13 @@ class ScreeningEntity {
         medicationRemarks.hashCode ^
         images.hashCode ^
         createdAt.hashCode ^
-        updatedAt.hashCode ^
-        status.hashCode;
+        updatedAt.hashCode;
   }
 
   factory ScreeningEntity.initial() {
     return ScreeningEntity(
       id: '',
       patient: '',
-      assignment: '',
       historyOfIllness: '',
       remarks: '',
       temperature: 0.0,
@@ -302,16 +221,17 @@ class ScreeningEntity {
       images: <String>[],
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      status: RecordStatus.pending,
     );
   }
 
-  factory ScreeningEntity.fromMedical(MedicalFormEntity medical, String patient,
-      String assignment, List<String> images) {
+  factory ScreeningEntity.fromMedical(
+    MedicalFormEntity medical,
+    String patient,
+    List<String> images,
+  ) {
     return ScreeningEntity(
       id: uuid.v4(),
       patient: patient,
-      assignment: assignment,
       historyOfIllness: medical.historyOfIllness,
       remarks: medical.remarks,
       temperature: medical.temperature,
@@ -329,7 +249,6 @@ class ScreeningEntity {
       images: images,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      status: RecordStatus.pending,
     );
   }
 

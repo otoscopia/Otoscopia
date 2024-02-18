@@ -6,7 +6,8 @@ class SignUpFormEntity {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
-  final schoolController = TextEditingController();
+  final List<String> schools = [];
+
   String? role;
   String? publickKey;
 
@@ -15,7 +16,6 @@ class SignUpFormEntity {
   String get name => nameController.text;
   String get phone => phoneController.text;
   String get address => addressController.text;
-  String get school => schoolController.text;
 
   bool get isValid {
     bool emailIsValid = email.isNotEmpty;
@@ -23,7 +23,6 @@ class SignUpFormEntity {
     bool nameIsValid = name.isNotEmpty;
     bool phoneIsValid = phone.isNotEmpty;
     bool addressIsValid = address.isNotEmpty;
-    bool schoolIsValid = school.isNotEmpty;
     bool roleIsValid = role != null;
 
     return emailIsValid &&
@@ -31,7 +30,6 @@ class SignUpFormEntity {
         nameIsValid &&
         phoneIsValid &&
         addressIsValid &&
-        schoolIsValid &&
         roleIsValid;
   }
 
@@ -42,7 +40,7 @@ class SignUpFormEntity {
       'name': name,
       'phone': "+63$phone",
       'workAddress': address,
-      'schools': school,
+      'school': schools,
       'role': role!.toLowerCase(),
       'publicKey': "--",
     };

@@ -14,7 +14,28 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.schoolCollection,
-        queries: [Query.limit(100)],
+        queries: [
+          Query.limit(100),
+          Query.equal('isActive', true),
+        ],
+      );
+
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
+  Future<DocumentList> getUnAssignedSchools() async {
+    try {
+      DocumentList result = await _databases.listDocuments(
+        databaseId: Env.database,
+        collectionId: Env.schoolCollection,
+        queries: [
+          Query.limit(100),
+          Query.equal('isAssigned', false),
+          Query.equal('isActive', true),
+        ],
       );
 
       return result;
@@ -41,7 +62,7 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.assignmentCollection,
-        queries: [Query.equal("users", id)],
+        queries: [Query.equal("nurse", id)],
       );
 
       return result;
@@ -56,7 +77,7 @@ class FetchDataDataSource {
         databaseId: Env.database,
         collectionId: Env.patientCollection,
         queries: [
-          if (schools.isNotEmpty) Query.equal('schools', schools),
+          if (schools.isNotEmpty) Query.equal('school', schools),
           Query.limit(100)
         ],
       );
@@ -115,7 +136,7 @@ class FetchDataDataSource {
         databaseId: Env.database,
         collectionId: Env.screeningCollection,
         queries: [
-          if (patients.isNotEmpty) Query.equal('patients', patients),
+          if (patients.isNotEmpty) Query.equal('patient', patients),
           Query.limit(100)
         ],
       );

@@ -49,3 +49,4 @@ const kFullName = 'Full Name';
 const kPhoneNumber = "Phone Number";
 const kCountryCode = "+63";
 const kRole = "Role";
+const kLocation = "Location";

@@ -26,19 +26,31 @@ class DoctorsRemarkCard extends ConsumerWidget {
                 return const LoadingWidget();
               }
 
-              final remark = snapshot.data as RemarksEntity;
+              final remarks = snapshot.data as List<RemarksEntity>;
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(width: double.infinity),
-                  CustomText("Remarks: ${remark.remarks}"),
-                  if (screening.status != RecordStatus.followUp) const Gap(8),
-                  if (screening.status != RecordStatus.followUp)
-                    CustomText(
-                      "Follow up date: ${remark.followUpDate}",
-                      style: 3,
-                    ),
-                ],
+                children: remarks.map(
+                  (remark) {
+                    final hasDate = remark.status != RecordStatus.resolved &&
+                        remark.status != RecordStatus.pending;
+
+                    return Card(
+                      child: Column(
+                        children: [
+                          const SizedBox(width: double.infinity),
+                          CustomText("Remarks: ${remark.remarks}"),
+                          if (hasDate) const Gap(8),
+                          if (hasDate)
+                            CustomText(
+                              "Follow up date: ${remark.date}",
+                              style: 3,
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                ).toList(),
               );
             },
           ),

@@ -47,8 +47,8 @@ class AssignmentEntity {
   factory AssignmentEntity.fromMap(Map<String, dynamic> map) {
     return AssignmentEntity(
       id: map['\$id'] as String,
-      nurse: map['users']["\$id"] as String,
-      school: map['schools']["\$id"] as String,
+      nurse: map['nurse']["\$id"] as String,
+      school: map['school']["\$id"] as String,
       isActive: map['isActive'] as bool,
       createdAt: DateTime.parse(map['\$createdAt']),
       updatedAt: DateTime.parse(map['\$updatedAt']),
