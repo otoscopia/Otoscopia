@@ -8,9 +8,10 @@ import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/nurse/nurse.dart';
 
 class LocalImage extends ConsumerStatefulWidget {
-  const LocalImage(this._images, {super.key, required this.index});
+  const LocalImage(this._images, {super.key, required this.index, required this.refresh});
   final List _images;
   final int index;
+  final void Function(void Function()) refresh;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LocalImageState();
@@ -31,13 +32,13 @@ class _LocalImageState extends ConsumerState<LocalImage> {
           top: 0,
           right: 0,
           child: IconButton(
-            icon: const Icon(Ionicons.close_circle),
+            icon: Icon(Ionicons.trash_bin, color: Colors.red.light, size: 24,),
             onPressed: () async {
               try {
                 await ref
                     .read(screeningInformationProvider.notifier)
                     .removeImage(images[widget.index]);
-                setState(() {});
+                widget.refresh(() {});
               } catch (e) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   popUpInfoBar(kErrorTitle, e.toString(), context);
