@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:ionicons/ionicons.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/authentication/authentication.dart';
@@ -35,7 +37,7 @@ class _EarImagesState extends ConsumerState<EarImages> {
           .toList();
     } else {
       images = widget._earPath.where((element) {
-        return element.split("\\").last.contains(earPosition);
+        return element.split("\\").last.toLowerCase().contains(earPosition);
       }).toList();
     }
 
@@ -75,19 +77,79 @@ class _EarImagesState extends ConsumerState<EarImages> {
                   mainAxisSpacing: 8,
                 ),
                 itemBuilder: (context, index) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: widget.isNetwork
-                        ? Image.memory(
-                            images[index],
-                            fit: BoxFit.cover,
-                            width: 350,
-                          )
-                        : LocalImage(images, index: index),
+                  return GestureDetector(
+                    onTap: () async {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ContentDialog(
+                            constraints: const BoxConstraints(
+                              maxWidth: 550,
+                              maxHeight: 550,
+                            ),
+                            content: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: PopUpImage(
+                                widget.isNetwork
+                                    ? Image.memory(images[index])
+                                    : Image.file(File(images[index])),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: widget.isNetwork
+                          ? Image.memory(
+                              images[index],
+                              fit: BoxFit.cover,
+                              width: 350,
+                            )
+                          : LocalImage(
+                              images,
+                              index: index,
+                              refresh: (p0) {
+                                setState(() {});
+                              },
+                            ),
+                    ),
                   );
                 },
               );
             },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PopUpImage extends ConsumerWidget {
+  const PopUpImage(this.child, {super.key});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return GestureDetector(
+      onDoubleTap: () => Navigator.pop(context),
+      child: Stack(
+        children: [
+          child,
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+              icon: Icon(
+                Ionicons.close_circle,
+                color: Colors.red.light,
+                size: 24,
+              ),
+              onPressed: () async {
+                Navigator.pop(context);
+              },
+            ),
           ),
         ],
       ),
