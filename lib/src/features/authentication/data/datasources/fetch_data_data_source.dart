@@ -14,6 +14,7 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.schoolCollection,
+        queries: [Query.limit(100)],
       );
 
       return result;

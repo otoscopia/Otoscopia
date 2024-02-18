@@ -6,18 +6,23 @@ import 'package:otoscopia/src/core/core.dart';
 class TableEntity {
   final PatientEntity patient;
   final ScreeningEntity screening;
+  final RemarksEntity? remarks;
+
   TableEntity({
     required this.patient,
     required this.screening,
+    this.remarks,
   });
 
   TableEntity copyWith({
     PatientEntity? patient,
     ScreeningEntity? screening,
+    RemarksEntity? remarks,
   }) {
     return TableEntity(
       patient: patient ?? this.patient,
       screening: screening ?? this.screening,
+      remarks: remarks ?? this.remarks,
     );
   }
 
@@ -25,6 +30,7 @@ class TableEntity {
     return <String, dynamic>{
       'patient': patient.toMap(),
       'screening': screening.toMap(),
+      'remarks': remarks?.toMap(),
     };
   }
 
@@ -33,6 +39,9 @@ class TableEntity {
       patient: PatientEntity.fromMap(map['patient'] as Map<String, dynamic>),
       screening:
           ScreeningEntity.fromMap(map['screening'] as Map<String, dynamic>),
+      remarks: map['remarks'] != null
+          ? RemarksEntity.fromMap(map['remarks'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -42,15 +51,18 @@ class TableEntity {
       TableEntity.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
-  String toString() => 'TableEntity(patient: $patient, screening: $screening)';
+  String toString() =>
+      'TableEntity(patient: $patient, screening: $screening, remarks: $remarks)';
 
   @override
   bool operator ==(covariant TableEntity other) {
     if (identical(this, other)) return true;
 
-    return other.patient == patient && other.screening == screening;
+    return other.patient == patient &&
+        other.screening == screening &&
+        other.remarks == remarks;
   }
 
   @override
-  int get hashCode => patient.hashCode ^ screening.hashCode;
+  int get hashCode => patient.hashCode ^ screening.hashCode ^ remarks.hashCode;
 }
