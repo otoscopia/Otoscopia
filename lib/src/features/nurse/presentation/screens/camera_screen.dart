@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import "dart:async";
 import "dart:io";
 
@@ -142,8 +140,13 @@ class _CameraState extends ConsumerState<CameraScreen> {
         _hasNoCamera = false;
       }
     } on PlatformException catch (e) {
-      popUpInfoBar(
-          kErrorTitle, "$kFailedToGetCamera ${e.code} : ${e.message}", context);
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        popUpInfoBar(
+          kErrorTitle,
+          "$kFailedToGetCamera ${e.code} : ${e.message}",
+          context,
+        );
+      });
     }
 
     if (mounted) {
@@ -207,8 +210,13 @@ class _CameraState extends ConsumerState<CameraScreen> {
           await CameraPlatform.instance.dispose(cameraId);
         }
       } on CameraException catch (e) {
-        popUpInfoBar(kErrorTitle,
-            "$kFailedToDisposeCamera ${e.code}: ${e.description}", context);
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          popUpInfoBar(
+            kErrorTitle,
+            "$kFailedToDisposeCamera ${e.code}: ${e.description}",
+            context,
+          );
+        });
       }
 
       /// Reset State

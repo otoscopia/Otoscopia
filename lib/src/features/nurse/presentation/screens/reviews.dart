@@ -83,8 +83,9 @@ class _ReviewsState extends ConsumerState<Reviews> {
           );
       ref.read(dashboardTabProvider.notifier).removePatientTab();
     } catch (e) {
-      // ignore: use_build_context_synchronously
-      popUpInfoBar(kErrorTitle, e.toString(), context);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        popUpInfoBar(kErrorTitle, e.toString(), context);
+      });
     } finally {
       setState(() {
         isScreeningUploading = false;
