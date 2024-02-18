@@ -75,7 +75,7 @@ class _AddPatientInformationState extends ConsumerState<AddPatientInformation> {
                 const Gap(16),
                 TextFormInput(
                   kIdNumber,
-                  _form.idNumberController,
+                  _form.lrnController,
                   idNumber: true,
                 ),
                 const Gap(16),
@@ -92,14 +92,15 @@ class _AddPatientInformationState extends ConsumerState<AddPatientInformation> {
   void initState() {
     PatientEntity patient = ref.read(patientProvider);
     if (patient.id.isNotEmpty) {
-      final school = ref.read(schoolsProvider.notifier).findById(patient.school);
+      final school =
+          ref.read(schoolsProvider.notifier).findById(patient.school);
       _form.nameController.text = patient.name;
       _form.gender = patient.gender.index;
       _form.birthDate = patient.birthDate;
       _form.guardianNameController.text = patient.guardian;
       _form.guardianPhoneNumberController.text = patient.guardianPhone;
       _form.schoolController.text = school.abbr;
-      _form.idNumberController.text = patient.idNumber;
+      _form.lrnController.text = patient.lrn;
     }
     super.initState();
   }

@@ -7,7 +7,7 @@ class PatientFormEntity {
   TextEditingController guardianNameController = TextEditingController();
   TextEditingController guardianPhoneNumberController = TextEditingController();
   TextEditingController schoolController = TextEditingController();
-  TextEditingController idNumberController = TextEditingController();
+  TextEditingController lrnController = TextEditingController();
 
   PatientFormEntity();
 
@@ -15,14 +15,14 @@ class PatientFormEntity {
   String get guardianName => guardianNameController.text;
   String get guardianPhone => guardianPhoneNumberController.text;
   String get school => schoolController.text;
-  String get idNumber => idNumberController.text;
+  String get lrn => lrnController.text;
 
   bool get isValid {
     bool nameIsValid = name.isNotEmpty;
     bool guardianNameIsValid = guardianName.isNotEmpty;
     bool guardianPhoneIsValid = guardianPhone.isNotEmpty;
     bool schoolIsValid = school.isNotEmpty;
-    bool idNumberIsValid = idNumber.isNotEmpty;
+    bool lrnIsValid = lrn.isNotEmpty;
     bool genderIsValid = gender != 3;
 
     String birthdate = birthDate.toString().split(" ")[0];
@@ -33,7 +33,7 @@ class PatientFormEntity {
         guardianNameIsValid &&
         guardianPhoneIsValid &&
         schoolIsValid &&
-        idNumberIsValid &&
+        lrnIsValid &&
         genderIsValid &&
         birthDateIsValid;
   }

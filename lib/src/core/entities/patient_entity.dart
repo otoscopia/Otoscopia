@@ -11,7 +11,7 @@ class PatientEntity {
   final Gender gender;
   final DateTime birthDate;
   final String school;
-  final String idNumber;
+  final String lrn;
   final String guardian;
   final String guardianPhone;
   final String creator;
@@ -27,7 +27,7 @@ class PatientEntity {
     required this.gender,
     required this.birthDate,
     required this.school,
-    required this.idNumber,
+    required this.lrn,
     required this.guardian,
     required this.guardianPhone,
     required this.creator,
@@ -44,7 +44,7 @@ class PatientEntity {
     Gender? gender,
     DateTime? birthDate,
     String? school,
-    String? idNumber,
+    String? lrn,
     String? guardian,
     String? guardianPhone,
     String? creator,
@@ -60,7 +60,7 @@ class PatientEntity {
       gender: gender ?? this.gender,
       birthDate: birthDate ?? this.birthDate,
       school: school ?? this.school,
-      idNumber: idNumber ?? this.idNumber,
+      lrn: lrn ?? this.lrn,
       guardian: guardian ?? this.guardian,
       guardianPhone: guardianPhone ?? this.guardianPhone,
       creator: creator ?? this.creator,
@@ -72,13 +72,17 @@ class PatientEntity {
     );
   }
 
+  String get genderString {
+    return gender.toString().split(" ").last;
+  }
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'name': name,
-      'gender': gender.toString(),
+      'gender': genderString,
       'birthDate': birthDate.toIso8601String(),
       'schools': school,
-      'idNumber': idNumber,
+      'lrn': lrn,
       'guardian': guardian,
       'guardianPhone': guardianPhone,
       'creator': creator,
@@ -89,20 +93,19 @@ class PatientEntity {
   }
 
   factory PatientEntity.fromMap(Map<String, dynamic> map) {
-    Gender gender =
-        map["gender"] == "Gender.male" ? Gender.male : Gender.female;
+    Gender gender = map["gender"] == "male" ? Gender.male : Gender.female;
 
     return PatientEntity(
       id: map['\$id'] as String,
       name: map['name'] as String,
       gender: gender,
       birthDate: DateTime.parse(map['birthDate'] as String),
-      school: map['schools']['\$id'] as String,
-      idNumber: map['idNumber'] as String,
+      school: map['school']['\$id'] as String,
+      lrn: map['lrn'] as String,
       guardian: map['guardian'] as String,
       guardianPhone: map['guardianPhone'] as String,
       creator: map['creator'] as String,
-      doctor: map['doctor'] as String,
+      doctor: map['doctor']["\$id"] as String,
       code: map['code'] as String,
       image: map['image'] != null ? map['image'] as String : null,
       updatedAt: DateTime.parse(map['\$updatedAt'] as String),
@@ -117,7 +120,7 @@ class PatientEntity {
 
   @override
   String toString() {
-    return 'PatientEntity(id: $id, name: $name, gender: $gender, birthDate: $birthDate, school: $school, idNumber: $idNumber, guardian: $guardian, guardianPhone: $guardianPhone, creator: $creator, doctor: $doctor, code: $code, image: $image, updatedAt: $updatedAt, createdAt: $createdAt)';
+    return 'PatientEntity(id: $id, name: $name, gender: $gender, birthDate: $birthDate, school: $school, lrn: $lrn, guardian: $guardian, guardianPhone: $guardianPhone, creator: $creator, doctor: $doctor, code: $code, image: $image, updatedAt: $updatedAt, createdAt: $createdAt)';
   }
 
   @override
@@ -129,7 +132,7 @@ class PatientEntity {
         other.gender == gender &&
         other.birthDate == birthDate &&
         other.school == school &&
-        other.idNumber == idNumber &&
+        other.lrn == lrn &&
         other.guardian == guardian &&
         other.guardianPhone == guardianPhone &&
         other.creator == creator &&
@@ -147,7 +150,7 @@ class PatientEntity {
         gender.hashCode ^
         birthDate.hashCode ^
         school.hashCode ^
-        idNumber.hashCode ^
+        lrn.hashCode ^
         guardian.hashCode ^
         guardianPhone.hashCode ^
         creator.hashCode ^
@@ -165,7 +168,7 @@ class PatientEntity {
       gender: Gender.unknown,
       birthDate: DateTime.now(),
       school: "",
-      idNumber: "",
+      lrn: "",
       guardian: "",
       guardianPhone: "",
       creator: "",
@@ -187,7 +190,7 @@ class PatientEntity {
       gender: Gender.values[form.gender],
       birthDate: form.birthDate,
       school: form.school,
-      idNumber: form.idNumber,
+      lrn: form.lrn,
       guardian: form.guardianName,
       guardianPhone: form.guardianPhone,
       creator: creatorId,
@@ -208,7 +211,7 @@ class PatientEntity {
       gender: Gender.values[form.gender],
       birthDate: form.birthDate,
       school: form.school,
-      idNumber: form.idNumber,
+      lrn: form.lrn,
       guardian: form.guardianName,
       guardianPhone: form.guardianPhone,
       creator: patient.creator,
