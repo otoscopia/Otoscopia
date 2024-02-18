@@ -73,7 +73,7 @@ class PatientEntity {
   }
 
   String get genderString {
-    return gender.toString().split(" ").last;
+    return gender.toString().split(".").last;
   }
 
   Map<String, dynamic> toMap() {
@@ -81,7 +81,7 @@ class PatientEntity {
       'name': name,
       'gender': genderString,
       'birthDate': birthDate.toIso8601String(),
-      'schools': school,
+      'school': school,
       'lrn': lrn,
       'guardian': guardian,
       'guardianPhone': guardianPhone,
