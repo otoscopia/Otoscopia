@@ -1,15 +1,23 @@
 import 'package:otoscopia/src/core/core.dart';
 
 abstract class FetchDataRepository {
-  Future<List<AssignmentEntity>> getAssignments(UserEntity user);
+  Future<List<SchoolEntity>> getSchools();
 
-  Future<List<PatientEntity>> getPatients();
+  Future<List<SchoolEntity>> getUnAssignedSchools();
+
+  Future<List<AssignmentEntity>> getAssignments();
+
+  Future<List<AssignmentEntity>> getAssignmentsByNurse(String user);
+
+  Future<List<PatientEntity>> getPatientsBySchools(List<String> schools);
+
+  Future<List<PatientEntity>> getPatientsByDoctor(String id);
 
   Future<List<UsersEntity>> getDoctors();
 
   Future<List<UsersEntity>> getNurses();
 
-  Future<List<SchoolEntity>> getSchools();
+  Future<List<ScreeningEntity>> getScreeningsByPatient(List<String> patients);
 
-  Future<List<ScreeningEntity>> getScreenings();
+  Future<List<RemarksEntity>> getRemarksByScreening(String screening);
 }

@@ -12,3 +12,13 @@ const String kEmail = "laurencetroy.valdez@g.msuiit.edu.ph";
 const String kCopyRight =
     "Copyright © 2022 - 2023 Mindanao State University - Iligan Institute of Technology";
 Uri kGithub = Uri.parse("https://github.com/otoscopia");
+
+const String kInvalidForm = "Invalid form";
+const String kFillAllFields = "Please fill all the fields";
+
+const kAccountCreated = "Account created";
+const kCheckEmail = "Please check your email and wait for the confirmation";
+
+const kAccountNotVerified = "Account not verified, please wait for the admins' approval to access your account.";
+const kAddSchools = "Add schools";
+const kSelectAssignedSchools = "Select the schools you are assigned to";

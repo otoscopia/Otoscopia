@@ -29,21 +29,30 @@ class SearchEntity {
   }
 
   factory SearchEntity.fromMap(Map<String, dynamic> map) {
-    SearchRole role = map['role'] == 'SearchRole.patient'
-        ? SearchRole.patient
-        : map['role'] == 'SearchRole.nurse'
-            ? SearchRole.nurse
-            : map['role'] == 'SearchRole.doctor'
-                ? SearchRole.doctor
-                : map['role'] == 'SearchRole.schools'
-                    ? SearchRole.schools
-                    : map['role'] == 'SearchRole.settings'
-                        ? SearchRole.settings
-                        : SearchRole.profile;
+    final role = getRole(map['role'] as String);
     return SearchEntity(
       name: map['name'] as String,
       role: role,
     );
+  }
+
+  static SearchRole getRole(String role) {
+    switch (role) {
+      case 'SearchRole.patient':
+        return SearchRole.patient;
+      case 'SearchRole.doctor':
+        return SearchRole.doctor;
+      case 'SearchRole.school':
+        return SearchRole.nurse;
+      case 'SearchRole.nurse':
+        return SearchRole.nurse;
+      case 'SearchRole.schools':
+        return SearchRole.schools;
+      case 'SearchRole.settings':
+        return SearchRole.settings;
+      default:
+        return SearchRole.profile;
+    }
   }
 
   String toJson() => json.encode(toMap());

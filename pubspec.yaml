@@ -32,6 +32,7 @@ dependencies:
   camera: ^0.10.5+9
   camera_platform_interface: ^2.7.2
   camera_windows: ^0.2.1+9
+  collection: ^1.18.0
   cupertino_icons: ^1.0.2
   data_table_2: ^2.5.10
   envied: ^0.5.3

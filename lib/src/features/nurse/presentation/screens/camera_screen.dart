@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import "dart:async";
 import "dart:io";
 
@@ -14,14 +12,15 @@ import "package:otoscopia/src/config/config.dart";
 import "package:otoscopia/src/core/core.dart";
 import "package:otoscopia/src/features/nurse/nurse.dart";
 
-class RightCamera extends ConsumerStatefulWidget {
-  const RightCamera({super.key});
+class CameraScreen extends ConsumerStatefulWidget {
+  const CameraScreen(this.position, {super.key});
+  final int position;
 
   @override
-  ConsumerState<RightCamera> createState() => _CameraState();
+  ConsumerState<CameraScreen> createState() => _CameraState();
 }
 
-class _CameraState extends ConsumerState<RightCamera> {
+class _CameraState extends ConsumerState<CameraScreen> {
   /// Stores list of cameras found on device.
   List<CameraDescription> _cameras = [];
 
@@ -47,6 +46,8 @@ class _CameraState extends ConsumerState<RightCamera> {
   StreamSubscription<CameraClosingEvent>? _cameraClosingStreamSubscription;
 
   bool _hasNoCamera = false;
+
+  String get positionString => widget.position == 0 ? "Left" : "Right";
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +140,13 @@ class _CameraState extends ConsumerState<RightCamera> {
         _hasNoCamera = false;
       }
     } on PlatformException catch (e) {
-      popUpInfoBar(
-          kErrorTitle, "$kFailedToGetCamera ${e.code} : ${e.message}", context);
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        popUpInfoBar(
+          kErrorTitle,
+          "$kFailedToGetCamera ${e.code} : ${e.message}",
+          context,
+        );
+      });
     }
 
     if (mounted) {
@@ -204,8 +210,13 @@ class _CameraState extends ConsumerState<RightCamera> {
           await CameraPlatform.instance.dispose(cameraId);
         }
       } on CameraException catch (e) {
-        popUpInfoBar(kErrorTitle,
-            "$kFailedToDisposeCamera ${e.code}: ${e.description}", context);
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          popUpInfoBar(
+            kErrorTitle,
+            "$kFailedToDisposeCamera ${e.code}: ${e.description}",
+            context,
+          );
+        });
       }
 
       /// Reset State
@@ -256,10 +267,12 @@ class _CameraState extends ConsumerState<RightCamera> {
     final patientUid = ref.watch(patientProvider).id;
     final String filePath = "$applicationDirectory\\$patientUid";
     Directory(filePath).createSync(recursive: true);
-    final String filePosition = "right-$fileName";
+    final String filePosition = "$positionString-$fileName";
     final String finalFilePath = "$filePath\\$filePosition";
 
     await sourceFile.rename(finalFilePath);
+
+    ref.read(screeningInformationProvider.notifier).setImage(finalFilePath);
   }
 
   /// This switches camera provided the device is connected to multiple cameras.
@@ -304,7 +317,7 @@ class _CameraState extends ConsumerState<RightCamera> {
 
       for (FileSystemEntity file in files) {
         if (FileSystemEntity.isFileSync(file.path) &&
-            file.path.contains('right-')) {
+            file.path.contains('$positionString-')) {
           fileExist = true;
           break;
         }
@@ -312,7 +325,11 @@ class _CameraState extends ConsumerState<RightCamera> {
 
       if (fileExist) {
         _disposeCurrentCamera();
-        ref.read(addPatientTabProvider.notifier).addScreeningInformation();
+        if (widget.position == 0) {
+          ref.read(addPatientTabProvider.notifier).addRightCamera();
+        } else {
+          ref.read(addPatientTabProvider.notifier).addScreeningInformation();
+        }
       }
     }
   }

@@ -17,7 +17,9 @@ class CustomTable extends ConsumerWidget {
     bool nurse = role == UserRole.nurse;
     bool doctor = role == UserRole.doctor;
 
-    m3.DataTableSource source = TableSource(ref, nurse, doctor);
+    final data = ref.watch(tableProvider);
+
+    m3.DataTableSource source = TableSource(ref, data);
 
     return Card(
       padding: EdgeInsets.zero,
@@ -26,7 +28,7 @@ class CustomTable extends ConsumerWidget {
           PaginatedDataTable2(
             dividerThickness: 0,
             showCheckboxColumn: false,
-            minWidth: 1000,
+            minWidth: 1200,
             empty: const Center(child: Text(kNoDataAvailable)),
             headingRowColor:
                 const m3.MaterialStatePropertyAll(Colors.transparent),
@@ -35,7 +37,7 @@ class CustomTable extends ConsumerWidget {
             columns: [
               const DataColumn2(label: Text(kName)),
               const DataColumn2(label: Text(kAgeAndGender), size: ColumnSize.S),
-              const DataColumn2(label: Text(kStatus), size: ColumnSize.S),
+              const DataColumn2(label: Text(kStatus), fixedWidth: 175),
               const DataColumn2(label: Text(kSchool)),
               if (nurse) const DataColumn2(label: Text(kDoctor)),
               if (doctor) const DataColumn2(label: Text(kNurse)),
@@ -61,32 +63,35 @@ class CustomTable extends ConsumerWidget {
 
 class TableSource extends m3.DataTableSource {
   final WidgetRef ref;
-  final List<TableEntity> _data = [];
-  final bool nurse;
-  final bool doctor;
+  final List<TableEntity> _data;
 
-  TableSource(this.ref, this.nurse, this.doctor);
+  TableSource(this.ref, this._data);
 
   @override
   m3.DataRow? getRow(int index) {
-    final TableEntity table = _data[index];
-    final PatientEntity patient = table.patient;
-    final ScreeningEntity screening = table.screening;
-    final AssignmentEntity assignment = table.assignment;
-    final int age = DateTime.now().difference(patient.birthDate).inDays ~/ 365;
-    final String status = convertRecordStatus(screening.status);
+    final role = ref.read(userProvider).role == UserRole.nurse;
+    final table = _data[index];
+    final patient = table.patient;
+    
+    final school = ref.read(schoolsProvider.notifier).findById(patient.school);
+    final assignment = ref.read(assignmentsProvider.notifier).findBySchool(school.id);
+    final nurse = ref.read(nursesProvider.notifier).findById(assignment.nurse);
+    final doctor = ref.read(doctorsProvider.notifier).findById(patient.doctor);
+    final age = DateTime.now().difference(patient.birthDate).inDays ~/ 365;
+    final status = table.remarks?.statusString ?? "Pending";
+    final gender = patient.gender == Gender.male ? "Male" : "Female";
 
     return DataRow2(
       onSelectChanged: (value) {
         ref.read(dashboardTabProvider.notifier).addTab(table);
       },
       cells: [
-        m3.DataCell(Text(patient.name)),
-        m3.DataCell(Text("$age/${patient.gender}")),
-        m3.DataCell(Text(status)),
-        m3.DataCell(Text(patient.school)),
-        if (nurse) m3.DataCell(Text(patient.doctor)),
-        if (doctor) m3.DataCell(Text(assignment.nurse)),
+        m3.DataCell(CustomText(patient.name)),
+        m3.DataCell(CustomText("$age/$gender")),
+        m3.DataCell(CustomText(status)),
+        m3.DataCell(CustomText(school.name)),
+        if (role) m3.DataCell(CustomText(doctor.name)),
+        if (!role) m3.DataCell(CustomText(nurse.name)),
       ],
     );
   }

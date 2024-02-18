@@ -13,6 +13,9 @@ abstract class Env {
   @EnviedField(varName: 'DATABASE', obfuscate: true)
   static final String database = _Env.database;
 
+  @EnviedField(varName: 'ACCOUNT_CREATION_ID', obfuscate: true)
+  static final String accountCreation = _Env.accountCreation;
+
   @EnviedField(varName: 'SCREENING_BUCKET', obfuscate: true)
   static final String screeningBucket = _Env.screeningBucket;
 

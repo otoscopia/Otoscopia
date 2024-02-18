@@ -7,19 +7,27 @@ import 'package:ionicons/ionicons.dart';
 import 'package:otoscopia/src/core/core.dart';
 
 class VitalsCard extends ConsumerWidget {
-  const VitalsCard(this._screening, {super.key, this.isReview = false});
+  const VitalsCard(
+    this._screening, {
+    super.key,
+    this.remarks,
+    this.isReview = false,
+  });
+
   final ScreeningEntity _screening;
+  final RemarksEntity? remarks;
   final bool isReview;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vitalSigns = _screening.statusIcon;
-    final vitalSignsColor = _screening.statusColor;
+    final hasRemarks = remarks != null;
+    final vitalSigns = hasRemarks ? remarks!.statusIcon : Ionicons.time_outline;
+    final vitalSignsColor = hasRemarks ? remarks!.statusColor : Colors.yellow;
     final uploadedAt = DateFormat.yMMMMd().format(_screening.createdAt);
     final temperature = _screening.temperature.toStringAsFixed(1);
     final weight = _screening.weight.toStringAsFixed(1);
     final height = _screening.height.toStringAsFixed(1);
-    final updated = _screening.status != RecordStatus.pending;
+    final updated = hasRemarks ? remarks!.status != RecordStatus.pending : false;
     final updatedAt = DateFormat.yMMMMd().format(_screening.updatedAt);
 
     return CardOpacity(
@@ -31,7 +39,7 @@ class VitalsCard extends ConsumerWidget {
             children: [
               Icon(vitalSigns, color: vitalSignsColor, size: 32),
               const Gap(8),
-              CustomText(_screening.statusString, style: 2),
+              CustomText(hasRemarks ? remarks!.statusString : "Pending", style: 2),
             ],
           ),
           const Gap(8),
@@ -42,9 +50,7 @@ class VitalsCard extends ConsumerWidget {
               if (updated)
                 VitalRow(Ionicons.cloud_upload, kModifiedAt, uploadedAt)
               else if (isReview || !updated)
-                VitalRow(Ionicons.cloud_upload, kUploadedAt, updatedAt),
-              const Gap(16),
-              VitalRow(Ionicons.thermometer, kTemperature, temperature),
+                VitalRow(Ionicons.cloud_upload, isReview ? "Screened at:" : kUploadedAt, updatedAt),
               const Gap(16),
               VitalRow(Ionicons.thermometer, kTemperature, temperature),
               const Gap(16),
