@@ -1,0 +1,8 @@
+{
+    "name": "First Closed Beta Test Release",
+    "version": "0.1.0",
+    "description": [
+        "Otoscopia Closed Beta Test"
+    ],
+    "windows_file_name": "installers/windows/otoscopia.exe"
+}
