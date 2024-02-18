@@ -39,7 +39,7 @@ class TableNotifier extends StateNotifier<List<TableEntity>> {
   void removeTable(int index) => state.removeAt(index);
 
   void fromSnapshot(Map<String, dynamic> snapshot) {
-    final patient = PatientEntity.fromMap(snapshot['patients']);
+    final patient = PatientEntity.fromMap(snapshot['patient']);
     final screening = ScreeningEntity.fromMap(snapshot);
 
     addTable(TableEntity(patient: patient, screening: screening));
