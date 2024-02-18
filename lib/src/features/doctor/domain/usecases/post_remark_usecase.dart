@@ -6,7 +6,7 @@ class PostRemarkUseCase {
 
   PostRemarkUseCase(this._repository);
 
-  Future<void> postRemark(RemarksEntity remarks, RecordStatus status) async {
-    return await _repository.postRemark(remarks, status);
+  Future<void> postRemark(RemarksEntity remarks) async {
+    return await _repository.postRemark(remarks);
   }
 }

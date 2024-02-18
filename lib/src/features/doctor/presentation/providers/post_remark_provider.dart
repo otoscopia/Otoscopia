@@ -14,14 +14,13 @@ class PostRemarkNotifier extends StateNotifier<void> {
 
   Future<void> postRemark(
     String remarks,
-    DateTime? followUpDate,
+    DateTime? date,
     String id,
+    String? location,
     RecordStatus status,
   ) async {
-    final response =
-        await ref.read(fetchDataProvider.notifier).getRemarks(id);
+    final response = await ref.read(fetchDataProvider.notifier).getRemarks(id);
     final hasRemarks = response?.id.isNotEmpty ?? false;
-    
 
     try {
       if (hasRemarks) {
@@ -29,13 +28,22 @@ class PostRemarkNotifier extends StateNotifier<void> {
           id: response!.id,
           remarks: remarks,
           screening: response.id,
-          followUpDate: followUpDate,
+          date: date,
+          location: location,
+          status: status,
         );
-        _repository.updateRemark(entity, status);
+        _repository.updateRemark(entity);
       } else {
-        final entity = RemarksEntity(id: id, remarks: remarks, screening: id, followUpDate: followUpDate);
+        final entity = RemarksEntity(
+          id: id,
+          remarks: remarks,
+          screening: id,
+          date: date,
+          location: location,
+          status: status,
+        );
 
-        await _repository.postRemark(entity, status);
+        await _repository.postRemark(entity);
       }
     } on AppwriteException catch (e) {
       throw Exception(e.message);
