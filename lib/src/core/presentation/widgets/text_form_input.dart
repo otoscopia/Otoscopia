@@ -10,11 +10,12 @@ class TextFormInput extends ConsumerWidget {
     super.key,
     this.maxLines = 1,
     this.booleanFilter = false,
+    this.numberOnly = false,
     this.isTemperature = false,
     this.maxLength,
-    this.idNumber = false,
     this.phoneNumber = false,
     this.suffix,
+    this.prefix,
   });
 
   final String _label;
@@ -22,18 +23,17 @@ class TextFormInput extends ConsumerWidget {
   final int? maxLines;
   final int? maxLength;
   final bool booleanFilter;
+  final bool numberOnly;
   final bool isTemperature;
-  final bool idNumber;
   final bool phoneNumber;
   final Widget? suffix;
+  final Widget? prefix;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final booleanFormat = FilteringTextInputFormatter.allow(RegExp(r'[0-9\.]'));
     final temperatureFormat =
         FilteringTextInputFormatter.allow(RegExp(r'^\d{0,3}(\.\d{0,1})?'));
-    final idFilter = FilteringTextInputFormatter.allow(RegExp(r'[0-9\-]'));
-    final phoneFilter = FilteringTextInputFormatter.allow(RegExp(r'[0-9\+]'));
 
     return InfoLabel(
       label: _label,
@@ -41,18 +41,21 @@ class TextFormInput extends ConsumerWidget {
         controller: _controller,
         minLines: 1,
         maxLines: maxLines,
-        maxLength: phoneNumber ? 11 : maxLength,
+        maxLength: phoneNumber ? 10 : maxLength,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         suffix: Padding(
           padding: const EdgeInsets.only(right: 5.0),
           child: suffix,
         ),
+        prefix: prefix == null ? null : Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: prefix,
+        ),
         inputFormatters: [
           if (booleanFilter) booleanFormat,
           if (isTemperature) temperatureFormat,
           if (isTemperature) TemperatureFormatter(),
-          if (idNumber) idFilter,
-          if (phoneNumber) phoneFilter,
+          if (numberOnly) FilteringTextInputFormatter.digitsOnly,
         ],
         validator: (value) {
           if (value == null || value.isEmpty) {

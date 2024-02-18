@@ -8,7 +8,7 @@ class SchoolsNotifier extends StateNotifier<List<SchoolEntity>> {
   void setSchools(List<SchoolEntity> schools) => state = schools;
 
   SchoolEntity findByName(String name) {
-    final SchoolEntity school = state.firstWhere((school) => school.abbr == name);
+    final SchoolEntity school = state.firstWhere((school) => school.name == name);
     return school;
   }
 
