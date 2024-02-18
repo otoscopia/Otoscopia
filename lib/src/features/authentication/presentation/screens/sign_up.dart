@@ -20,18 +20,14 @@ class _SignUpState extends ConsumerState<SignUp> {
   final formKey = GlobalKey<FormState>();
   final _form = SignUpFormEntity();
 
+  late List<TreeViewItem> items;
+
   final roles = accountRole
       .map((item) => ComboBoxItem(value: item, child: Text(item)))
       .toList();
 
   @override
   Widget build(BuildContext context) {
-    final schools = ref.read(schoolsProvider);
-
-    final items = schools
-        .map((item) => AutoSuggestBoxItem(value: item, label: item.name))
-        .toList();
-
     return ApplicationContainer(
       child: CenterCard(
         child: Form(
@@ -77,23 +73,48 @@ class _SignUpState extends ConsumerState<SignUp> {
                   controller: _form.addressController,
                 ),
                 const Gap(16),
-                ComboBox(
-                  isExpanded: true,
-                  placeholder: const Text(kRole).opacity(.8),
-                  items: roles,
-                  value: _form.role,
-                  onChanged: (value) => setState(() {
-                    _form.role = value!;
-                  }),
-                ),
-                const Gap(16),
-                AutoSuggestBox(
-                  placeholder: kSchool,
-                  items: items,
-                  onSelected: (value) {
-                    setState(
-                        () => _form.schoolController.text = value.value!.id);
-                  },
+                Row(
+                  children: [
+                    Expanded(
+                      child: ComboBox(
+                        isExpanded: true,
+                        placeholder: const Text(kRole).opacity(.8),
+                        items: roles,
+                        value: _form.role,
+                        onChanged: (value) => setState(() {
+                          if (value == kDoctor) {
+                            _form.schools.clear();
+                          }
+                          _form.role = value!;
+                        }),
+                      ),
+                    ),
+                    if (_form.role == kNurse) const Gap(16),
+                    if (_form.role == kNurse)
+                      FutureBuilder(
+                        future: getSchools(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const ProgressRing();
+                          }
+
+                          final schools = ref.read(schoolsProvider);
+
+                          items = schools
+                              .map((item) => TreeViewItem(
+                                    content: Text(item.name),
+                                    value: item,
+                                  ))
+                              .toList();
+
+                          return Button(
+                            child: const Text(kAddSchools),
+                            onPressed: () => showContentDialog(context),
+                          );
+                        },
+                      ),
+                  ],
                 ),
                 const Gap(16),
                 const TextNavigator(kAlreadyHaveAnAccount, pop: true),
@@ -109,6 +130,42 @@ class _SignUpState extends ConsumerState<SignUp> {
         ),
       ),
     );
+  }
+
+  void showContentDialog(BuildContext context) async {
+    await showDialog<String>(
+      context: context,
+      builder: (context) => ContentDialog(
+        constraints: const BoxConstraints(maxWidth: 550, maxHeight: 550),
+        title: const Text(kSelectAssignedSchools),
+        content: TreeView(
+            items: items,
+            selectionMode: TreeViewSelectionMode.multiple,
+            onItemInvoked: (item, reason) async {
+              final school = item.value as SchoolEntity;
+
+              if (_form.schools.contains(school.id)) {
+                _form.schools.remove(school.id);
+              } else {
+                _form.schools.add(school.id);
+              }
+            }),
+        actions: [
+          Button(
+            child: const Text(kCancelBtn),
+            onPressed: () {
+              Navigator.pop(context);
+              _form.schools.clear();
+            },
+          ),
+          FilledButton(
+            child: const Text(kSaveBtn),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+    setState(() {});
   }
 
   Button signInBtn() {
@@ -131,13 +188,15 @@ class _SignUpState extends ConsumerState<SignUp> {
             await ref.read(authenticationProvider.notifier).signUp(_form);
 
         if (response) {
-          // ignore: use_build_context_synchronously
-          popUpInfoBar(
-            kAccountCreated,
-            kCheckEmail,
-            context,
-            barSeverity: InfoBarSeverity.success,
-          );
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pop(context);
+            popUpInfoBar(
+              kAccountCreated,
+              kCheckEmail,
+              context,
+              barSeverity: InfoBarSeverity.success,
+            );
+          });
         }
       } on Exception catch (error) {
         WidgetsBinding.instance.addPostFrameCallback(
@@ -150,6 +209,15 @@ class _SignUpState extends ConsumerState<SignUp> {
       } finally {
         setState(() => isLoading = false);
       }
+    }
+  }
+
+  Future<bool> getSchools() async {
+    try {
+      await ref.read(fetchDataProvider.notifier).getUnAssignedSchools();
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }
