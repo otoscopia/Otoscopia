@@ -35,6 +35,7 @@ dependencies:
   collection: ^1.18.0
   cupertino_icons: ^1.0.2
   data_table_2: ^2.5.10
+  dio: ^5.4.1
   envied: ^0.5.3
   fluent_ui: ^4.8.5
   flutter:
@@ -43,6 +44,7 @@ dependencies:
   flutter_riverpod: ^2.4.9
   flutter_svg: ^2.0.9
   gap: ^3.0.1
+  http: ^1.0.0
   intl: ^0.18.1
   ionicons: ^0.2.2
   path_provider: ^2.1.2
