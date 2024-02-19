@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
@@ -31,6 +32,7 @@ class MyApp extends ConsumerWidget {
       theme: LightTheme.themeData,
       darkTheme: DarkTheme.themeData,
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [SentryNavigatorObserver()],
       builder: (context, child) => responsiveBuilder(child!),
     );
   }
