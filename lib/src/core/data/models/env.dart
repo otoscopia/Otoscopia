@@ -36,4 +36,7 @@ abstract class Env {
 
   @EnviedField(varName: 'USER_COLLECTION', obfuscate: true)
   static final String userCollection = _Env.userCollection;
+
+  @EnviedField(varName: 'SENTRY_API', obfuscate: true)
+  static final String sentryApi = _Env.sentryApi;
 }
