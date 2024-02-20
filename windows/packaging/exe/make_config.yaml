@@ -1,0 +1,8 @@
+app_id: 546d4af3-9ce4-464a-a827-1ffc45d654ec
+publisher: laurencetroyv
+publisher_url: https://github.com/laurencetroyv
+display_name: Otoscopia
+create_desktop_icon: true
+install_dir_name: Otoscopia
+locales:
+  - en
