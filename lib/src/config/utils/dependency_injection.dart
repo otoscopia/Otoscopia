@@ -1,18 +1,19 @@
-import 'dart:io';
-
 import 'package:appwrite/appwrite.dart';
-import 'package:fluent_ui/fluent_ui.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'package:otoscopia/src/core/core.dart';
+
+import 'desktop_dependency.dart';
 
 late final Client client;
 late final Realtime realtime;
 late final Uuid uuid;
 late final String applicationDirectory;
 late final String documentDirectory;
+late final FlutterSecureStorage secureStorage;
+late final BoxCollection collection;
 
 class DependencyInjection {
   static final DependencyInjection _singleton = DependencyInjection._internal();
@@ -26,7 +27,9 @@ class DependencyInjection {
   Future<void> init(DeviceType deviceType) async {
     uuid = const Uuid();
 
-    appwriteInit();
+    secureStorage = const FlutterSecureStorage();
+
+    await appwriteInit();
 
     switch (deviceType) {
       case DeviceType.mobile:
@@ -39,28 +42,6 @@ class DependencyInjection {
         webInit();
         break;
     }
-  }
-
-  Future<void> desktopInit() async {
-    await windowManager.ensureInitialized();
-
-    WindowOptions windowOptions = const WindowOptions(
-      size: Size(1000, 700),
-      minimumSize: Size(1000, 700),
-      title: kAppName,
-      center: true,
-    );
-
-    windowManager.waitUntilReadyToShow(windowOptions, () async {
-      await windowManager.show();
-      await windowManager.focus();
-    });
-
-    Directory applicationSupport = await getApplicationSupportDirectory();
-    applicationDirectory = applicationSupport.path;
-
-    Directory applicationDocuments = await getApplicationDocumentsDirectory();
-    documentDirectory = applicationDocuments.path;
   }
 
   void mobileInit() {}

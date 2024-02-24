@@ -35,6 +35,16 @@ class AuthenticationDataSource {
     }
   }
 
+  Future<List> getUser(String sessionId) async {
+    try {
+      final session = await _account.getSession(sessionId: sessionId);
+      final user = await _account.get();
+      return [session, user];
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
   Future<bool> signUp(SignUpFormEntity form) async {
     try {
       final user = await _account.create(
