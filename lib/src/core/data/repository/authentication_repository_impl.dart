@@ -33,6 +33,27 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
+  Future<UserEntity> getUser(String sessionId) async {
+    try {
+      List response = await _source.getUser(sessionId);
+      Session session = response[0];
+      User user = response[1];
+
+      Document result = await _database.getDocument(
+        databaseId: Env.database,
+        collectionId: Env.userCollection,
+        documentId: user.$id,
+      );
+
+      return UserEntity.fromMap(result.data, session.$id);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  @override
   Future<bool> signUp(SignUpFormEntity form) {
     try {
       return _source.signUp(form);

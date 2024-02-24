@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/authentication/authentication.dart';
 
@@ -17,7 +18,20 @@ class AuthenticationNotifier extends StateNotifier<bool> {
       UserEntity user = await _repository.login(form);
       state = true;
       ref.read(userProvider.notifier).setUser(user);
+      await ref.read(fetchDataProvider.notifier).fetch(user);
+      secureStorage.write(key: "session", value: user.sessionId);
       return user;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
+  Future<void> getUser(String sessionId) async {
+    try {
+      UserEntity user = await _repository.getUser(sessionId);
+      state = true;
+      ref.read(userProvider.notifier).setUser(user);
+      await ref.read(fetchDataProvider.notifier).fetch(user);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     }
@@ -38,6 +52,7 @@ class AuthenticationNotifier extends StateNotifier<bool> {
     UserEntity user = ref.read(userProvider);
     try {
       await _repository.logout(user.sessionId);
+      await secureStorage.delete(key: 'session');
       state = false;
       ref.read(userProvider.notifier).setUser(UserEntity.initial());
     } on AppwriteException catch (error) {
