@@ -73,16 +73,17 @@ class _ReviewsState extends ConsumerState<Reviews> {
       isPatientUploading = true;
     });
     final notifier = ref.read(postDataProvider.notifier);
+    final connection = ref.read(connectionProvider);
 
     try {
-      await notifier.postPatient(patient);
+      await notifier.postPatient(connection, patient);
 
       setState(() {
         isPatientUploading = false;
         isScreeningUploading = true;
       });
 
-      await notifier.postScreening(screening);
+      await notifier.postScreening(connection, screening);
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         popUpInfoBar(kErrorTitle, e.toString(), context);

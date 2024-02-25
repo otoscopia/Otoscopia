@@ -1,5 +1,6 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
@@ -24,7 +25,15 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         documentId: user.$id,
       );
 
-      return UserEntity.fromMap(result.data, session.$id);
+      final userEntity = UserEntity.fromMap(result.data, session.$id);
+
+      final userBox = await Hive.openBox<UserModel>(kUserHiveBox);
+
+      final userModel = UserModel.fromEntity(userEntity);
+
+      userBox.add(userModel);
+
+      return userEntity;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
@@ -70,6 +71,14 @@ class AuthenticationDataSource {
   Future<void> logout(String sessionId) async {
     try {
       await _account.deleteSession(sessionId: sessionId);
+      await Hive.deleteBoxFromDisk(kPatientHiveBox);
+      await Hive.deleteBoxFromDisk(kScreeningHiveBox);
+      await Hive.deleteBoxFromDisk(kSettingsHiveBox);
+      await Hive.deleteBoxFromDisk(kUserHiveBox);
+      await Hive.deleteBoxFromDisk(kDoctorsHiveBox);
+      await Hive.deleteBoxFromDisk(kNursesHiveBox);
+      await Hive.deleteBoxFromDisk(kAssignmentsHiveBox);
+      await Hive.deleteBoxFromDisk(kSchoolsHiveBox);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     }
