@@ -1,5 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:otoscopia/src/core/core.dart';
+
 part 'assignment_model.g.dart';
 
 @HiveType(typeId: 0)
@@ -30,4 +32,15 @@ class AssignmentModel {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  factory AssignmentModel.fromEntity(AssignmentEntity entity) {
+    return AssignmentModel(
+      id: entity.id,
+      nurse: entity.nurse,
+      school: entity.school,
+      isActive: entity.isActive,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+    );
+  }
 }

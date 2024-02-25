@@ -1,5 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:otoscopia/src/core/core.dart';
+
 import 'enum_model.dart';
 
 part 'patient_model.g.dart';
@@ -64,4 +66,25 @@ class PatientModel {
     required this.updatedAt,
     required this.createdAt,
   });
+
+  factory PatientModel.fromEntity(PatientEntity entity) {
+    final GenderModel gender =
+        entity.gender == Gender.male ? GenderModel.male : GenderModel.female;
+
+    return PatientModel(
+      id: entity.id,
+      name: entity.name,
+      gender: gender,
+      birthDate: entity.birthDate,
+      school: entity.school,
+      lrn: entity.lrn,
+      guardian: entity.guardian,
+      guardianPhone: entity.guardianPhone,
+      creator: entity.creator,
+      doctor: entity.doctor,
+      code: entity.code,
+      updatedAt: entity.updatedAt,
+      createdAt: entity.createdAt,
+    );
+  }
 }

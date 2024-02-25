@@ -1,5 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:otoscopia/src/core/core.dart';
+
 import 'enum_model.dart';
 
 part 'remarks_model.g.dart';
@@ -36,4 +38,24 @@ class RemarksModel {
     this.date,
     this.createdAt,
   });
+
+  factory RemarksModel.fromEntity(RemarksEntity entity) {
+    final status = entity.status == RecordStatus.followUp
+        ? RecordStatusModel.followUp
+        : entity.status == RecordStatus.medicalAttention
+            ? RecordStatusModel.medicalAttention
+            : entity.status == RecordStatus.resolved
+                ? RecordStatusModel.resolved
+                : RecordStatusModel.pending;
+
+    return RemarksModel(
+      id: entity.id,
+      remarks: entity.remarks,
+      screening: entity.screening,
+      status: status,
+      location: entity.location,
+      date: entity.date,
+      createdAt: entity.createdAt,
+    );
+  }
 }

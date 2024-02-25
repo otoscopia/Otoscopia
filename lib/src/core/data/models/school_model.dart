@@ -1,5 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:otoscopia/src/core/core.dart';
+
 part 'school_model.g.dart';
 
 @HiveType(typeId: 3)
@@ -30,4 +32,15 @@ class SchoolModel {
     required this.address,
     required this.isActive,
   });
+
+  factory SchoolModel.fromEntity(SchoolEntity entity) {
+    return SchoolModel(
+      id: entity.id,
+      name: entity.name,
+      abbr: entity.abbr,
+      code: entity.code,
+      address: entity.address,
+      isActive: entity.isActive,
+    );
+  }
 }

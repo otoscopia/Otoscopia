@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+import 'package:otoscopia/src/core/core.dart';
+
 import 'enum_model.dart';
 
 part 'users_model.g.dart';
@@ -36,4 +38,21 @@ class UsersModel {
     required this.publicKey,
     required this.role,
   });
+
+  factory UsersModel.fromEntity(UsersEntity entity) {
+    final role = entity.role == UserRole.doctor
+        ? UserRoleModel.doctor
+        : entity.role == UserRole.nurse
+            ? UserRoleModel.nurse
+            : UserRoleModel.admin;
+    return UsersModel(
+      id: entity.id,
+      name: entity.name,
+      email: entity.email,
+      phone: entity.phone,
+      workAddress: entity.workAddress,
+      publicKey: entity.publicKey,
+      role: role,
+    );
+  }
 }

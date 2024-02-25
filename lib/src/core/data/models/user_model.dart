@@ -25,7 +25,7 @@ class UserModel {
   final String publicKey;
 
   @HiveField(6)
-  final UserRole role;
+  final UserRoleModel role;
 
   @HiveField(7)
   final String sessionId;
@@ -39,4 +39,23 @@ class UserModel {
     required this.role,
     required this.sessionId,
   });
+
+  factory UserModel.fromEntity(UserEntity entity) {
+    final role = entity.role == UserRole.doctor
+        ? UserRoleModel.doctor
+        : entity.role == UserRole.nurse
+            ? UserRoleModel.nurse
+            : UserRoleModel.admin;
+
+    return UserModel(
+      id: entity.id,
+      name: entity.name,
+      email: entity.email,
+      phone: entity.phone,
+      workAddress: entity.workAddress,
+      publicKey: entity.publicKey,
+      role: role,
+      sessionId: entity.sessionId,
+    );
+  }
 }

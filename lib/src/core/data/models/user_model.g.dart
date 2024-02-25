@@ -23,7 +23,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       phone: fields[3] as String,
       workAddress: fields[4] as String,
       publicKey: fields[5] as String,
-      role: fields[6] as UserRole,
+      role: fields[6] as UserRoleModel,
       sessionId: fields[7] as String,
     );
   }

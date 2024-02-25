@@ -1,9 +1,11 @@
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:otoscopia/src/core/core.dart';
+
 part 'screening_model.g.dart';
 
 @HiveType(typeId: 4)
-class ScreeningEntity {
+class ScreeningModel {
   
   @HiveField(0)
   final String id;
@@ -62,7 +64,7 @@ class ScreeningEntity {
   @HiveField(18)
   final DateTime updatedAt;
 
-  ScreeningEntity({
+  ScreeningModel({
     required this.id,
     required this.patient,
     required this.historyOfIllness,
@@ -83,4 +85,28 @@ class ScreeningEntity {
     required this.createdAt,
     required this.updatedAt,
   });
+
+  factory ScreeningModel.fromEntity(ScreeningEntity entity) {
+    return ScreeningModel(
+      id: entity.id,
+      patient: entity.patient,
+      historyOfIllness: entity.historyOfIllness,
+      remarks: entity.remarks,
+      temperature: entity.temperature,
+      weight: entity.weight,
+      height: entity.height,
+      similarCondition: entity.similarCondition,
+      chiefComplaint: entity.chiefComplaint,
+      chiefComplaintRemarks: entity.chiefComplaintRemarks,
+      allergy: entity.allergy,
+      allergyRemarks: entity.allergyRemarks,
+      undergoneSurgery: entity.undergoneSurgery,
+      undergoneSurgeryRemarks: entity.undergoneSurgeryRemarks,
+      medication: entity.medication,
+      medicationRemarks: entity.medicationRemarks,
+      images: entity.images,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+    );
+  }
 }

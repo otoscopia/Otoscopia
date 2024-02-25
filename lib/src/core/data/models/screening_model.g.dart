@@ -6,17 +6,17 @@ part of 'screening_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ScreeningEntityAdapter extends TypeAdapter<ScreeningEntity> {
+class ScreeningModelAdapter extends TypeAdapter<ScreeningModel> {
   @override
   final int typeId = 4;
 
   @override
-  ScreeningEntity read(BinaryReader reader) {
+  ScreeningModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return ScreeningEntity(
+    return ScreeningModel(
       id: fields[0] as String,
       patient: fields[1] as String,
       historyOfIllness: fields[2] as String,
@@ -40,7 +40,7 @@ class ScreeningEntityAdapter extends TypeAdapter<ScreeningEntity> {
   }
 
   @override
-  void write(BinaryWriter writer, ScreeningEntity obj) {
+  void write(BinaryWriter writer, ScreeningModel obj) {
     writer
       ..writeByte(19)
       ..writeByte(0)
@@ -89,7 +89,7 @@ class ScreeningEntityAdapter extends TypeAdapter<ScreeningEntity> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScreeningEntityAdapter &&
+      other is ScreeningModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
