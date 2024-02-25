@@ -32,7 +32,7 @@ Future<void> desktopInit() async {
   Directory applicationDocuments = await getApplicationDocumentsDirectory();
   documentDirectory = applicationDocuments.path;
 
-  Hive.init(documentDirectory);
+  Hive.init(applicationDirectory);
 
   final storageKey = await secureStorage.read(key: kHiveKey);
 
@@ -51,6 +51,17 @@ Future<void> desktopInit() async {
     kOtoscopiaHiveBox,
     hiveBoxes,
     key: cipher,
-    path: documentDirectory,
+    path: applicationDirectory,
   );
+
+  Hive.registerAdapter(UserRoleModelAdapter());
+  Hive.registerAdapter(GenderModelAdapter());
+  Hive.registerAdapter(RecordStatusModelAdapter());
+  Hive.registerAdapter(SchoolModelAdapter());
+  Hive.registerAdapter(AssignmentModelAdapter());
+  Hive.registerAdapter(PatientModelAdapter());
+  Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(UsersModelAdapter());
+  Hive.registerAdapter(ScreeningModelAdapter());
+  Hive.registerAdapter(RemarksModelAdapter());
 }
