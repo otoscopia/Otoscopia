@@ -12,27 +12,27 @@ class ApplicationContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return OfflineBuilder(
-      connectivityBuilder: (context, connectivity, child) {
-        final bool connected = connectivity != ConnectivityResult.none;
+    return ScaffoldPage(
+      padding: EdgeInsets.zero,
+      content: OfflineBuilder(
+        connectivityBuilder: (context, connectivity, child) {
+          final bool connected = connectivity != ConnectivityResult.none;
 
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (ref.read(connectionProvider) != connected) {
-            ref.read(connectionProvider.notifier).setConnection(connected);
-          }
-        });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (ref.read(connectionProvider) != connected) {
+              ref.read(connectionProvider.notifier).setConnection(connected);
+            }
+          });
 
-        return Stack(
-          fit: StackFit.expand,
-          children: [
-            child,
-            OfflineBottomBar(connected),
-          ],
-        );
-      },
-      child: ScaffoldPage(
-        padding: EdgeInsets.zero,
-        content: child,
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              child,
+              OfflineBottomBar(connected),
+            ],
+          );
+        },
+        child: child,
       ),
     );
   }
