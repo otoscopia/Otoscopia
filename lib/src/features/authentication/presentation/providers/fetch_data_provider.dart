@@ -184,6 +184,27 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
+  Future<void> getRemarksByPatients() async {
+    final screenings = ref.read(screeningsProvider).map((e) => e.id).toList();
+    try {
+      if (ref.read(connectionProvider)) {
+        final result = await _repository.getRemarksByPatients(screenings);
+        ref.read(remarksProvider.notifier).setRemarks(result);
+      } else {
+        // final screeningBox =
+        //     await Hive.openBox<ScreeningModel>(kScreeningHiveBox);
+        // final screeningModel = screeningBox.values.toList();
+        // final screenings =
+        //     screeningModel.map((e) => ScreeningEntity.fromModel(e)).toList();
+        // ref.read(screeningsProvider.notifier).setScreenings(screenings);
+      }
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
   Future<ScreeningEntity> getScreeningsByPatientId(String id) async {
     try {
       if (ref.read(connectionProvider)) {
@@ -230,7 +251,8 @@ class FetchDataNotifier extends StateNotifier<void> {
   Future<void> setTableData() async {
     final patients = ref.read(patientsProvider);
     final screenings = ref.read(screeningsProvider);
-    ref.read(tableProvider.notifier).setTable(patients, screenings);
+    final remarks = ref.read(remarksProvider);
+    ref.read(tableProvider.notifier).setTable(patients, screenings, remarks);
   }
 
   Future<void> filterSchoolsByUser(UserEntity user) async {
@@ -258,6 +280,7 @@ class FetchDataNotifier extends StateNotifier<void> {
       await getPatientsByDoctor(user.id);
     }
     await getScreeningsByPatient();
+    await getRemarksByPatients();
     await setTableData();
   }
 }
@@ -265,3 +288,14 @@ class FetchDataNotifier extends StateNotifier<void> {
 final fetchDataProvider = StateNotifierProvider<FetchDataNotifier, void>(
   (ref) => FetchDataNotifier(ref),
 );
+
+
+class RemarksNotifier extends StateNotifier<List<RemarksEntity>> {
+  RemarksNotifier(): super([]);
+
+  setRemarks(List<RemarksEntity> remarks) => state = remarks;
+}
+
+final remarksProvider = StateNotifierProvider<RemarksNotifier, List<RemarksEntity>>((ref) {
+  return RemarksNotifier();
+});
