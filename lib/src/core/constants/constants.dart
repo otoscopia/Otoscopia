@@ -1,11 +1,13 @@
 export 'button_constants.dart';
 export 'doctor_constants.dart';
 export 'guest_constants.dart';
+export 'hive_constants.dart';
 export 'named_routes_constants.dart';
 export 'nurse_constants.dart';
 export 'settings_constants.dart';
 
 const String kAppName = 'Otoscopia';
+const kPackageName = 'com.laurencetroyv.otoscopia';
 const String kMultiPlatform = 'A Multi-Platform Application';
 const String kDiscoverYourEarHealth = 'Discover your ear health with a simple test, and get a diagnosis with the help of a doctor.';
 const String kOffline = 'Offline';

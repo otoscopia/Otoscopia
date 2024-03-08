@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:styled_widget/styled_widget.dart';
 
+import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/authentication/authentication.dart';
 
@@ -17,52 +18,34 @@ class _SignInState extends ConsumerState<SignIn> {
   bool isLoading = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final _form = SignInFormEntity();
+  bool _futureCompleted = false;
 
   @override
   Widget build(BuildContext context) {
     return ApplicationContainer(
-        child: CenterCard(
-      child: Form(
-        key: formKey,
-        child: SizedBox(
-          width: 440,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Logo(height: 32),
-              const Gap(16),
-              const Text(kSignIn).fontSize(24),
-              const Gap(12),
-              EmailTextInput(emailController: _form.emailController),
-              const Gap(16),
-              PasswordFormBox(
-                controller: _form.passwordController,
-                placeholder: kPassword,
-                onEditingComplete: onClick,
-              ),
-              const Gap(16),
-              const TextNavigator(
-                kNoAccount,
-                bold: false,
-                child: NamedGuest.register,
-              ),
-              const TextNavigator(
-                kAccountNotAccessible,
-                bold: false,
-                child: NamedGuest.forgotPassword,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (!isLoading) signInBtn() else const ProgressRing(),
-                ],
-              ),
-            ],
-          ),
-        ),
+      child: CenterCard(
+        child: !_futureCompleted
+            ? FutureBuilder(
+                future: fetchSession(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const LoadingWidget();
+                  }
+
+                  _futureCompleted = true;
+                  if (snapshot.data == true) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (route) => false);
+                    });
+                  }
+
+                  return _signInForm();
+                },
+              )
+            : _signInForm(),
       ),
-    ));
+    );
   }
 
   Button signInBtn() {
@@ -81,8 +64,6 @@ class _SignInState extends ConsumerState<SignIn> {
             await ref.read(authenticationProvider.notifier).login(_form);
 
         if (response.id.isNotEmpty) {
-          await ref.read(fetchDataProvider.notifier).fetch(response);
-
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           });
@@ -98,6 +79,70 @@ class _SignInState extends ConsumerState<SignIn> {
       } finally {
         setState(() => isLoading = false);
       }
+    }
+  }
+
+  Widget _signInForm() {
+    return Form(
+      key: formKey,
+      child: SizedBox(
+        width: 440,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Logo(height: 32),
+            const Gap(16),
+            const Text(kSignIn).fontSize(24),
+            const Gap(12),
+            EmailTextInput(emailController: _form.emailController),
+            const Gap(16),
+            PasswordFormBox(
+              controller: _form.passwordController,
+              placeholder: kPassword,
+              onEditingComplete: onClick,
+            ),
+            const Gap(16),
+            const TextNavigator(
+              kNoAccount,
+              bold: false,
+              child: NamedGuest.register,
+            ),
+            const TextNavigator(
+              kAccountNotAccessible,
+              bold: false,
+              child: NamedGuest.forgotPassword,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (!isLoading) signInBtn() else const ProgressRing(),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<bool> fetchSession() async {
+    final connectionState = ref.watch(connectionProvider);
+    try {
+      final session = await secureStorage.read(key: 'session');
+
+      if (session != null) {
+        if (connectionState) {
+          await ref.read(authenticationProvider.notifier).getUser(session);
+        } else {
+          await ref
+              .read(authenticationProvider.notifier)
+              .getUserOffline(session);
+        }
+        return true;
+      }
+      return false;
+    } catch (error) {
+      throw Exception(error.toString());
     }
   }
 }

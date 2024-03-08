@@ -62,6 +62,7 @@
         },
         onEntrypointLoaded: function (engineInitializer) {
           engineInitializer.initializeEngine().then(function (appRunner) {
+            document.getElementById('load').remove();
             appRunner.runApp();
           });
         }

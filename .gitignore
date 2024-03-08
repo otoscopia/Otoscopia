@@ -50,3 +50,7 @@ env.g.dart
 
 # sonar
 /.scannerwork/
+
+# flutter_distributor files
+dist/
+windows/packaging/msix/make_config.yaml

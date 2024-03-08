@@ -5,7 +5,9 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   camera_windows
   connectivity_plus
+  flutter_secure_storage_windows
   screen_retriever
+  sentry_flutter
   system_theme
   url_launcher_windows
   window_manager

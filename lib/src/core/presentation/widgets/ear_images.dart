@@ -57,9 +57,13 @@ class _EarImagesState extends ConsumerState<EarImages> {
                 return const LoadingWidget();
               }
 
-                if (widget.isNetwork) {
+              if (widget.isNetwork) {
+                if (ref.read(connectionProvider)) {
                   images = snapshot.data as List<Uint8List>;
+                } else {
+                  images = [];
                 }
+              }
 
               return GridView.builder(
                 shrinkWrap: true,
@@ -98,11 +102,14 @@ class _EarImagesState extends ConsumerState<EarImages> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: widget.isNetwork
-                          ? Image.memory(
-                              images[index],
-                              fit: BoxFit.cover,
-                              width: 350,
-                            )
+                          ? images.isEmpty
+                              ? const Text(
+                                  "Please connect to the internet to get the ear images")
+                              : Image.memory(
+                                  images[index],
+                                  fit: BoxFit.cover,
+                                  width: 350,
+                                )
                           : LocalImage(
                               images,
                               index: index,

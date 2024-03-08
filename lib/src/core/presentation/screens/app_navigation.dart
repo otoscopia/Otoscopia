@@ -9,17 +9,33 @@ class AppNavigation extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final subscriber = realtime.subscribe([
-      'databases.${Env.database}.collections.${Env.screeningCollection}.documents'
-    ]);
+    final connection = ref.watch(connectionProvider);
 
-    subscriber.stream.listen((event) {
-      try {
-        ref.read(tableProvider.notifier).fromSnapshot(event.payload);
-      } catch (e) {
-        popUpInfoBar(kErrorTitle, e.toString(), context);
-      }
-    });
+    final events = [
+      'databases.${Env.database}.collections.${Env.patientCollection}.documents',
+      'databases.${Env.database}.collections.${Env.screeningCollection}.documents',
+      'databases.${Env.database}.collections.${Env.remarksCollection}.documents',
+    ];
+
+    if (connection) {
+      final subscriber = realtime.subscribe(events);
+
+      subscriber.stream.listen((event) {
+        try {
+          if (event.channels.contains(events[0])) {
+            ref.read(tableProvider.notifier).fromPatientSnapshot(event.payload);
+          } else if (event.channels.contains(events[1])) {
+            ref
+                .read(tableProvider.notifier)
+                .fromScreeningSnapshot(event.payload);
+          } else if (event.channels.contains(events[2])) {
+            ref.read(tableProvider.notifier).fromRemarksSnapshot(event.payload);
+          }
+        } catch (e) {
+          popUpInfoBar(kErrorTitle, e.toString(), context);
+        }
+      });
+    }
 
     UserEntity user = ref.read(userProvider);
     return ApplicationContainer(

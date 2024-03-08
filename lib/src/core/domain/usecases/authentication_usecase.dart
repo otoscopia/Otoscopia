@@ -10,6 +10,10 @@ class AuthenticationUseCase {
     return await _authenticationRepository.login(form);
   }
 
+  Future<UserEntity> getUser(String sessionId) async {
+    return await _authenticationRepository.getUser(sessionId);
+  }
+
   Future<bool> signUp(SignUpFormEntity form) async {
     return await _authenticationRepository.signUp(form);
   }

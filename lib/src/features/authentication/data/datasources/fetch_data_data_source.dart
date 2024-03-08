@@ -49,6 +49,7 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.assignmentCollection,
+        queries: [Query.limit(100)],
       );
 
       return result;
@@ -152,7 +153,7 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.remarksCollection,
-        queries: [Query.equal('screening', screening)],
+        queries: [Query.equal('screening', screening), Query.limit(100)],
       );
 
       return result;
