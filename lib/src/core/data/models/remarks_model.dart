@@ -2,8 +2,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 
-import 'enum_model.dart';
-
 part 'remarks_model.g.dart';
 
 @HiveType(typeId: 2)
@@ -50,7 +48,7 @@ class RemarksModel {
 
     return RemarksModel(
       id: entity.id,
-      remarks: entity.remarks,
+      remarks: entity.remarks ?? "",
       screening: entity.screening,
       status: status,
       location: entity.location,

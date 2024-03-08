@@ -2,8 +2,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 
-import 'enum_model.dart';
-
 part 'patient_model.g.dart';
 
 @HiveType(typeId: 1)

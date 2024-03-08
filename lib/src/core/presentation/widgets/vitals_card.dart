@@ -27,7 +27,8 @@ class VitalsCard extends ConsumerWidget {
     final temperature = _screening.temperature.toStringAsFixed(1);
     final weight = _screening.weight.toStringAsFixed(1);
     final height = _screening.height.toStringAsFixed(1);
-    final updated = hasRemarks ? remarks!.status != RecordStatus.pending : false;
+    final updated =
+        hasRemarks ? remarks!.status != RecordStatus.pending : false;
     final updatedAt = DateFormat.yMMMMd().format(_screening.updatedAt);
 
     return CardOpacity(
@@ -35,14 +36,16 @@ class VitalsCard extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Icon(vitalSigns, color: vitalSignsColor, size: 32),
-              const Gap(8),
-              CustomText(hasRemarks ? remarks!.statusString : "Pending", style: 2),
-            ],
-          ),
-          const Gap(8),
+          if (!hasRemarks)
+            Row(
+              children: [
+                Icon(vitalSigns, color: vitalSignsColor, size: 32),
+                const Gap(8),
+                CustomText(hasRemarks ? remarks!.statusString : "Pending",
+                    style: 2),
+              ],
+            ),
+          if (!hasRemarks) const Gap(8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -50,7 +53,8 @@ class VitalsCard extends ConsumerWidget {
               if (updated)
                 VitalRow(Ionicons.cloud_upload, kModifiedAt, uploadedAt)
               else if (isReview || !updated)
-                VitalRow(Ionicons.cloud_upload, isReview ? "Screened at:" : kUploadedAt, updatedAt),
+                VitalRow(Ionicons.cloud_upload,
+                    isReview ? "Screened at:" : kUploadedAt, updatedAt),
               const Gap(16),
               VitalRow(Ionicons.thermometer, kTemperature, temperature),
               const Gap(16),

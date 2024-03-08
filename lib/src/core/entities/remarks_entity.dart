@@ -6,7 +6,7 @@ import 'package:otoscopia/src/core/core.dart';
 
 class RemarksEntity {
   final String id;
-  final String remarks;
+  final String? remarks;
   final String screening;
   final String? location;
   final RecordStatus status;
@@ -15,9 +15,9 @@ class RemarksEntity {
 
   RemarksEntity(
       {required this.id,
-      required this.remarks,
       required this.screening,
       required this.status,
+      this.remarks,
       this.location,
       this.date,
       this.createdAt});

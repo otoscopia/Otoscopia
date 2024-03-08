@@ -2,8 +2,6 @@ import 'package:hive/hive.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 
-import 'enum_model.dart';
-
 part 'users_model.g.dart';
 
 @HiveType(typeId: 6)

@@ -59,7 +59,12 @@ class _EarImagesState extends ConsumerState<EarImages> {
 
               if (widget.isNetwork) {
                 if (ref.read(connectionProvider)) {
-                  images = snapshot.data as List<Uint8List>;
+                  try {
+                    final data = snapshot.data as List<Uint8List>;
+                    images = data;
+                  } catch (_) {
+                    images = [];
+                  }
                 } else {
                   images = [];
                 }
