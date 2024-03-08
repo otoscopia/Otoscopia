@@ -41,6 +41,7 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
     final hasRemarks = remarks != null;
     final bool modified =
         hasRemarks ? remarks.status != RecordStatus.pending : false;
+    final connection = ref.read(connectionProvider);
 
     return GestureDetector(
       onSecondaryTapUp: (details) {
@@ -62,10 +63,17 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
               const Gap(8),
               ScreeningInformationCard(screening),
               const Gap(8),
-              EarImages("$kLeftEar:", table!.screening.images, isNetwork: true),
+              EarImages(
+                "$kLeftEar:",
+                table!.screening.images,
+                isNetwork: connection,
+              ),
               const Gap(8),
-              EarImages("$kRightEar:", table!.screening.images,
-                  isNetwork: true),
+              EarImages(
+                "$kRightEar:",
+                table!.screening.images,
+                isNetwork: connection,
+              ),
             ],
           ),
         ),

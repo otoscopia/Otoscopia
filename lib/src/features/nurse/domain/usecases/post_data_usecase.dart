@@ -6,11 +6,11 @@ class PostDataUseCase {
 
   PostDataUseCase(this._repository);
 
-  Future<void> postPatient(PatientEntity patient) async {
-    return await _repository.postPatient(patient);
+  Future<void> postPatient(bool connection, PatientEntity patient) async {
+    return await _repository.postPatient(connection, patient);
   }
 
-  Future<void> postScreening(ScreeningEntity screening) async {
-    return await _repository.postScreening(screening);
+  Future<void> postScreening(bool connection, ScreeningEntity screening) async {
+    return await _repository.postScreening(connection, screening);
   }
 }

@@ -126,11 +126,18 @@ class _SignInState extends ConsumerState<SignIn> {
   }
 
   Future<bool> fetchSession() async {
+    final connectionState = ref.watch(connectionProvider);
     try {
       final session = await secureStorage.read(key: 'session');
 
       if (session != null) {
-        await ref.read(authenticationProvider.notifier).getUser(session);
+        if (connectionState) {
+          await ref.read(authenticationProvider.notifier).getUser(session);
+        } else {
+          await ref
+              .read(authenticationProvider.notifier)
+              .getUserOffline(session);
+        }
         return true;
       }
       return false;
