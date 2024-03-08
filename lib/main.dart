@@ -24,6 +24,8 @@ Future<void> main() async {
     await SentryFlutter.init((options) {
       options.dsn = Env.sentryApi;
       options.release = sentryRelease;
+      options.tracesSampleRate = 1.0;
+      options.tracesSampler = (samplingContext) => 1;
     }, appRunner: () {
       return runApp(
         DefaultAssetBundle(
