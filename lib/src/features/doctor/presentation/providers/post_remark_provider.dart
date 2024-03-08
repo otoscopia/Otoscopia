@@ -1,6 +1,7 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/doctor/doctor.dart';
 
@@ -11,7 +12,7 @@ class PostRemarkNotifier extends StateNotifier<void> {
   static final _source = PostRemarkDataSource();
   static final _repository = PostRemarkRepositoryImpl(_source);
 
-  Future<void> postRemark(
+  Future<RemarksEntity> postRemark(
     String remarks,
     DateTime? date,
     String id,
@@ -20,7 +21,7 @@ class PostRemarkNotifier extends StateNotifier<void> {
   ) async {
     try {
       final entity = RemarksEntity(
-        id: id,
+        id: uuid.v4(),
         remarks: remarks,
         screening: id,
         date: date,
@@ -29,6 +30,8 @@ class PostRemarkNotifier extends StateNotifier<void> {
       );
 
       await _repository.postRemark(entity);
+
+      return entity;
     } on AppwriteException catch (e) {
       throw Exception(e.message);
     }
