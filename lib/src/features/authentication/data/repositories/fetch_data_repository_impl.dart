@@ -187,6 +187,20 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
   }
 
   @override
+  Future<ScreeningEntity> getScreeningsByPatientId(String patients) async {
+    try {
+      final result = await _source.getScreeningsByPatientId(patients);
+      final screenings = ScreeningEntity.fromMap(result.documents.first.data);
+
+      return screenings;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  @override
   Future<List<RemarksEntity>> getRemarksByScreening(String screening) async {
     try {
       DocumentList result = await _source.getRemarksByScreening(screening);
