@@ -36,8 +36,6 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        TextFormInput(kRemarks, widget.controller, maxLines: 3),
-        const Gap(8),
         InfoLabel(
           label: kMedicalRecordStatus,
           child: Column(
@@ -66,13 +64,33 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
             ),
           ),
         ),
-        if (recordIndex != 2) const Gap(8),
-        if (recordIndex != 2)
+        const Gap(8),
+        InfoLabel(
+          label: "Remarks (Doctors note)",
+          child: TextBox(
+            controller: widget.controller,
+            maxLines: 5,
+          ),
+        ),
+        if (recordIndex != null && recordIndex != 2) const Gap(8),
+        if (recordIndex != null && recordIndex != 2)
           InfoLabel(
             label: kFollowUpDate,
             child: DatePicker(
               selected: followUpDate,
               startDate: DateTime.now(),
+              onChanged: (date) {
+                setState(() => followUpDate = date);
+                widget.date(date);
+              },
+            ),
+          ),
+        if (recordIndex != null && recordIndex != 2) const Gap(8),
+        if (recordIndex != null && recordIndex != 2)
+          InfoLabel(
+            label: "Follow up Time",
+            child: TimePicker(
+              selected: followUpDate,
               onChanged: (date) {
                 setState(() => followUpDate = date);
                 widget.date(date);
