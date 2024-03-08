@@ -84,6 +84,14 @@ class _ReviewsState extends ConsumerState<Reviews> {
       });
 
       await notifier.postScreening(connection, screening);
+
+      if (!connection) {
+        final newTable = TableEntity(
+          patient: patient,
+          screening: screening,
+        );
+        ref.read(tableProvider.notifier).addTable(newTable);
+      }
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         popUpInfoBar(kErrorTitle, e.toString(), context);
