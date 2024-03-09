@@ -1,6 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
@@ -28,7 +27,10 @@ class OfflineBottomBar extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(kOffline.toUpperCase()).letterSpacing(1),
+        Text(
+          kOffline.toUpperCase(),
+          style: const TextStyle(letterSpacing: 1),
+        ),
       ],
     );
   }

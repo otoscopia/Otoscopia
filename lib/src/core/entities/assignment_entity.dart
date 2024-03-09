@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:otoscopia/src/core/core.dart';
-
 class AssignmentEntity {
   final String id;
   final String nurse;
@@ -44,17 +42,6 @@ class AssignmentEntity {
       'school': school,
       'isActive': isActive,
     };
-  }
-
-  factory AssignmentEntity.fromModel(AssignmentModel model) {
-    return AssignmentEntity(
-      id: model.id,
-      nurse: model.nurse,
-      school: model.school,
-      isActive: model.isActive,
-      createdAt: model.createdAt,
-      updatedAt: model.updatedAt,
-    );
   }
 
   factory AssignmentEntity.fromMap(Map<String, dynamic> map) {

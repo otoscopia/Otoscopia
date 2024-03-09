@@ -55,26 +55,6 @@ class UsersEntity {
     };
   }
 
-  factory UsersEntity.fromModel(UsersModel model) {
-    final role = model.role == UserRoleModel.admin
-        ? UserRole.admin
-        : model.role == UserRoleModel.doctor
-            ? UserRole.doctor
-            : model.role == UserRoleModel.nurse
-                ? UserRole.nurse
-                : UserRole.patient;
-
-    return UsersEntity(
-      id: model.id,
-      name: model.name,
-      email: model.email,
-      phone: model.phone,
-      workAddress: model.workAddress,
-      publicKey: model.publicKey,
-      role: role,
-    );
-  }
-
   static UserRole getRole(String role) {
     switch (role) {
       case "admin":

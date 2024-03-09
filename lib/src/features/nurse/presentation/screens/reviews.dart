@@ -76,14 +76,14 @@ class _ReviewsState extends ConsumerState<Reviews> {
     final connection = ref.read(connectionProvider);
 
     try {
-      await notifier.postPatient(connection, patient);
+      await notifier.postPatient(patient);
 
       setState(() {
         isPatientUploading = false;
         isScreeningUploading = true;
       });
 
-      await notifier.postScreening(connection, screening);
+      await notifier.postScreening(screening);
 
       if (!connection) {
         final newTable = TableEntity(

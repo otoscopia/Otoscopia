@@ -10,9 +10,9 @@ class PostDataNotifier extends StateNotifier<void> {
   static final _source = PostDataDataSource();
   static final _repository = PostDataRepositoryImpl(_source);
 
-  Future<bool> postPatient(bool connection, PatientEntity patient) async {
+  Future<bool> postPatient(PatientEntity patient) async {
     try {
-      await _repository.postPatient(connection, patient);
+      await _repository.postPatient(patient);
       return true;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
@@ -21,9 +21,9 @@ class PostDataNotifier extends StateNotifier<void> {
     }
   }
 
-  Future<bool> postScreening(bool connection, ScreeningEntity screening) async {
+  Future<bool> postScreening(ScreeningEntity screening) async {
     try {
-      await _repository.postScreening(connection, screening);
+      await _repository.postScreening(screening);
       return true;
     } on AppwriteException catch (error) {
       throw Exception(error.message);

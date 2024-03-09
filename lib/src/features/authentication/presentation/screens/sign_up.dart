@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/authentication/authentication.dart';
@@ -40,7 +39,7 @@ class _SignUpState extends ConsumerState<SignUp> {
               children: [
                 const Logo(height: 32),
                 const Gap(16),
-                const Text(kSignUp).fontSize(24),
+                const Text(kSignUp, style: TextStyle(fontSize: 24)),
                 const Gap(12),
                 EmailTextInput(emailController: _form.emailController),
                 const Gap(16),
@@ -78,7 +77,7 @@ class _SignUpState extends ConsumerState<SignUp> {
                     Expanded(
                       child: ComboBox(
                         isExpanded: true,
-                        placeholder: const Text(kRole).opacity(.8),
+                        placeholder: const Text(kRole),
                         items: roles,
                         value: _form.role,
                         onChanged: (value) => setState(() {
