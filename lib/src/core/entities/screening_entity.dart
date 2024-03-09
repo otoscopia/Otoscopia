@@ -117,29 +117,6 @@ class ScreeningEntity {
     };
   }
 
-  factory ScreeningEntity.fromModel(ScreeningModel model) {
-    return ScreeningEntity(
-      id: model.id,
-      patient: model.patient,
-      historyOfIllness: model.historyOfIllness,
-      remarks: model.remarks,
-      temperature: model.temperature,
-      weight: model.weight,
-      height: model.height,
-      similarCondition: model.similarCondition,
-      chiefComplaint: model.chiefComplaint,
-      chiefComplaintRemarks: model.chiefComplaintRemarks,
-      allergy: model.allergy,
-      allergyRemarks: model.allergyRemarks,
-      undergoneSurgery: model.undergoneSurgery,
-      undergoneSurgeryRemarks: model.undergoneSurgeryRemarks,
-      medication: model.medication,
-      medicationRemarks: model.medicationRemarks,
-      images: model.images,
-      createdAt: model.createdAt,
-      updatedAt: model.updatedAt,
-    );
-  }
 
   factory ScreeningEntity.fromMap(Map<String, dynamic> map) {
     return ScreeningEntity(

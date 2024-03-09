@@ -2,7 +2,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/guest/guest.dart';
@@ -35,7 +34,7 @@ class Footer extends ConsumerWidget {
           ],
         ),
         Gap(responsive ? 4 : 8),
-        const Text(kCopyRight).textAlignment(TextAlign.center)
+        const Text(kCopyRight, textAlign: TextAlign.center)
       ],
     );
   }

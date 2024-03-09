@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/authentication/authentication.dart';
@@ -18,16 +17,8 @@ class FetchDataNotifier extends StateNotifier<void> {
 
   Future<void> getSchools() async {
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getSchools();
-        ref.read(schoolsProvider.notifier).setSchools(result);
-      } else {
-        final schoolBox = await Hive.openBox<SchoolModel>(kSchoolsHiveBox);
-        final schoolsModel = schoolBox.values.toList();
-        final schools =
-            schoolsModel.map((e) => SchoolEntity.fromModel(e)).toList();
-        ref.read(schoolsProvider.notifier).setSchools(schools);
-      }
+      final result = await _repository.getSchools();
+      ref.read(schoolsProvider.notifier).setSchools(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -48,17 +39,8 @@ class FetchDataNotifier extends StateNotifier<void> {
 
   Future<void> getAssignments() async {
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getAssignments();
-        ref.read(assignmentsProvider.notifier).setAssignments(result);
-      } else {
-        final assignmentBox =
-            await Hive.openBox<AssignmentModel>(kAssignmentsHiveBox);
-        final assignmentModel = assignmentBox.values.toList();
-        final assignments =
-            assignmentModel.map((e) => AssignmentEntity.fromModel(e)).toList();
-        ref.read(assignmentsProvider.notifier).setAssignments(assignments);
-      }
+      final result = await _repository.getAssignments();
+      ref.read(assignmentsProvider.notifier).setAssignments(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -68,17 +50,8 @@ class FetchDataNotifier extends StateNotifier<void> {
 
   Future<void> getAssignmentsByNurse(UserEntity user) async {
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getAssignmentsByNurse(user.id);
-        ref.read(assignmentsProvider.notifier).setAssignments(result);
-      } else {
-        final assignmentBox =
-            await Hive.openBox<AssignmentModel>(kAssignmentsHiveBox);
-        final assignmentModel = assignmentBox.values.toList();
-        final assignments =
-            assignmentModel.map((e) => AssignmentEntity.fromModel(e)).toList();
-        ref.read(assignmentsProvider.notifier).setAssignments(assignments);
-      }
+      final result = await _repository.getAssignmentsByNurse(user.id);
+      ref.read(assignmentsProvider.notifier).setAssignments(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -90,16 +63,8 @@ class FetchDataNotifier extends StateNotifier<void> {
     final schools =
         ref.read(schoolsProvider).map((school) => school.id).toList();
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getPatientsBySchools(schools);
-        ref.read(patientsProvider.notifier).setPatients(result);
-      } else {
-        final patientBox = await Hive.openBox<PatientModel>(kPatientHiveBox);
-        final patientModel = patientBox.values.toList();
-        final patients =
-            patientModel.map((e) => PatientEntity.fromModel(e)).toList();
-        ref.read(patientsProvider.notifier).setPatients(patients);
-      }
+      final result = await _repository.getPatientsBySchools(schools);
+      ref.read(patientsProvider.notifier).setPatients(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -109,16 +74,8 @@ class FetchDataNotifier extends StateNotifier<void> {
 
   Future<void> getPatientsByDoctor(String id) async {
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getPatientsByDoctor(id);
-        ref.read(patientsProvider.notifier).setPatients(result);
-      } else {
-        final patientBox = await Hive.openBox<PatientModel>(kPatientHiveBox);
-        final patientModel = patientBox.values.toList();
-        final patients =
-            patientModel.map((e) => PatientEntity.fromModel(e)).toList();
-        ref.read(patientsProvider.notifier).setPatients(patients);
-      }
+      final result = await _repository.getPatientsByDoctor(id);
+      ref.read(patientsProvider.notifier).setPatients(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -128,16 +85,8 @@ class FetchDataNotifier extends StateNotifier<void> {
 
   Future<void> getDoctors() async {
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getDoctors();
-        ref.read(doctorsProvider.notifier).setDoctors(result);
-      } else {
-        final doctorBox = await Hive.openBox<UsersModel>(kDoctorsHiveBox);
-        final doctorModel = doctorBox.values.toList();
-        final doctors =
-            doctorModel.map((e) => UsersEntity.fromModel(e)).toList();
-        ref.read(doctorsProvider.notifier).setDoctors(doctors);
-      }
+      final result = await _repository.getDoctors();
+      ref.read(doctorsProvider.notifier).setDoctors(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -147,15 +96,8 @@ class FetchDataNotifier extends StateNotifier<void> {
 
   Future<void> getNurses() async {
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getNurses();
-        ref.read(nursesProvider.notifier).setNurses(result);
-      } else {
-        final nurseBox = await Hive.openBox<UsersModel>(kNursesHiveBox);
-        final nurseModel = nurseBox.values.toList();
-        final nurses = nurseModel.map((e) => UsersEntity.fromModel(e)).toList();
-        ref.read(nursesProvider.notifier).setNurses(nurses);
-      }
+      final result = await _repository.getNurses();
+      ref.read(nursesProvider.notifier).setNurses(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -166,17 +108,8 @@ class FetchDataNotifier extends StateNotifier<void> {
   Future<void> getScreeningsByPatient() async {
     final patients = ref.read(patientsProvider).map((e) => e.id).toList();
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getScreeningsByPatient(patients);
-        ref.read(screeningsProvider.notifier).setScreenings(result);
-      } else {
-        final screeningBox =
-            await Hive.openBox<ScreeningModel>(kScreeningHiveBox);
-        final screeningModel = screeningBox.values.toList();
-        final screenings =
-            screeningModel.map((e) => ScreeningEntity.fromModel(e)).toList();
-        ref.read(screeningsProvider.notifier).setScreenings(screenings);
-      }
+      final result = await _repository.getScreeningsByPatient(patients);
+      ref.read(screeningsProvider.notifier).setScreenings(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -187,17 +120,8 @@ class FetchDataNotifier extends StateNotifier<void> {
   Future<void> getRemarksByPatients() async {
     final screenings = ref.read(screeningsProvider).map((e) => e.id).toList();
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getRemarksByPatients(screenings);
-        ref.read(remarksProvider.notifier).setRemarks(result);
-      } else {
-        // final screeningBox =
-        //     await Hive.openBox<ScreeningModel>(kScreeningHiveBox);
-        // final screeningModel = screeningBox.values.toList();
-        // final screenings =
-        //     screeningModel.map((e) => ScreeningEntity.fromModel(e)).toList();
-        // ref.read(screeningsProvider.notifier).setScreenings(screenings);
-      }
+      final result = await _repository.getRemarksByPatients(screenings);
+      ref.read(remarksProvider.notifier).setRemarks(result);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -207,18 +131,8 @@ class FetchDataNotifier extends StateNotifier<void> {
 
   Future<ScreeningEntity> getScreeningsByPatientId(String id) async {
     try {
-      if (ref.read(connectionProvider)) {
-        final result = await _repository.getScreeningsByPatientId(id);
-        return result;
-      } else {
-        final screeningBox =
-            await Hive.openBox<ScreeningModel>(kScreeningHiveBox);
-        final screeningModel = screeningBox.values
-            .toList()
-            .firstWhere((element) => element.patient == id);
-        final screenings = ScreeningEntity.fromModel(screeningModel);
-        return screenings;
-      }
+      final result = await _repository.getScreeningsByPatientId(id);
+      return result;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
@@ -289,13 +203,13 @@ final fetchDataProvider = StateNotifierProvider<FetchDataNotifier, void>(
   (ref) => FetchDataNotifier(ref),
 );
 
-
 class RemarksNotifier extends StateNotifier<List<RemarksEntity>> {
-  RemarksNotifier(): super([]);
+  RemarksNotifier() : super([]);
 
   setRemarks(List<RemarksEntity> remarks) => state = remarks;
 }
 
-final remarksProvider = StateNotifierProvider<RemarksNotifier, List<RemarksEntity>>((ref) {
+final remarksProvider =
+    StateNotifierProvider<RemarksNotifier, List<RemarksEntity>>((ref) {
   return RemarksNotifier();
 });

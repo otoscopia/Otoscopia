@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 class TextNavigator extends StatelessWidget {
   const TextNavigator(
@@ -24,8 +23,14 @@ class TextNavigator extends StatelessWidget {
           return FluentTheme.of(context).typography.body!.color;
         }),
       ),
-      child: Text(text).fontWeight(bold ? null : FontWeight.normal),
-      onPressed: () => pop ? Navigator.pop(context) : Navigator.pushNamed(context, child!),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      onPressed: () =>
+          pop ? Navigator.pop(context) : Navigator.pushNamed(context, child!),
     );
   }
 }
