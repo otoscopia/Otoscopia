@@ -24,7 +24,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         documentId: user.$id,
       );
 
-      return UserEntity.fromMap(result.data, session.$id);
+      final userEntity = UserEntity.fromMap(result.data, session.$id);
+
+      return userEntity;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {

@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
@@ -26,10 +25,10 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
             children: [
               const Logo(height: 32),
               const Gap(16),
-              const Text(kForgotPassword).fontSize(24),
+              const Text(kForgotPassword, style: TextStyle(fontSize: 24)),
               const Gap(12),
-              const Text(kResetUnavailable).fontSize(16),
-              const Text(kEmail).textColor(AppColors.accentColor).fontSize(16),
+              const Text(kResetUnavailable, style: TextStyle(fontSize: 16)),
+              Text(kEmail, style: TextStyle(fontSize: 24, color: AppColors.accentColor)),
               const Gap(12),
               const CustomHyperLink(kEmailNowBtn, to: kMailToBtn),
               const TextNavigator(kGoBackBtn, pop: true, bold: false)

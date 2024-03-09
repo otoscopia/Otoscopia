@@ -117,6 +117,7 @@ class ScreeningEntity {
     };
   }
 
+
   factory ScreeningEntity.fromMap(Map<String, dynamic> map) {
     return ScreeningEntity(
       id: map['\$id'] as String,

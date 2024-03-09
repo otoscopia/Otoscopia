@@ -73,6 +73,7 @@ class _ReviewsState extends ConsumerState<Reviews> {
       isPatientUploading = true;
     });
     final notifier = ref.read(postDataProvider.notifier);
+    final connection = ref.read(connectionProvider);
 
     try {
       await notifier.postPatient(patient);
@@ -83,6 +84,14 @@ class _ReviewsState extends ConsumerState<Reviews> {
       });
 
       await notifier.postScreening(screening);
+
+      if (!connection) {
+        final newTable = TableEntity(
+          patient: patient,
+          screening: screening,
+        );
+        ref.read(tableProvider.notifier).addTable(newTable);
+      }
     } catch (e) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         popUpInfoBar(kErrorTitle, e.toString(), context);

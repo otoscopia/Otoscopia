@@ -1,7 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:styled_widget/styled_widget.dart';
 
 import 'package:otoscopia/src/config/config.dart';
 import 'package:otoscopia/src/core/core.dart';
@@ -93,7 +92,7 @@ class _SignInState extends ConsumerState<SignIn> {
           children: [
             const Logo(height: 32),
             const Gap(16),
-            const Text(kSignIn).fontSize(24),
+            const Text(kSignIn, style: TextStyle(fontSize: 24)),
             const Gap(12),
             EmailTextInput(emailController: _form.emailController),
             const Gap(16),
@@ -131,6 +130,7 @@ class _SignInState extends ConsumerState<SignIn> {
 
       if (session != null) {
         await ref.read(authenticationProvider.notifier).getUser(session);
+
         return true;
       }
       return false;

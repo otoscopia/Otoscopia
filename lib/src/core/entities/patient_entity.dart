@@ -113,6 +113,7 @@ class PatientEntity {
     );
   }
 
+
   String toJson() => json.encode(toMap());
 
   factory PatientEntity.fromJson(String source) =>

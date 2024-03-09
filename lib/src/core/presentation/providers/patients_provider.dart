@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/core/core.dart';
@@ -30,6 +31,11 @@ class PatientsNotifier extends StateNotifier<List<PatientEntity>> {
 
   PatientEntity findById(String id) {
     final patient = state.firstWhere((patient) => patient.id == id);
+    return patient;
+  }
+
+  PatientEntity? findByName(String name) {
+    final patient = state.firstWhereOrNull((patient) => patient.name == name);
     return patient;
   }
 }

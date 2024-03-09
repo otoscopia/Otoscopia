@@ -73,6 +73,8 @@ class UserEntity {
     );
   }
 
+  
+
   String toJson() => json.encode(toMap());
 
   factory UserEntity.fromJson(String source, String session) =>

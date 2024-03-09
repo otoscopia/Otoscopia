@@ -13,7 +13,7 @@ Map<String, WidgetBuilder> createRoutes(
   DeviceType platform,
   UserRole? role,
 ) {
-  if (!isAuthenticated) return GuestRoutes.getRoutes(platform);
+  if (!isAuthenticated) return GuestRoutes.getRoutes();
 
   switch (role) {
     case UserRole.admin:
@@ -25,6 +25,6 @@ Map<String, WidgetBuilder> createRoutes(
     case UserRole.patient:
       return PatientRoutes.getRoutes(platform);
     default:
-      return GuestRoutes.getRoutes(platform);
+      return GuestRoutes.getRoutes();
   }
 }

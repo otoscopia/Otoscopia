@@ -23,10 +23,13 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
   final bool isUploading = false;
   DateTime? date;
   RecordStatus? recordStatus;
+  late bool isDoctor;
 
   @override
   void initState() {
     super.initState();
+    isDoctor = ref.read(userProvider).role == UserRole.doctor;
+
     recordStatus = widget._table.remarks != null
         ? widget._table.remarks!.status
         : RecordStatus.pending;
@@ -41,6 +44,7 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
     final hasRemarks = remarks != null;
     final bool modified =
         hasRemarks ? remarks.status != RecordStatus.pending : false;
+    final connection = ref.read(connectionProvider);
 
     return GestureDetector(
       onSecondaryTapUp: (details) {
@@ -49,32 +53,56 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
       child: FlyoutTarget(
         key: contextAttacKey,
         controller: controller,
-        child: DoubleCard(
-          scroll: true,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PatientInformationCard(patient),
-              const Gap(8),
-              if (modified) DoctorsRemarkCard(screening),
-              if (modified) const Gap(8),
-              VitalsCard(screening),
-              const Gap(8),
-              ScreeningInformationCard(screening),
-              const Gap(8),
-              EarImages("$kLeftEar:", table!.screening.images, isNetwork: true),
-              const Gap(8),
-              EarImages("$kRightEar:", table!.screening.images,
-                  isNetwork: true),
-            ],
-          ),
+        child: Stack(
+          children: [
+            DoubleCard(
+              scroll: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PatientInformationCard(patient),
+                  const Gap(8),
+                  if (modified) DoctorsRemarkCard(screening),
+                  if (modified) const Gap(8),
+                  VitalsCard(screening, remarks: remarks,),
+                  const Gap(8),
+                  ScreeningInformationCard(screening),
+                  const Gap(8),
+                  EarImages(
+                    "$kLeftEar:",
+                    table!.screening.images,
+                    isNetwork: connection,
+                  ),
+                  const Gap(8),
+                  EarImages(
+                    "$kRightEar:",
+                    table!.screening.images,
+                    isNetwork: connection,
+                  ),
+                ],
+              ),
+            ),
+            if (isDoctor)
+              Positioned(
+                right: 32,
+                bottom: 32,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FilledButton(
+                    child: const Icon(FluentIcons.edit, size: 32),
+                    onPressed: () async {
+                      await showEditContent();
+                    },
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
   }
 
   void onRightClick(TapUpDetails details) {
-    final isDoctor = ref.read(userProvider).role == UserRole.doctor;
     final targetContext = contextAttacKey.currentContext;
     if (targetContext == null) return;
     final box = targetContext.findRenderObject() as RenderBox;
@@ -136,6 +164,7 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
       context: context,
       builder: (context) {
         return ContentDialog(
+          constraints: const BoxConstraints(maxWidth: 325),
           title: const Text(kModifyMedicalRecordStatus),
           content: ContentPopUpDialog(
             controller: remarksController,
@@ -147,16 +176,17 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
             if (isUploading)
               const Center(child: ProgressRing())
             else
-              Button(
+              FilledButton(
                 child: const Text(kSaveBtn),
                 onPressed: () async {
                   onSave();
                 },
               ),
-            FilledButton(
+            Button(
               child: const Text(kCancelBtn),
               onPressed: () {
-                table = widget._table;
+                table ??= widget._table;
+                remarksController.text = "";
                 Navigator.of(context).pop();
               },
             ),
@@ -168,24 +198,39 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
   }
 
   void onSave() async {
-    final isResolved = recordStatus == RecordStatus.resolved;
+    final isRemarksNotEmpty = remarksController.text != "";
+    final isResolved =
+        recordStatus == RecordStatus.resolved && isRemarksNotEmpty;
     final isMedicalAttention = (recordStatus == RecordStatus.medicalAttention &&
-        (date != null && location.text != ""));
+        (date != null && location.text != "" && isRemarksNotEmpty));
     final isFollowUp = recordStatus == RecordStatus.followUp &&
-        (date != null && location.text != "");
+        (date != null && location.text != "" && isRemarksNotEmpty);
 
     if (isResolved || isMedicalAttention || isFollowUp) {
-      await ref.read(postRemarkProvider.notifier).postRemark(
-            remarksController.text,
-            date,
-            table!.screening.id,
-            location.text,
-            recordStatus!,
-          );
+      final remarksEntity =
+          await ref.read(postRemarkProvider.notifier).postRemark(
+                remarksController.text,
+                date,
+                table!.screening.id,
+                location.text,
+                recordStatus!,
+              );
+
+      setState(() {
+        table = table = TableEntity(
+          patient: table!.patient,
+          screening: table!.screening,
+          remarks: remarksEntity,
+        );
+      });
 
       WidgetsFlutterBinding.ensureInitialized()
           .addPostFrameCallback((timeStamp) {
         Navigator.of(context).pop();
+        remarksController.text = "";
+        location.text = "";
+        date = null;
+        recordStatus = null;
       });
     } else {
       popUpInfoBar(

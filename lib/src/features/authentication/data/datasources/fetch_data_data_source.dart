@@ -49,6 +49,7 @@ class FetchDataDataSource {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.assignmentCollection,
+        queries: [Query.limit(100)],
       );
 
       return result;
@@ -147,12 +148,46 @@ class FetchDataDataSource {
     }
   }
 
+  Future<DocumentList> getRemarksByPatients(List<String> screening) async {
+    try {
+      DocumentList result = await _databases.listDocuments(
+        databaseId: Env.database,
+        collectionId: Env.remarksCollection,
+        queries: [
+          if (screening.isNotEmpty) Query.equal('screening', screening),
+          Query.limit(100)
+        ],
+      );
+
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
+  Future<DocumentList> getScreeningsByPatientId(String patient) async {
+    try {
+      DocumentList result = await _databases.listDocuments(
+        databaseId: Env.database,
+        collectionId: Env.screeningCollection,
+        queries: [
+          Query.equal('patient', patient),
+          Query.limit(100)
+        ],
+      );
+
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
   Future<DocumentList> getRemarksByScreening(String screening) async {
     try {
       DocumentList result = await _databases.listDocuments(
         databaseId: Env.database,
         collectionId: Env.remarksCollection,
-        queries: [Query.equal('screening', screening)],
+        queries: [Query.equal('screening', screening), Query.limit(100)],
       );
 
       return result;
