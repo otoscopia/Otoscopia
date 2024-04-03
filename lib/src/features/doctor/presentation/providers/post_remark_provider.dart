@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +20,9 @@ class PostRemarkNotifier extends StateNotifier<void> {
     String id,
     String? location,
     RecordStatus status,
+    List<Uint8List> bytes,
+    String oldScreening,
+    List<String> names,
   ) async {
     try {
       final entity = RemarksEntity(
@@ -29,9 +34,19 @@ class PostRemarkNotifier extends StateNotifier<void> {
         status: status,
       );
 
-      await _repository.postRemark(entity);
+      await _repository.postRemark(entity, bytes, names);
 
       return entity;
+    } on AppwriteException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+  Future<bool> referDoctor(String id, String doctor) async {
+    try {
+      await _repository.referDoctor(id, doctor);
+
+      return true;
     } on AppwriteException catch (e) {
       throw Exception(e.message);
     }
