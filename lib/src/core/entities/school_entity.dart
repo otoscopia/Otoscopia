@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:otoscopia/src/core/core.dart';
 
 class SchoolEntity {
   final String id;
@@ -59,16 +58,7 @@ class SchoolEntity {
     );
   }
 
-  factory SchoolEntity.fromModel(SchoolModel model) {
-    return SchoolEntity(
-      id: model.id,
-      name: model.name,
-      abbr: model.abbr,
-      code: model.code,
-      address: model.address,
-      isActive: model.isActive,
-    );
-  }
+  
 
   String toJson() => json.encode(toMap());
 

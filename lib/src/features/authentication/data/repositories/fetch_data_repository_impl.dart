@@ -1,6 +1,5 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/authentication/authentication.dart';
@@ -16,13 +15,6 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
       DocumentList result = await _source.getSchools();
       final schools =
           result.documents.map((e) => SchoolEntity.fromMap(e.data)).toList();
-
-      final schoolsBox = await Hive.openBox<SchoolModel>(kSchoolsHiveBox);
-
-      final schoolsModel =
-          schools.map((e) => SchoolModel.fromEntity(e)).toList();
-
-      schoolsBox.addAll(schoolsModel);
 
       return schools;
     } on AppwriteException catch (error) {
@@ -56,14 +48,6 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
           .map((e) => AssignmentEntity.fromMap(e.data))
           .toList();
 
-      final assignmentsBox =
-          await Hive.openBox<AssignmentModel>(kAssignmentsHiveBox);
-
-      final assignmentsModel =
-          assignments.map((e) => AssignmentModel.fromEntity(e)).toList();
-
-      assignmentsBox.addAll(assignmentsModel);
-
       return assignments;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
@@ -80,14 +64,6 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
       assignments = result.documents
           .map((e) => AssignmentEntity.fromMap(e.data))
           .toList();
-
-      final assignmentBox =
-          await Hive.openBox<AssignmentModel>(kAssignmentsHiveBox);
-
-      final assignmentsModel =
-          assignments.map((e) => AssignmentModel.fromEntity(e)).toList();
-
-      assignmentBox.addAll(assignmentsModel);
 
       return assignments;
     } on AppwriteException catch (error) {
@@ -134,13 +110,6 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
       final doctors =
           result.documents.map((e) => UsersEntity.fromMap(e.data)).toList();
 
-      final doctorsBox = await Hive.openBox<UsersModel>(kDoctorsHiveBox);
-
-      final doctorsModel =
-          doctors.map((e) => UsersModel.fromEntity(e)).toList();
-
-      doctorsBox.addAll(doctorsModel);
-
       return doctors;
     } on AppwriteException catch (error) {
       throw Exception(error.message);
@@ -155,12 +124,6 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
       DocumentList result = await _source.getNurses();
       final nurses =
           result.documents.map((e) => UsersEntity.fromMap(e.data)).toList();
-
-      final nursesBox = await Hive.openBox<UsersModel>(kNursesHiveBox);
-
-      final nursesModel = nurses.map((e) => UsersModel.fromEntity(e)).toList();
-
-      nursesBox.addAll(nursesModel);
 
       return nurses;
     } on AppwriteException catch (error) {
@@ -187,8 +150,7 @@ class FetchDataRepositoryImpl implements FetchDataRepository {
   }
 
   @override
-  Future<List<RemarksEntity>> getRemarksByPatients(
-      List<String> remarks) async {
+  Future<List<RemarksEntity>> getRemarksByPatients(List<String> remarks) async {
     try {
       DocumentList result = await _source.getRemarksByPatients(remarks);
       final response =

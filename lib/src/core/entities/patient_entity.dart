@@ -113,25 +113,6 @@ class PatientEntity {
     );
   }
 
-  factory PatientEntity.fromModel(PatientModel model) {
-    final gender =
-        model.gender == GenderModel.male ? Gender.male : Gender.female;
-    return PatientEntity(
-      id: model.id,
-      name: model.name,
-      gender: gender,
-      birthDate: model.birthDate,
-      school: model.school,
-      lrn: model.lrn,
-      guardian: model.guardian,
-      guardianPhone: model.guardianPhone,
-      creator: model.creator,
-      doctor: model.doctor,
-      code: model.code,
-      updatedAt: model.updatedAt,
-      createdAt: model.createdAt,
-    );
-  }
 
   String toJson() => json.encode(toMap());
 

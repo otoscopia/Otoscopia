@@ -73,26 +73,7 @@ class UserEntity {
     );
   }
 
-  factory UserEntity.fromModel(UserModel model) {
-    final role = model.role == UserRoleModel.admin
-        ? UserRole.admin
-        : model.role == UserRoleModel.doctor
-            ? UserRole.doctor
-            : model.role == UserRoleModel.nurse
-                ? UserRole.nurse
-                : UserRole.patient;
-
-    return UserEntity(
-      id: model.id,
-      name: model.name,
-      email: model.email,
-      phone: model.phone,
-      workAddress: model.workAddress,
-      publicKey: model.publicKey,
-      role: role,
-      sessionId: model.sessionId,
-    );
-  }
+  
 
   String toJson() => json.encode(toMap());
 

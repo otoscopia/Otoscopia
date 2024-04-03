@@ -1,6 +1,5 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:otoscopia/src/core/core.dart';
@@ -13,7 +12,6 @@ late final Uuid uuid;
 late final String applicationDirectory;
 late final String documentDirectory;
 late final FlutterSecureStorage secureStorage;
-late final BoxCollection collection;
 
 class DependencyInjection {
   static final DependencyInjection _singleton = DependencyInjection._internal();
