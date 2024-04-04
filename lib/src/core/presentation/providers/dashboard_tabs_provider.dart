@@ -83,7 +83,18 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
     }
   }
 
-  void viewRecord(ScreeningEntity screening) {
+  void removeTab(String name) {
+    final int index = state.indexWhere(
+      (Tab tab) => (tab.text as Text).data == name,
+    );
+
+    if (index != -1) {
+      state = state..removeAt(index);
+      ref.read(dashboardIndexProvider.notifier).setIndex(0);
+    }
+  }
+
+  void viewRecord(ScreeningEntity screening, {RemarksEntity? remarks}) {
     final patient =
         ref.read(patientsProvider.notifier).findById(screening.patient);
 
@@ -92,7 +103,7 @@ class DashboardTabNotifier extends StateNotifier<List<Tab>> {
     if (index != -1) {
       ref.read(dashboardIndexProvider.notifier).setIndex(index);
     } else {
-      addTab(TableEntity(patient: patient, screening: screening));
+      addTab(TableEntity(patient: patient, screening: screening, remarks: remarks));
     }
   }
 }

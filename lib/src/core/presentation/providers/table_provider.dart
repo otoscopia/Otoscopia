@@ -11,9 +11,10 @@ class TableNotifier extends StateNotifier<List<TableEntity>> {
   void setTable(List<PatientEntity> patients, List<ScreeningEntity> screenings,
       List<RemarksEntity> remarks) {
     patients.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    final List<TableEntity> tables = patients.map((patients) {
-      final screening = screenings
-          .firstWhere((screening) => screening.patient == patients.id);
+    final tables = screenings.map((screening) {
+      final patient =
+          patients.firstWhere((patient) => patient.id == screening.patient);
+
       final remark =
           remarks.where((element) => element.screening == screening.id);
 
@@ -22,10 +23,22 @@ class TableNotifier extends StateNotifier<List<TableEntity>> {
       }
 
       return TableEntity(
-          patient: patients, screening: screening, remarks: remark.firstOrNull);
+          patient: patient, screening: screening, remarks: remark.firstOrNull);
     }).toList();
 
-    state = tables;
+    final data = tables.reversed.toList();
+
+    tables.sort((a, b) {
+      if (a.remarks != null && b.remarks == null) {
+        return 1;
+      } else if (a.remarks == null && b.remarks != null) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+
+    state = data;
   }
 
   int findTableByPatientId(String id) =>
