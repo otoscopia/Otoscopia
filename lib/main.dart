@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:system_theme/system_theme.dart';
 
 import 'package:otoscopia/application.dart';
 import 'package:otoscopia/src/app.dart';
@@ -11,6 +12,9 @@ import 'package:otoscopia/src/core/core.dart';
 
 Future<void> main() async {
   const sentryRelease = '$kPackageName@${ApplicationConfig.currentVersion}';
+
+  SystemTheme.fallbackColor = const Color(0xFF4ca0e0);
+  await SystemTheme.accentColor.load();
 
   WidgetsFlutterBinding.ensureInitialized();
 
