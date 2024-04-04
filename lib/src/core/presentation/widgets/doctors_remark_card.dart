@@ -36,6 +36,7 @@ class DoctorsRemarkCard extends ConsumerWidget {
                   children: remarks.asMap().entries.map((entry) {
                     final index = entry.key;
                     final remark = entry.value;
+                    final hasImage = remark.images != null;
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -57,16 +58,20 @@ class DoctorsRemarkCard extends ConsumerWidget {
                             else
                               CustomText("Status: ${remark.statusString}"),
                             CustomText("Doctors Remarks: ${remark.remarks!}"),
+                            if (hasImage) RenderPrescription(remark.images!),
                             if (remark.status != RecordStatus.pending &&
-                                remark.status != RecordStatus.resolved)
+                                remark.status != RecordStatus.resolved &&
+                                !hasImage)
                               CustomText(
                                   "Follow up date: ${DateFormat.yMMMMd().format(remark.date!)}"),
                             if (remark.status != RecordStatus.pending &&
-                                remark.status != RecordStatus.resolved)
+                                remark.status != RecordStatus.resolved &&
+                                !hasImage)
                               CustomText(
                                   "Follow up time: ${DateFormat.jm().format(remark.date!)}"),
                             if (remark.status != RecordStatus.pending &&
-                                remark.status != RecordStatus.resolved)
+                                remark.status != RecordStatus.resolved &&
+                                !hasImage)
                               CustomText("Location: ${remark.location}"),
                             CustomText(
                               "Updated at: ${DateFormat.yMMMMd().format(remark.createdAt!)}",
@@ -81,5 +86,68 @@ class DoctorsRemarkCard extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class RenderPrescription extends ConsumerWidget {
+  const RenderPrescription(this.ids, {super.key});
+  final List<String> ids;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FutureBuilder(
+      future: getPrescription(ref, ids),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const LoadingWidget();
+        }
+
+        final prescription = snapshot.data as List<PrescriptionEntity>;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: prescription.map((e) {
+            return Row(
+              children: [
+                IconButton(
+                  icon: const Icon(FluentIcons.download),
+                  onPressed: () async {
+                    await ref
+                        .read(fetchDataProvider.notifier)
+                        .downloadPrescription(e);
+                  },
+                ),
+                GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ContentDialog(
+                            constraints: const BoxConstraints(
+                              maxWidth: 550,
+                              maxHeight: 550,
+                            ),
+                            content: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: PopUpImage(Image.memory(e.image)),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: CustomText(e.name)),
+              ],
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  Future<List<PrescriptionEntity>> getPrescription(
+      WidgetRef ref, List<String> ids) async {
+    final prescription =
+        await ref.read(fetchDataProvider.notifier).getPrescription(ids);
+    return prescription;
   }
 }

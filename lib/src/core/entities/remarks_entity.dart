@@ -12,15 +12,18 @@ class RemarksEntity {
   final RecordStatus status;
   final DateTime? date;
   final DateTime? createdAt;
+  final List<String>? images;
 
-  RemarksEntity(
-      {required this.id,
-      required this.screening,
-      required this.status,
-      this.remarks,
-      this.location,
-      this.date,
-      this.createdAt});
+  RemarksEntity({
+    required this.id,
+    required this.screening,
+    required this.status,
+    this.remarks,
+    this.location,
+    this.date,
+    this.createdAt,
+    this.images,
+  });
 
   factory RemarksEntity.fromMap(Map<String, dynamic> json) {
     RecordStatus status = getStatus(json['status']);
@@ -36,16 +39,18 @@ class RemarksEntity {
       status: status,
       date: date,
       createdAt: createdAt,
+      images: List<String>.from(json['images']),
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({List<String>? images}) {
     return <String, dynamic>{
       'remarks': remarks,
       'screening': screening,
       'location': location,
       'status': statusText,
       'date': date?.toIso8601String(),
+      'images': images,
     };
   }
 

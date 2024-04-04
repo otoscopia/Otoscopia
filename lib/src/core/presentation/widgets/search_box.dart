@@ -27,12 +27,18 @@ class _SearchBoxState extends ConsumerState<SearchBox> {
       onSelected: (value) {
         switch (value.value!.role) {
           case SearchRole.patient:
+            ref.read(appIndexProvider.notifier).setIndex(1);
+            final patient = ref.read(patientsProvider.notifier).findByName(value.value!.name);
+            ref.read(patientsTabProvider.notifier).addTab(patient!);
             break;
           case SearchRole.nurse:
             break;
           case SearchRole.doctor:
             break;
           case SearchRole.schools:
+            ref.read(appIndexProvider.notifier).setIndex(2);
+            final schools = ref.read(schoolsProvider.notifier).findByName(value.value!.name);
+            ref.read(schoolsTabProvider.notifier).addTab(schools);
             break;
           case SearchRole.settings:
             break;

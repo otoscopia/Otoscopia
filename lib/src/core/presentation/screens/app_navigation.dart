@@ -38,14 +38,25 @@ class AppNavigation extends ConsumerWidget {
     }
 
     UserEntity user = ref.read(userProvider);
+
+    final isWeb = getDeviceType() == DeviceType.web;
+    final isMobile = getDeviceType() == DeviceType.mobile;
+
+    final mobile = isMobile == true ? isMobile : isWeb && MediaQuery.of(context).size.width < 400;
+
     return ApplicationContainer(
       child: NavigationView(
+        appBar:mobile ? const NavigationAppBar(
+          title: Logo(),
+          automaticallyImplyLeading: false,
+        ) : null,
         pane: NavigationPane(
-          displayMode: PaneDisplayMode.compact,
+          displayMode:
+              mobile ? PaneDisplayMode.minimal : PaneDisplayMode.compact,
           size: const NavigationPaneSize(openMaxWidth: 300),
           selected: ref.watch(appIndexProvider),
           onChanged: (i) => ref.watch(appIndexProvider.notifier).setIndex(i),
-          header: const Logo(),
+          header: mobile ? null : const Logo(),
           autoSuggestBox: const SearchBox(),
           items: navigationItems(user.role),
           footerItems: footerItems(ref, context),

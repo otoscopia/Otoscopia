@@ -162,6 +162,27 @@ class FetchDataNotifier extends StateNotifier<void> {
     }
   }
 
+  Future<List<PrescriptionEntity>> getPrescription(List<String> ids) async {
+    try {
+      final result = await _imageRepository.getPrescription(ids);
+      return result;
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
+  Future<void> downloadPrescription(PrescriptionEntity prescription) async {
+    try {
+      await _imageRepository.downloadPrescription(prescription);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    } on Exception catch (error) {
+      throw Exception(error.toString());
+    }
+  }
+
   Future<void> setTableData() async {
     final patients = ref.read(patientsProvider);
     final screenings = ref.read(screeningsProvider);
@@ -180,6 +201,26 @@ class FetchDataNotifier extends StateNotifier<void> {
     ref.read(schoolsProvider.notifier).setSchools(filteredSchools);
   }
 
+  Future<void> setSearchData() async {
+    List<SearchEntity> data = [];
+    final patients = ref.read(patientsProvider);
+    final schools = ref.read(schoolsProvider);
+    final doctors = ref.read(doctorsProvider);
+    final nurses = ref.read(nursesProvider);
+
+    data.addAll([
+      ...patients
+          .map((e) => SearchEntity(name: e.name, role: SearchRole.patient)),
+      ...schools
+          .map((e) => SearchEntity(name: e.name, role: SearchRole.schools)),
+      ...doctors
+          .map((e) => SearchEntity(name: e.name, role: SearchRole.doctor)),
+      ...nurses.map((e) => SearchEntity(name: e.name, role: SearchRole.nurse)),
+    ]);
+
+    ref.read(searchProvider.notifier).addList(data);
+  }
+
   Future<void> fetch(UserEntity user) async {
     await getSchools();
     await getDoctors();
@@ -196,6 +237,8 @@ class FetchDataNotifier extends StateNotifier<void> {
     await getScreeningsByPatient();
     await getRemarksByPatients();
     await setTableData();
+
+    await setSearchData();
   }
 }
 

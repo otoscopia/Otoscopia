@@ -11,4 +11,14 @@ class FetchImageRepositoryImpl implements FetchImageRepository {
   Future<List<Uint8List>> getImages(String path, List<String> ids) async {
     return await _source.getImages(path, ids);
   }
+
+  @override
+  Future<List<PrescriptionEntity>> getPrescription(List<String> ids) async {
+    return await _source.getPrescription(ids);
+  }
+
+  @override
+  Future<void> downloadPrescription(PrescriptionEntity prescription) async {
+    return await _source.downloadPrescription(prescription);
+  }
 }

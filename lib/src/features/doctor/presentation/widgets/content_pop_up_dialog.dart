@@ -1,3 +1,6 @@
+import 'package:flutter/services.dart';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -11,12 +14,16 @@ class ContentPopUpDialog extends ConsumerStatefulWidget {
     required this.location,
     required this.status,
     required this.date,
+    required this.bytes,
+    required this.names,
   });
 
   final TextEditingController controller;
   final TextEditingController location;
   final void Function(RecordStatus) status;
   final void Function(DateTime?) date;
+  final void Function(List<Uint8List>) bytes;
+  final void Function(List<String>) names;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -29,6 +36,9 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
   RecordStatus? recordStatus;
 
   final statusText = [kFollowUp, kMedicalAttention, kResolved];
+  bool hasFiles = false;
+  List<String> names = [];
+  List<Uint8List> bytes = [];
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +82,64 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
             maxLines: 5,
           ),
         ),
-        if (recordIndex != null && recordIndex != 2) const Gap(8),
-        if (recordIndex != null && recordIndex != 2)
+        if (recordIndex != null && recordIndex == 0) const Gap(8),
+        if (recordIndex != null && recordIndex == 0)
+          // file picker ui
+          InfoLabel(
+            label: "Attach Prescription",
+            child: Button(
+              onPressed: () async {
+                // file picker
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  dialogTitle: "Select a file to attach",
+                  allowMultiple: true,
+                  type: FileType.custom,
+                  allowedExtensions: ['pdf', 'png', 'jpeg', 'jpg'],
+                );
+
+                if (result != null) {
+                  widget.bytes(result.files.map((e) => e.bytes!).toList());
+                  widget.names(result.files.map((e) => e.name).toList());
+                  setState(() {
+                    names = result.files.map((e) => e.name).toList();
+                    bytes = result.files.map((e) => e.bytes!).toList();
+                    hasFiles = true;
+                  });
+                } else {
+                  // User canceled the picker
+                }
+              },
+              child: const Text("Attach File"),
+            ),
+          ),
+        if (recordIndex != null && recordIndex == 0 && hasFiles) const Gap(8),
+        if (recordIndex != null && recordIndex == 0 && hasFiles)
+          InfoLabel(
+            label: "Attached Files",
+            child: Wrap(
+              children: List.generate(
+                names.length,
+                (index) {
+                  return ListTile(
+                    title: Text(names[index]),
+                    trailing: IconButton(
+                      icon: const Icon(FluentIcons.delete),
+                      onPressed: () {
+                        setState(() {
+                          names.removeAt(index);
+                          bytes.removeAt(index);
+                          widget.names(names);
+                          widget.bytes(bytes);
+                        });
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        if (recordIndex != null && recordIndex == 1) const Gap(8),
+        if (recordIndex != null && recordIndex == 1)
           InfoLabel(
             label: kFollowUpDate,
             child: DatePicker(
@@ -85,8 +151,8 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
               },
             ),
           ),
-        if (recordIndex != null && recordIndex != 2) const Gap(8),
-        if (recordIndex != null && recordIndex != 2)
+        if (recordIndex != null && recordIndex == 1) const Gap(8),
+        if (recordIndex != null && recordIndex == 1)
           InfoLabel(
             label: "Follow up Time",
             child: TimePicker(
@@ -97,8 +163,8 @@ class _ContentPopUpDialogState extends ConsumerState<ContentPopUpDialog> {
               },
             ),
           ),
-        if (recordIndex != null && recordIndex != 2) const Gap(8),
-        if (recordIndex != null && recordIndex != 2)
+        if (recordIndex != null && recordIndex == 1) const Gap(8),
+        if (recordIndex != null && recordIndex == 1)
           TextFormInput(kLocation, widget.location),
       ],
     );

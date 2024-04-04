@@ -5,7 +5,9 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   camera_windows
   connectivity_plus
+  file_saver
   flutter_secure_storage_windows
+  printing
   screen_retriever
   sentry_flutter
   system_theme

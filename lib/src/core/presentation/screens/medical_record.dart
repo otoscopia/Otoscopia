@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -24,6 +26,8 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
   DateTime? date;
   RecordStatus? recordStatus;
   late bool isDoctor;
+  List<Uint8List> imageBytes = [];
+  List<String> names = [];
 
   @override
   void initState() {
@@ -46,61 +50,82 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
         hasRemarks ? remarks.status != RecordStatus.pending : false;
     final connection = ref.read(connectionProvider);
 
-    return GestureDetector(
-      onSecondaryTapUp: (details) {
-        onRightClick(details);
-      },
-      child: FlyoutTarget(
-        key: contextAttacKey,
-        controller: controller,
-        child: Stack(
-          children: [
-            DoubleCard(
-              scroll: true,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PatientInformationCard(patient),
-                  const Gap(8),
-                  if (modified) DoctorsRemarkCard(screening),
-                  if (modified) const Gap(8),
-                  VitalsCard(screening, remarks: remarks,),
-                  const Gap(8),
-                  ScreeningInformationCard(screening),
-                  const Gap(8),
-                  EarImages(
-                    "$kLeftEar:",
-                    table!.screening.images,
-                    isNetwork: connection,
-                  ),
-                  const Gap(8),
-                  EarImages(
-                    "$kRightEar:",
-                    table!.screening.images,
-                    isNetwork: connection,
-                  ),
-                ],
+    return DoubleCard(
+      scroll: true,
+      child: GestureDetector(
+        onSecondaryTapUp: (details) {
+          onRightClick(details);
+        },
+        child: FlyoutTarget(
+          key: contextAttacKey,
+          controller: controller,
+          child: Stack(
+            children: [
+              _buildRecord(
+                patient,
+                modified,
+                screening,
+                remarks,
+                connection,
               ),
-            ),
-            if (isDoctor)
-              Positioned(
-                right: 32,
-                bottom: 32,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FilledButton(
-                    child: const Icon(FluentIcons.edit, size: 32),
-                    onPressed: () async {
-                      await showEditContent();
-                    },
+              if (isDoctor)
+                Positioned(
+                  right: 32,
+                  bottom: 32,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FilledButton(
+                      child: const Icon(FluentIcons.edit, size: 32),
+                      onPressed: () async {
+                        await showEditContent();
+                      },
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+
+  Widget _buildRecord(
+    PatientEntity patient,
+    bool modified,
+    ScreeningEntity screening,
+    RemarksEntity? remarks,
+    bool connection, {
+    bool hasOldScreening = false,
+    bool isPreview = false,
+  }) =>
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (!hasOldScreening) PatientInformationCard(patient),
+          if (!hasOldScreening) const Gap(8),
+          if (modified && !isPreview) DoctorsRemarkCard(screening),
+          if (modified && !isPreview) const Gap(8),
+          VitalsCard(
+            screening,
+            remarks: remarks,
+            isOverview: isPreview,
+          ),
+          const Gap(8),
+          ScreeningInformationCard(screening),
+          const Gap(8),
+          EarImages(
+            "$kLeftEar:",
+            table!.screening.images,
+            isNetwork: connection,
+          ),
+          const Gap(8),
+          EarImages(
+            "$kRightEar:",
+            table!.screening.images,
+            isNetwork: connection,
+          ),
+        ],
+      );
 
   void onRightClick(TapUpDetails details) {
     final targetContext = contextAttacKey.currentContext;
@@ -110,6 +135,8 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
       details.localPosition,
       ancestor: Navigator.of(context).context.findRenderObject(),
     );
+
+    final doctors = isDoctor ? ref.read(doctorsProvider) : <UsersEntity>[];
 
     controller.showFlyout(
       position: position,
@@ -131,7 +158,7 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
             MenuFlyoutItem(
               leading: const Icon(FluentIcons.print),
               text: const Text(kPrintBtn),
-              onPressed: () {
+              onPressed: () async {
                 Flyout.of(context).close();
               },
             ),
@@ -144,18 +171,74 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
                     .visitPatient(table!.patient);
               },
             ),
-            if (!isDoctor)
+            if (!isDoctor &&
+                widget._table.remarks != null &&
+                widget._table.remarks!.status == RecordStatus.followUp)
               MenuFlyoutItem(
                 leading: const Icon(FluentIcons.add),
                 text: const Text("Add New Record"),
                 onPressed: () {
+                  ref.read(dashboardTabProvider.notifier).addPatient();
                   Flyout.of(context).close();
                 },
+              ),
+            if (isDoctor)
+              MenuFlyoutSubItem(
+                leading: const Icon(FluentIcons.account_management),
+                text: const Text('Refer to'),
+                items: (_) => doctors
+                    .map(
+                      (doctor) => MenuFlyoutItem(
+                        text: Text(doctor.name),
+                        onPressed: () async {
+                          final response = await showReferConfirmation(doctor);
+
+                          if (response) {
+                            ref
+                                .read(dashboardTabProvider.notifier)
+                                .removeTab(widget._table.patient.name);
+                          }
+                        },
+                      ),
+                    )
+                    .toList(),
               ),
           ],
         );
       },
     );
+  }
+
+  Future<bool> showReferConfirmation(UsersEntity doctor) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return ContentDialog(
+              title: const CustomText("Refer Patient"),
+              content: CustomText(
+                "Are you sure you want to refer this patient? to ${doctor.name}",
+              ),
+              actions: [
+                Button(
+                  child: const Text("Confirm"),
+                  onPressed: () async {
+                    ref
+                        .read(postRemarkProvider.notifier)
+                        .referDoctor(table!.patient.id, doctor.id);
+                    Navigator.of(context).pop(true);
+                  },
+                ),
+                Button(
+                  child: const Text(kCancelBtn),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 
   Future<void> showEditContent() async {
@@ -171,6 +254,8 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
             location: location,
             date: (value) => setState(() => date = value),
             status: (value) => setState(() => recordStatus = value),
+            bytes: (value) => setState(() => imageBytes = value),
+            names: (value) => setState(() => names = value),
           ),
           actions: [
             if (isUploading)
@@ -204,7 +289,7 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
     final isMedicalAttention = (recordStatus == RecordStatus.medicalAttention &&
         (date != null && location.text != "" && isRemarksNotEmpty));
     final isFollowUp = recordStatus == RecordStatus.followUp &&
-        (date != null && location.text != "" && isRemarksNotEmpty);
+        (imageBytes.isNotEmpty && isRemarksNotEmpty);
 
     if (isResolved || isMedicalAttention || isFollowUp) {
       final remarksEntity =
@@ -214,6 +299,9 @@ class _MedicalRecordState extends ConsumerState<MedicalRecord> {
                 table!.screening.id,
                 location.text,
                 recordStatus!,
+                imageBytes,
+                table!.screening.id,
+                names,
               );
 
       setState(() {
