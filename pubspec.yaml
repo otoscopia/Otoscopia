@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   data_table_2: ^2.5.10
   envied: ^0.5.3
-  file_picker: ^6.2.0
+  file_picker: ^8.0.0
   file_saver: ^0.2.12
   fluent_ui: ^4.8.5
   flutter:
