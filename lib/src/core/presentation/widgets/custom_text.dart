@@ -13,53 +13,48 @@ class CustomText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = FluentTheme.of(context);
-    final fontScale = ref.watch(fontSizeProvider);
-    final fontSize = 0.5 + fontScale;
+    final typography = FluentTheme.of(context).typography;
+
+    final settings = ref.watch(settingsProvider);
+
     switch (style) {
       case 1:
         return Text(
           _text,
-          style: theme.typography.title,
-          textScaler: TextScaler.linear(fontSize),
+          style: typography.title?.apply(fontSizeFactor: settings.fontSize),
         );
       case 2:
         return Text(
           _text,
-          style: theme.typography.subtitle,
-          textScaler: TextScaler.linear(fontSize),
+          style: typography.subtitle?.apply(fontSizeFactor: settings.fontSize),
         );
       case 3:
         return Text(
           _text,
-          style: theme.typography.caption,
-          textScaler: TextScaler.linear(fontSize),
+          style: typography.caption?.apply(fontSizeFactor: settings.fontSize),
         );
       case 4:
         return Text(
           _text,
-          style: theme.typography.bodyLarge,
-          textScaler: TextScaler.linear(fontSize),
+          style: typography.bodyLarge?.apply(fontSizeFactor: settings.fontSize),
         );
       case 5:
         return Text(
           _text,
-          style: theme.typography.bodyStrong,
-          textScaler: TextScaler.linear(fontSize),
+          style:
+              typography.bodyStrong?.apply(fontSizeFactor: settings.fontSize),
         );
       case 6:
         return Text(
           _text,
-          style: theme.typography.caption?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-          textScaler: TextScaler.linear(fontSize),
+          style: typography.caption
+              ?.apply(fontSizeFactor: settings.fontSize)
+              .copyWith(fontWeight: FontWeight.bold),
         );
       default:
         return Text(
           _text,
-          style: theme.typography.body,
-          textScaler: TextScaler.linear(fontSize),
+          style: typography.body?.apply(fontSizeFactor: settings.fontSize),
         );
     }
   }
