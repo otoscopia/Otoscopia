@@ -16,11 +16,12 @@ class DisplayText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = AppColors();
     return Text(
       text,
       style: TextStyle(
         fontSize: 56,
-        color: primary! ? AppColors.accentColor : null,
+        color: primary! ? color.systemAccent : null,
         fontWeight: FontWeight.bold,
       ),
       textAlign: center! ? TextAlign.center : TextAlign.start,

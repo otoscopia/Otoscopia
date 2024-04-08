@@ -15,6 +15,7 @@ class ForgotPassword extends ConsumerStatefulWidget {
 class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors();
     return ApplicationContainer(
       child: CenterCard(
         child: SizedBox(
@@ -28,7 +29,7 @@ class _ForgotPasswordState extends ConsumerState<ForgotPassword> {
               const Text(kForgotPassword, style: TextStyle(fontSize: 24)),
               const Gap(12),
               const Text(kResetUnavailable, style: TextStyle(fontSize: 16)),
-              Text(kEmail, style: TextStyle(fontSize: 24, color: AppColors.accentColor)),
+              Text(kEmail, style: TextStyle(fontSize: 24, color: colors.systemAccent)),
               const Gap(12),
               const CustomHyperLink(kEmailNowBtn, to: kMailToBtn),
               const TextNavigator(kGoBackBtn, pop: true, bold: false)
