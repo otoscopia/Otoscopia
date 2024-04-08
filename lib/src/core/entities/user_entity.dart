@@ -12,6 +12,8 @@ class UserEntity {
   final String publicKey;
   final UserRole role;
   final String sessionId;
+  final String? image;
+
   UserEntity({
     required this.id,
     required this.name,
@@ -21,6 +23,7 @@ class UserEntity {
     required this.publicKey,
     required this.role,
     required this.sessionId,
+    this.image,
   });
 
   UserEntity copyWith({
@@ -32,6 +35,7 @@ class UserEntity {
     String? publicKey,
     UserRole? role,
     String? sessionId,
+    String? image,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -42,6 +46,7 @@ class UserEntity {
       publicKey: publicKey ?? this.publicKey,
       role: role ?? this.role,
       sessionId: sessionId ?? this.sessionId,
+      image: image ?? this.image,
     );
   }
 
@@ -55,14 +60,17 @@ class UserEntity {
       'publicKey': publicKey,
       'role': role.toString(),
       'sessionId': sessionId,
+      'image': image,
     };
   }
 
   factory UserEntity.fromMap(Map<String, dynamic> map, String session) {
     UserRole role = getRole(map['role']);
+    final id = map['\$id'] as String;
+    final image = map['image'] as String?;
 
     return UserEntity(
-      id: map['\$id'] as String,
+      id: id,
       name: map['name'] as String,
       email: map['email'] as String,
       phone: map['phone'] as String,
@@ -70,6 +78,7 @@ class UserEntity {
       publicKey: map['publicKey'] as String,
       role: role,
       sessionId: session,
+      image: image ?? "https://robohash.org/$id?set=set4",
     );
   }
 

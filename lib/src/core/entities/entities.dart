@@ -2,6 +2,7 @@ export 'assignment_entity.dart';
 export 'patient_entity.dart';
 export 'prescription_entity.dart';
 export 'remarks_entity.dart';
+export 'release_entity.dart';
 export 'school_entity.dart';
 export 'screening_entity.dart';
 export 'search_entity.dart';
