@@ -37,8 +37,6 @@ class AppNavigation extends ConsumerWidget {
       });
     }
 
-    UserEntity user = ref.read(userProvider);
-
     final isWeb = getDeviceType() == DeviceType.web;
     final isMobile = getDeviceType() == DeviceType.mobile;
 
@@ -58,8 +56,9 @@ class AppNavigation extends ConsumerWidget {
           onChanged: (i) => ref.watch(appIndexProvider.notifier).setIndex(i),
           header: mobile ? null : const Logo(),
           autoSuggestBox: const SearchBox(),
-          items: navigationItems(user.role),
+          items: navigation,
           footerItems: footerItems(ref, context),
+          autoSuggestBoxReplacement: const Icon(FluentIcons.search),
         ),
       ),
     );
