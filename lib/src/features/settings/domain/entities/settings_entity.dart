@@ -29,10 +29,9 @@ class SettingsEntity {
       ];
 
   factory SettingsEntity.initial() {
-    final colors = AppColors();
     return SettingsEntity(
       themeMode: ThemeMode.system,
-      accentColor: colors.systemAccent,
+      accentColor: AppColors.accentColor,
       fontSize: 1,
       fontFamily: "Segoe UI",
     );

@@ -13,7 +13,6 @@ class ColorsSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(settingsProvider.notifier);
     final settings = ref.watch(settingsProvider);
-    final colors = AppColors();
 
     const width = 150.0;
 
@@ -53,7 +52,7 @@ class ColorsSettings extends ConsumerWidget {
               width: width,
               child: ComboBox<AccentColor>(
                 isExpanded: true,
-                items: colors.accentColors
+                items: AppColors.accentColors
                     .map((color) => ComboBoxItem(
                           value: color['color'] as AccentColor,
                           child: Row(

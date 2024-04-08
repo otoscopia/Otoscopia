@@ -70,7 +70,6 @@ class RemarksEntity {
   }
 
   Color get statusColor {
-    final color = AppColors();
     switch (status) {
       case RecordStatus.pending:
         return Colors.yellow;
@@ -81,7 +80,7 @@ class RemarksEntity {
       case RecordStatus.resolved:
         return Colors.green;
       default:
-        return color.systemAccent.darkest;
+        return AppColors.accentColor.darkest;
     }
   }
 
