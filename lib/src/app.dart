@@ -12,7 +12,8 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ThemeMode themeMode = ref.watch(themeProvider);
+    SettingsEntity settings = ref.watch(settingsProvider);
+    ThemeEntity theme = ThemeEntity(settings);
 
     bool isAuthenticated = ref.watch(authenticationProvider);
     UserEntity user = ref.watch(userProvider);
@@ -28,9 +29,9 @@ class MyApp extends ConsumerWidget {
       routes: routes,
       title: kAppName,
       initialRoute: kInitialRoute,
-      themeMode: themeMode,
-      theme: LightTheme.themeData,
-      darkTheme: DarkTheme.themeData,
+      themeMode: theme.themeMode,
+      theme: theme.lightMode,
+      darkTheme: theme.darkMode,
       debugShowCheckedModeBanner: false,
       navigatorObservers: [SentryNavigatorObserver()],
       builder: (context, child) => responsiveBuilder(child!),
