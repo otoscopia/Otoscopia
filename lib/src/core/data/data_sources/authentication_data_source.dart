@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/enums.dart';
 import 'package:appwrite/models.dart';
 
 import 'package:otoscopia/src/config/config.dart';
@@ -17,7 +18,7 @@ class AuthenticationDataSource {
 
   Future<List> login(SignInFormEntity form) async {
     try {
-      Session session = await _account.createEmailSession(
+      Session session = await _account.createEmailPasswordSession(
         email: form.email,
         password: form.password,
       );
@@ -58,7 +59,7 @@ class AuthenticationDataSource {
         functionId: Env.accountCreation,
         body: json.encode(form.toMap(user.$id)),
         path: '/',
-        method: 'POST',
+        method: ExecutionMethod.pOST,
       );
 
       return true;
