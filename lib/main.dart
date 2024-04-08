@@ -13,7 +13,7 @@ import 'package:otoscopia/src/core/core.dart';
 Future<void> main() async {
   const sentryRelease = '$kPackageName@${ApplicationConfig.currentVersion}';
 
-  SystemTheme.fallbackColor = const Color(0xFF4ca0e0);
+  SystemTheme.fallbackColor = AppColors.secondary;
   await SystemTheme.accentColor.load();
 
   WidgetsFlutterBinding.ensureInitialized();
