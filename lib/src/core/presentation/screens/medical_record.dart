@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 import 'package:otoscopia/src/features/doctor/doctor.dart';
-import 'package:otoscopia/src/features/nurse/nurse.dart';
 
 class MedicalRecord extends ConsumerStatefulWidget {
   const MedicalRecord(this._table, {super.key});
