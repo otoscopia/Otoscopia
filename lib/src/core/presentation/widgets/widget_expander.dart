@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsExpander extends ConsumerWidget {
-  const SettingsExpander({
+class WidgetExpander extends ConsumerWidget {
+  const WidgetExpander({
     super.key,
     required this.icon,
     required this.title,
