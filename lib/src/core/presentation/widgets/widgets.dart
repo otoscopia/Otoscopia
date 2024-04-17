@@ -1,6 +1,7 @@
 export 'application_container.dart';
 export 'card_opacity.dart';
 export 'center_card.dart';
+export 'circular_image.dart';
 export 'custom_hyperlink.dart';
 export 'custom_table.dart';
 export 'custom_text.dart';
