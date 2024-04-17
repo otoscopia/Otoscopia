@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/nurse/nurse.dart';
 import 'package:otoscopia/src/features/settings/settings.dart';
 
 class Settings extends ConsumerWidget {
@@ -20,14 +19,14 @@ class Settings extends ConsumerWidget {
           Gap(12),
           CustomText('Display', style: 5),
           Gap(8),
-          SettingsExpander(
+          WidgetExpander(
             icon: FluentIcons.color_solid,
             title: "Colors",
             subtitle: "Modify Theme Mode and Accent Colors",
             content: ColorsSettings(),
           ),
           Gap(4),
-          SettingsExpander(
+          WidgetExpander(
             icon: FluentIcons.font_color,
             title: "Text Size",
             subtitle: "Modify Text Size and Font Family",
