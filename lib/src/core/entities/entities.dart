@@ -1,4 +1,5 @@
 export 'assignment_entity.dart';
+export 'navigation_entity.dart';
 export 'patient_entity.dart';
 export 'prescription_entity.dart';
 export 'remarks_entity.dart';
