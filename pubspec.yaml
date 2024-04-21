@@ -17,13 +17,13 @@ dependencies:
   data_table_2: ^2.5.12
   dio: ^5.4.3+1
   envied: ^0.5.4+1
-  file_picker: ^8.0.0+1
+  file_picker: ^8.0.1
   file_saver: ^0.2.12
   fluent_ui: ^4.8.7
-  fluentui_system_icons: ^1.1.234
+  fluentui_system_icons: ^1.1.235
   flutter:
     sdk: flutter
-  flutter_markdown: ^0.6.23
+  flutter_markdown: ^0.7.1
   flutter_offline: ^3.0.1
   flutter_riverpod: ^2.5.1
   flutter_secure_storage: ^9.0.0
