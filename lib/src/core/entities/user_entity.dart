@@ -13,6 +13,7 @@ class UserEntity {
   final UserRole role;
   final String sessionId;
   final String? image;
+  final bool mfaFactors;
 
   UserEntity({
     required this.id,
@@ -23,6 +24,7 @@ class UserEntity {
     required this.publicKey,
     required this.role,
     required this.sessionId,
+    required this.mfaFactors,
     this.image,
   });
 
@@ -46,6 +48,7 @@ class UserEntity {
       publicKey: publicKey ?? this.publicKey,
       role: role ?? this.role,
       sessionId: sessionId ?? this.sessionId,
+      mfaFactors: mfaFactors,
       image: image ?? this.image,
     );
   }
@@ -64,7 +67,7 @@ class UserEntity {
     };
   }
 
-  factory UserEntity.fromMap(Map<String, dynamic> map, String session) {
+  factory UserEntity.fromMap(Map<String, dynamic> map, String session, bool mfa) {
     UserRole role = getRole(map['role']);
     final id = map['\$id'] as String;
     final image = map['image'] as String?;
@@ -79,6 +82,7 @@ class UserEntity {
       role: role,
       sessionId: session,
       image: image ?? "https://robohash.org/$id?set=set4",
+      mfaFactors: mfa,
     );
   }
 
@@ -86,8 +90,8 @@ class UserEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory UserEntity.fromJson(String source, String session) =>
-      UserEntity.fromMap(json.decode(source) as Map<String, dynamic>, session);
+  factory UserEntity.fromJson(String source, String session, bool mfa) =>
+      UserEntity.fromMap(json.decode(source) as Map<String, dynamic>, session, mfa);
 
   @override
   String toString() {
@@ -144,6 +148,7 @@ class UserEntity {
       workAddress: '',
       publicKey: '',
       role: UserRole.patient,
+      mfaFactors: false,
       sessionId: '',
     );
   }

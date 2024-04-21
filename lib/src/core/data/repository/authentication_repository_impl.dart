@@ -24,7 +24,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         documentId: user.$id,
       );
 
-      final userEntity = UserEntity.fromMap(result.data, session.$id);
+      final userEntity = UserEntity.fromMap(result.data, session.$id, user.mfa);
 
       return userEntity;
     } on AppwriteException catch (error) {
@@ -47,7 +47,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         documentId: user.$id,
       );
 
-      return UserEntity.fromMap(result.data, session.$id);
+      return UserEntity.fromMap(result.data, session.$id, user.mfa);
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } on Exception catch (error) {
