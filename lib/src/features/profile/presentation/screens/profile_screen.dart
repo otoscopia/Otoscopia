@@ -10,41 +10,43 @@ class Profile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const DoubleCard(
+    final mfa = ref.read(userProvider).mfaFactors;
+
+    return DoubleCard(
       scroll: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomText('Accounts', style: 1),
-          Gap(12),
+          const CustomText('Accounts', style: 1),
+          const Gap(12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              UserInformation(),
+              const UserInformation(),
               Row(
                 children: [
-                  Icon(FluentIcons.shield),
-                  Gap(16),
+                  Icon(mfa ? FluentIcons.shield_solid : FluentIcons.shield),
+                  const Gap(16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText("Security Status", style: 5),
-                      CustomText("Unsecured"),
+                      const CustomText("Security Status", style: 5),
+                      CustomText(mfa ? "Secured" : "Unsecured"),
                     ],
                   )
                 ],
               ),
             ],
           ),
-          Gap(32),
-          WidgetExpander(
+          const Gap(32),
+          const WidgetExpander(
             icon: FluentIcons.account_management,
             title: "User Information",
             subtitle: "View or Modify your Information",
             content: UserAccount(),
           ),
-          Gap(4),
-          WidgetExpander(
+          const Gap(4),
+          const WidgetExpander(
             icon: FluentIcons.lightning_secure,
             title: "Account Security & Notification",
             subtitle: "Modify your Security and Notification Settings",
