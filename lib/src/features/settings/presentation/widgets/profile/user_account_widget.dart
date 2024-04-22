@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/profile/profile.dart';
+import 'package:otoscopia/src/features/settings/settings.dart';
 
 class UserAccount extends ConsumerStatefulWidget {
   const UserAccount({super.key});
@@ -57,7 +57,7 @@ class _UserAccountState extends ConsumerState<UserAccount> {
               child: InfoLabel(
                 label: "Contact Number",
                 child: TextFormBox(
-                  controller: _controllers.nameController,
+                  controller: _controllers.phoneController,
                   enabled: enableEditing,
                 ),
               ),
