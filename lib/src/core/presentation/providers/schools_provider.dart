@@ -5,7 +5,10 @@ import 'package:otoscopia/src/core/core.dart';
 class SchoolsNotifier extends StateNotifier<List<SchoolEntity>> {
   SchoolsNotifier() : super([]);
 
-  void setSchools(List<SchoolEntity> schools) => state = schools;
+  void setSchools(List<SchoolEntity> schools) {
+    schools.sort((a, b) => a.name.compareTo(b.name));
+    state = schools;
+  }
 
   SchoolEntity findByName(String name) {
     final SchoolEntity school = state.firstWhere((school) => school.name == name);

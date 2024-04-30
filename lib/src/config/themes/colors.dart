@@ -7,4 +7,16 @@ class AppColors {
   static const Color transparent = Colors.transparent;
 
   static final accentColor = SystemTheme.accentColor.accent.toAccentColor();
+
+  static final List<Map<String, Object>> accentColors = [
+    {"color": accentColor, "name": "System"},
+    {"color": Colors.yellow, "name": "Light Yellow"},
+    {"color": Colors.orange, "name": "Orange"},
+    {"color": Colors.red, "name": "Red"},
+    {"color": Colors.magenta, "name": "Pink"},
+    {"color": Colors.purple, "name": "Lavander"},
+    {"color": Colors.blue, "name": "Blue"},
+    {"color": Colors.teal, "name": "Teal"},
+    {"color": Colors.green, "name": "Green"},
+  ];
 }

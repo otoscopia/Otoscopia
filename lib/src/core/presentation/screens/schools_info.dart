@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/nurse/nurse.dart';
 
 class SchoolsInfo extends ConsumerWidget {
   const SchoolsInfo(this._school, {super.key});

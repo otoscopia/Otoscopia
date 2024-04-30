@@ -15,10 +15,8 @@ Future<void> popUpInfoBar(
         title: Text(title),
         content: Text(message),
         severity: barSeverity!,
-        action: IconButton(
-          icon: const Icon(FluentIcons.clear),
-          onPressed: close,
-        ),
+        isLong: true,
+        onClose: close,
       );
     },
   );

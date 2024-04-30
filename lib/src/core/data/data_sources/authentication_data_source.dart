@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/enums.dart';
 import 'package:appwrite/models.dart';
 
 import 'package:otoscopia/src/config/config.dart';
@@ -9,28 +10,41 @@ import 'package:otoscopia/src/features/authentication/authentication.dart';
 
 class AuthenticationDataSource {
   final Account _account;
+  final Databases _database;
   final Functions _function;
 
   AuthenticationDataSource()
       : _account = Account(client),
+        _database = Databases(client),
         _function = Functions(client);
 
   Future<List> login(SignInFormEntity form) async {
     try {
-      Session session = await _account.createEmailSession(
+      Session session = await _account.createEmailPasswordSession(
         email: form.email,
         password: form.password,
       );
-      User user = await _account.get();
 
+      User user = await _account.get();
       final verified = user.emailVerification && user.phoneVerification;
+
+      final mfaFactors = await _account.listMfaFactors();
+
+      Document result = await _database.getDocument(
+        databaseId: Env.database,
+        collectionId: Env.userCollection,
+        documentId: user.$id,
+      );
 
       if (!verified) {
         throw Exception(kAccountNotVerified);
       }
 
-      return [session, user];
+      return [session, result, user.prefs.data, mfaFactors];
     } on AppwriteException catch (error) {
+      if (error.type == 'user_more_factors_required') {
+        throw Exception(error.type);
+      }
       throw Exception(error.message);
     }
   }
@@ -39,7 +53,15 @@ class AuthenticationDataSource {
     try {
       final session = await _account.getSession(sessionId: sessionId);
       final user = await _account.get();
-      return [session, user];
+
+      final mfaFactors = await _account.listMfaFactors();
+
+      Document result = await _database.getDocument(
+        databaseId: Env.database,
+        collectionId: Env.userCollection,
+        documentId: user.$id,
+      );
+      return [session, result, user.prefs.data, mfaFactors];
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     }
@@ -58,7 +80,7 @@ class AuthenticationDataSource {
         functionId: Env.accountCreation,
         body: json.encode(form.toMap(user.$id)),
         path: '/',
-        method: 'POST',
+        method: ExecutionMethod.pOST,
       );
 
       return true;
@@ -70,6 +92,36 @@ class AuthenticationDataSource {
   Future<void> logout(String sessionId) async {
     try {
       await _account.deleteSession(sessionId: sessionId);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
+  Future<List> confirmMfa(String otp) async {
+    try {
+      final result = await _account.createMfaChallenge(
+        factor: AuthenticationFactor.totp,
+      );
+
+      await _account.updateMfaChallenge(challengeId: result.$id, otp: otp);
+
+      final user = await _account.get();
+
+      Document data = await _database.getDocument(
+        databaseId: Env.database,
+        collectionId: Env.userCollection,
+        documentId: user.$id,
+      );
+
+      final mfaFactors = await _account.listMfaFactors();
+      final session = await _account.listSessions();
+
+      return [
+        session.sessions.first,
+        data.data,
+        user.prefs.data,
+        mfaFactors,
+      ];
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     }

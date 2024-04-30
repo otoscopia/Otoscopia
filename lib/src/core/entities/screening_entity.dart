@@ -27,6 +27,7 @@ class ScreeningEntity {
   final List<String> images;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String? oldScreening;
 
   ScreeningEntity({
     required this.id,
@@ -48,6 +49,7 @@ class ScreeningEntity {
     required this.images,
     required this.createdAt,
     required this.updatedAt,
+    this.oldScreening,
   });
 
   ScreeningEntity copyWith({
@@ -70,6 +72,7 @@ class ScreeningEntity {
     List<String>? images,
     DateTime? createdAt,
     DateTime? updatedAt,
+    String? oldScreening
   }) {
     return ScreeningEntity(
       id: id ?? this.id,
@@ -93,6 +96,7 @@ class ScreeningEntity {
       images: images ?? this.images,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      oldScreening: oldScreening ?? this.oldScreening,
     );
   }
 
@@ -114,6 +118,7 @@ class ScreeningEntity {
       'medication': medication,
       'medicationRemarks': medicationRemarks,
       'images': images,
+      'oldScreening': oldScreening,
     };
   }
 
@@ -139,6 +144,7 @@ class ScreeningEntity {
       images: List<String>.from((map['images'])),
       createdAt: DateTime.parse(map['\$createdAt'] as String),
       updatedAt: DateTime.parse(map['\$updatedAt'] as String),
+      oldScreening: map['oldScreening'] as String?,
     );
   }
 
@@ -175,6 +181,7 @@ class ScreeningEntity {
         other.medicationRemarks == medicationRemarks &&
         listEquals(other.images, images) &&
         other.createdAt == createdAt &&
+        other.oldScreening == oldScreening &&
         other.updatedAt == updatedAt;
   }
 
@@ -198,6 +205,7 @@ class ScreeningEntity {
         medicationRemarks.hashCode ^
         images.hashCode ^
         createdAt.hashCode ^
+        oldScreening.hashCode ^
         updatedAt.hashCode;
   }
 

@@ -37,16 +37,16 @@ class AppNavigation extends ConsumerWidget {
       });
     }
 
-    UserEntity user = ref.read(userProvider);
-
     final isWeb = getDeviceType() == DeviceType.web;
     final isMobile = getDeviceType() == DeviceType.mobile;
 
-    final mobile = isMobile == true ? isMobile : isWeb && MediaQuery.of(context).size.width < 400;
+    final mobile = isWeb && MediaQuery.of(context).size.width < 400 || isMobile;
+
+    final navigation = NavigationEntity(context, ref);
 
     return ApplicationContainer(
       child: NavigationView(
-        appBar:mobile ? const NavigationAppBar(
+        appBar: mobile ? const NavigationAppBar(
           title: Logo(),
           automaticallyImplyLeading: false,
         ) : null,
@@ -58,8 +58,9 @@ class AppNavigation extends ConsumerWidget {
           onChanged: (i) => ref.watch(appIndexProvider.notifier).setIndex(i),
           header: mobile ? null : const Logo(),
           autoSuggestBox: const SearchBox(),
-          items: navigationItems(user.role),
-          footerItems: footerItems(ref, context),
+          items: navigation.items,
+          footerItems: navigation.footer,
+          autoSuggestBoxReplacement: const Icon(FluentIcons.search),
         ),
       ),
     );

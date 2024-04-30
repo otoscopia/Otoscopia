@@ -1,9 +1,11 @@
 export 'application_container.dart';
 export 'card_opacity.dart';
 export 'center_card.dart';
+export 'circular_image.dart';
 export 'custom_hyperlink.dart';
 export 'custom_table.dart';
 export 'custom_text.dart';
+export 'double_card.dart';
 export 'doctors_remark_card.dart';
 export 'ear_images.dart';
 export 'loading_widget.dart';
@@ -22,6 +24,7 @@ export 'text_form_input.dart';
 export 'text_navigator.dart';
 export 'vital_row.dart';
 export 'vitals_card.dart';
+export 'widget_expander.dart';
 
 export 'text/display_text.dart';
 export 'text/title_text.dart';

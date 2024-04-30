@@ -11,7 +11,7 @@ class ThemeModeIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ThemeMode themeMode = ref.watch(themeProvider);
+    ThemeMode themeMode = ref.watch(settingsProvider).themeMode;
     IoniconsData iconData = themeMode == ThemeMode.system
         ? Ionicons.invert_mode
         : themeMode == ThemeMode.light
@@ -20,7 +20,8 @@ class ThemeModeIcon extends ConsumerWidget {
 
     return IconButton(
       icon: Icon(iconData, size: 18),
-      onPressed: () => ref.read(themeProvider.notifier).toggleTheme(),
+      onPressed: () => ref.read(settingsProvider.notifier).setThemeMode(
+          themeMode == ThemeMode.system ? ThemeMode.light : ThemeMode.dark),
       style: ButtonStyle(
         foregroundColor: ButtonState.resolveWith((states) {
           if (states.isHovering) return FluentTheme.of(context).accentColor;

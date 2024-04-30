@@ -6,7 +6,10 @@ import 'package:otoscopia/src/core/core.dart';
 class PatientsNotifier extends StateNotifier<List<PatientEntity>> {
   PatientsNotifier() : super([]);
 
-  void setPatients(List<PatientEntity> patients) => state = patients;
+  void setPatients(List<PatientEntity> patients) {
+    patients.sort((a, b) => a.name.compareTo(b.name));
+    state = patients;
+  }
 
   void removePatient(int index) => state.removeAt(index);
 

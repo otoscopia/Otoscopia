@@ -3,6 +3,8 @@ import 'package:flutter/material.dart' as m3;
 import 'package:data_table_2/data_table_2.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:ionicons/ionicons.dart';
 
 import 'package:otoscopia/src/core/core.dart';
 
@@ -95,6 +97,7 @@ class TableSource extends m3.DataTableSource {
     final nurse = ref.read(nursesProvider.notifier).findById(assignment.nurse);
     final doctor = ref.read(doctorsProvider.notifier).findById(patient.doctor);
     final age = DateTime.now().difference(patient.birthDate).inDays ~/ 365;
+    final icon = table.remarks?.statusIcon ?? Ionicons.time_outline;
     final status = table.remarks?.statusString ?? "Pending";
     final gender = patient.gender == Gender.male ? "Male" : "Female";
 
@@ -109,58 +112,27 @@ class TableSource extends m3.DataTableSource {
 
     final isDark = FluentTheme.of(_context).brightness == Brightness.dark;
 
+    final style = role ? 7 : (hasRemarks ? 0 : 5);
+
     return DataRow2(
-      color: role
-          ? null
-          : !hasRemarks
-              ? null
-              : isDark ? const m3.MaterialStatePropertyAll(Color(0xFF1d2224)) : const m3.MaterialStatePropertyAll(Color(0xFFabb1b4)),
+      color: role && !hasRemarks ? null : isDark ? const m3.MaterialStatePropertyAll(Color(0xFF1d2224)) : const m3.MaterialStatePropertyAll(Color(0xFFabb1b4)),
       onSelectChanged: (value) {
         ref.read(dashboardTabProvider.notifier).addTab(table);
       },
       cells: [
-        m3.DataCell(CustomText(patient.name,
-            style: role
-                ? 7
-                : hasRemarks
-                    ? 0
-                    : 5)),
-        if (!mobile)
-          m3.DataCell(CustomText("$age/$gender",
-              style: role
-                  ? 7
-                  : hasRemarks
-                      ? 0
-                      : 5)),
-        m3.DataCell(CustomText(status,
-            style: role
-                ? 7
-                : hasRemarks
-                    ? 0
-                    : 5)),
-        if (!mobile)
-          m3.DataCell(CustomText(school.name,
-              style: role
-                  ? 7
-                  : hasRemarks
-                      ? 0
-                      : 5)),
-        if (!mobile)
-          if (role)
-            m3.DataCell(CustomText(doctor.name,
-                style: role
-                    ? 7
-                    : hasRemarks
-                        ? 0
-                        : 5)),
-        if (!mobile)
-          if (!role)
-            m3.DataCell(CustomText(nurse.name,
-                style: role
-                    ? 7
-                    : hasRemarks
-                        ? 0
-                        : 5)),
+        m3.DataCell(CustomText(patient.name, style: style)),
+        if (!mobile) m3.DataCell(CustomText("$age/$gender", style: style)),
+        m3.DataCell(m3.Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(icon),
+            const Gap(4),
+            CustomText(status, style: style),
+          ],
+        )),
+        if (!mobile) m3.DataCell(CustomText(school.name, style: style)),
+        if (!mobile  && role) m3.DataCell(CustomText(doctor.name, style: style)),
+        if (!mobile && !role) m3.DataCell(CustomText(nurse.name, style: style)),
       ],
     );
   }
