@@ -2,6 +2,7 @@
 
 [![Known Vulnerabilities](https://snyk.io/test/github/otoscopia/otoscopia/badge.svg)](https://snyk.io/test/github/{username}/{repo})
 [![Dependency Vulnerabilities](https://img.shields.io/endpoint?url=https%3A%2F%2Fapi-hooks.soos.io%2Fapi%2Fshieldsio-badges%3FbadgeType%3DDependencyVulnerabilities%26pid%3Dg78q2tauz%26branchName%3Dmain)](https://app.soos.io)
+![SonarQube](.github/quality_gate.svg)
 
 This repository contains the source code for the Otoscopia project, a multi-platform healthcare application designed for ENT doctors and primary school nurses. The application serves as a medical record system, allowing users to store patient information, ear screening results, and prescriptions provided by doctors.
 
