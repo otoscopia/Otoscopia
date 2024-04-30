@@ -28,6 +28,11 @@ class UserNotifier extends StateNotifier<UserEntity> {
 
     setUser(user);
   }
+
+  void updateMfa(bool mfa) {
+    final user = state.updateMfaFactors(mfa);
+    setUser(user);
+  }
 }
 
 final userProvider = StateNotifierProvider<UserNotifier, UserEntity>(

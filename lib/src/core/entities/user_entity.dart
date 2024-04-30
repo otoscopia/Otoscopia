@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:appwrite/models.dart';
+
 import 'package:otoscopia/src/core/core.dart';
 
 class UserEntity {
@@ -13,7 +15,8 @@ class UserEntity {
   final UserRole role;
   final String sessionId;
   final String? image;
-  final bool mfaFactors;
+  final MfaFactors mfaFactors;
+  final Map<String, dynamic> preferences;
 
   UserEntity({
     required this.id,
@@ -25,6 +28,7 @@ class UserEntity {
     required this.role,
     required this.sessionId,
     required this.mfaFactors,
+    required this.preferences,
     this.image,
   });
 
@@ -38,6 +42,8 @@ class UserEntity {
     UserRole? role,
     String? sessionId,
     String? image,
+    MfaFactors? mfaFactors,
+    Map<String, dynamic>? preferences,
   }) {
     return UserEntity(
       id: id ?? this.id,
@@ -48,9 +54,20 @@ class UserEntity {
       publicKey: publicKey ?? this.publicKey,
       role: role ?? this.role,
       sessionId: sessionId ?? this.sessionId,
-      mfaFactors: mfaFactors,
       image: image ?? this.image,
+      mfaFactors: mfaFactors ?? this.mfaFactors,
+      preferences: preferences ?? this.preferences,
     );
+  }
+
+  UserEntity updateMfaFactors(bool mfa) {
+    final response = MfaFactors(
+      totp: mfa,
+      phone: mfaFactors.phone,
+      email: mfaFactors.email,
+      recoveryCode: mfaFactors.recoveryCode,
+    );
+    return copyWith(mfaFactors: response);
   }
 
   Map<String, dynamic> toMap() {
@@ -64,10 +81,13 @@ class UserEntity {
       'role': role.toString(),
       'sessionId': sessionId,
       'image': image,
+      'mfaFactors': mfaFactors,
+      'preferences': preferences,
     };
   }
 
-  factory UserEntity.fromMap(Map<String, dynamic> map, String session, bool mfa) {
+  factory UserEntity.fromMap(Map<String, dynamic> map, String session,
+      MfaFactors mfa, Map<String, dynamic> prefs) {
     UserRole role = getRole(map['role']);
     final id = map['\$id'] as String;
     final image = map['image'] as String?;
@@ -83,15 +103,16 @@ class UserEntity {
       sessionId: session,
       image: image ?? "https://robohash.org/$id?set=set4",
       mfaFactors: mfa,
+      preferences: prefs,
     );
   }
 
-  
-
   String toJson() => json.encode(toMap());
 
-  factory UserEntity.fromJson(String source, String session, bool mfa) =>
-      UserEntity.fromMap(json.decode(source) as Map<String, dynamic>, session, mfa);
+  factory UserEntity.fromJson(String source, String session, MfaFactors mfa,
+          Map<String, dynamic> prefs) =>
+      UserEntity.fromMap(
+          json.decode(source) as Map<String, dynamic>, session, mfa, prefs);
 
   @override
   String toString() {
@@ -140,6 +161,12 @@ class UserEntity {
   }
 
   factory UserEntity.initial() {
+    final mfa = MfaFactors(
+      totp: false,
+      phone: false,
+      email: false,
+      recoveryCode: false,  
+    );
     return UserEntity(
       id: '',
       name: '',
@@ -148,8 +175,9 @@ class UserEntity {
       workAddress: '',
       publicKey: '',
       role: UserRole.patient,
-      mfaFactors: false,
+      mfaFactors: mfa,
       sessionId: '',
+      preferences: {},
     );
   }
 }
