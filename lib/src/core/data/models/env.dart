@@ -16,6 +16,9 @@ abstract class Env {
   @EnviedField(varName: 'ACCOUNT_CREATION_ID', obfuscate: true)
   static final String accountCreation = _Env.accountCreation;
 
+  @EnviedField(varName: 'MESSAGING_ID', obfuscate: true)
+  static final String messaging = _Env.messaging;
+
   @EnviedField(varName: 'SCREENING_BUCKET', obfuscate: true)
   static final String screeningBucket = _Env.screeningBucket;
 
