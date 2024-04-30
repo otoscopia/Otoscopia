@@ -3,7 +3,6 @@ import 'package:fluentui_system_icons/fluentui_system_icons.dart' as icons;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/core/core.dart';
-import 'package:otoscopia/src/features/profile/profile.dart';
 import 'package:otoscopia/src/features/settings/settings.dart';
 
 class NavigationEntity {
@@ -22,14 +21,14 @@ class NavigationEntity {
           onTap: () async => await whatsNew(_context),
         ),
         PaneItem(
-          icon: CircularImage(image),
-          title: const Text("User Profile"),
-          body: const Profile(),
-        ),
-        PaneItem(
           icon: const Icon(icons.FluentIcons.settings_20_regular),
           title: const Text(kSettings),
           body: const Settings(),
+        ),
+        PaneItemAction(
+          icon: const Icon(icons.FluentIcons.sign_out_20_regular),
+          title: const Text("Sign out"),
+          onTap: () async => _ref.read(authenticationProvider.notifier).logout(_context),
         ),
         PaneItemSeparator(),
       ];
@@ -49,6 +48,14 @@ class NavigationEntity {
           icon: const Icon(FluentIcons.e_discovery),
           title: const Text(kSchools),
           body: const Schools(),
+        ),
+      ];
+
+  List<NavigationPaneItem> get adminItems => [
+        PaneItem(
+          icon: const Icon(FluentIcons.view_dashboard),
+          title: const Text(kDashboard),
+          body: const Dashboard(),
         ),
       ];
 }

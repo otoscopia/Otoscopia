@@ -222,23 +222,27 @@ class FetchDataNotifier extends StateNotifier<void> {
   }
 
   Future<void> fetch(UserEntity user) async {
-    await getSchools();
-    await getDoctors();
-    await getNurses();
-
-    if (user.role == UserRole.nurse) {
-      await getAssignmentsByNurse(user);
-      await filterSchoolsByUser(user);
-      await getPatientsBySchools();
+    if (user.role == UserRole.admin) {
+      // User Admin Fetch
     } else {
-      await getAssignments();
-      await getPatientsByDoctor(user.id);
-    }
-    await getScreeningsByPatient();
-    await getRemarksByPatients();
-    await setTableData();
+      await getSchools();
+      await getDoctors();
+      await getNurses();
 
-    await setSearchData();
+      if (user.role == UserRole.nurse) {
+        await getAssignmentsByNurse(user);
+        await filterSchoolsByUser(user);
+        await getPatientsBySchools();
+      } else {
+        await getAssignments();
+        await getPatientsByDoctor(user.id);
+      }
+      await getScreeningsByPatient();
+      await getRemarksByPatients();
+      await setTableData();
+
+      await setSearchData();
+    }
   }
 }
 
