@@ -1,4 +1,5 @@
 import 'package:appwrite/appwrite.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:otoscopia/src/config/config.dart';
@@ -48,13 +49,36 @@ class AuthenticationNotifier extends StateNotifier<bool> {
     }
   }
 
-  Future<void> logout() async {
+  Future<UserEntity> confirmMfa(String otp) async {
+    try {
+      return await _repository.confirmMfa(otp);
+    } on AppwriteException catch (error) {
+      throw Exception(error.message);
+    }
+  }
+
+  Future<void> logout(BuildContext context) async {
     UserEntity user = ref.read(userProvider);
     try {
       await _repository.logout(user.sessionId);
       await secureStorage.delete(key: 'session');
+
       state = false;
-      ref.read(userProvider.notifier).setUser(UserEntity.initial());
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+
+        ref.read(doctorsProvider).clear();
+        ref.read(nursesProvider).clear();
+        ref.read(assignmentsProvider).clear();
+        ref.read(patientsProvider).clear();
+        ref.read(tableProvider).clear();
+        ref.read(appIndexProvider.notifier).setIndex(0);
+        ref.read(patientsIndexProvider.notifier).setIndex(0);
+        ref.read(schoolsIndexProvider.notifier).setIndex(0);
+        ref.read(schoolsIndexProvider.notifier).setIndex(0);
+        ref.read(userProvider.notifier).setUser(UserEntity.initial());
+      });
     } on AppwriteException catch (error) {
       throw Exception(error.message);
     } catch (error) {
