@@ -59,15 +59,29 @@ class _SignInState extends ConsumerState<SignIn> {
     setState(() => isLoading = true);
     if (formKey.currentState!.validate()) {
       try {
-        final response =
+        final user =
             await ref.read(authenticationProvider.notifier).login(_form);
 
-        if (response.id.isNotEmpty) {
+        ref.read(userProvider.notifier).setUser(user);
+        await ref.read(fetchDataProvider.notifier).fetch(user);
+        await secureStorage.write(key: 'session', value: user.sessionId);
+
+        if (user.id.isNotEmpty) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           });
         }
       } on Exception catch (error) {
+        if (error.toString().contains('user_more_factors_required')) {
+          WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.push(
+                context,
+                FluentPageRoute(
+                  builder: (context) => const Mfa(),
+                ),
+              ));
+          return;
+        }
+
         WidgetsBinding.instance.addPostFrameCallback(
           (_) => popUpInfoBar(
             kErrorTitle,
