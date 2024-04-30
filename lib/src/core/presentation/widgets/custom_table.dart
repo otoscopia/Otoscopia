@@ -131,8 +131,8 @@ class TableSource extends m3.DataTableSource {
           ],
         )),
         if (!mobile) m3.DataCell(CustomText(school.name, style: style)),
-        if (!mobile && role) m3.DataCell(CustomText(doctor.name, style: style)),
-        if (!mobile && role) m3.DataCell(CustomText(nurse.name, style: style)),
+        if (!mobile  && role) m3.DataCell(CustomText(doctor.name, style: style)),
+        if (!mobile && !role) m3.DataCell(CustomText(nurse.name, style: style)),
       ],
     );
   }
