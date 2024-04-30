@@ -10,28 +10,17 @@ class Settings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const DoubleCard(
-      scroll: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        children: const [
           CustomText('Settings', style: 1),
-          Gap(12),
-          CustomText('Display', style: 5),
           Gap(8),
-          WidgetExpander(
-            icon: FluentIcons.color_solid,
-            title: "Colors",
-            subtitle: "Modify Theme Mode and Accent Colors",
-            content: ColorsSettings(),
-          ),
-          Gap(4),
-          WidgetExpander(
-            icon: FluentIcons.font_color,
-            title: "Text Size",
-            subtitle: "Modify Text Size and Font Family",
-            content: TextSettings(),
-          ),
+          ProfileSettings(),
+          Gap(8),
+          DisplaySettings(),
+          Gap(16),
         ],
       ),
     );
