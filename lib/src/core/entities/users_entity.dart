@@ -9,7 +9,6 @@ class UsersEntity {
   final String email;
   final String phone;
   final String workAddress;
-  final String publicKey;
   final UserRole role;
 
   UsersEntity({
@@ -18,7 +17,6 @@ class UsersEntity {
     required this.email,
     required this.phone,
     required this.workAddress,
-    required this.publicKey,
     required this.role,
   });
 
@@ -38,7 +36,6 @@ class UsersEntity {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       workAddress: workAddress ?? this.workAddress,
-      publicKey: publicKey ?? this.publicKey,
       role: role ?? this.role,
     );
   }
@@ -50,7 +47,6 @@ class UsersEntity {
       'email': email,
       'phone': phone,
       'workAddress': workAddress,
-      'publicKey': publicKey,
       'role': role.toString(),
     };
   }
@@ -79,7 +75,6 @@ class UsersEntity {
       email: map['email'] as String,
       phone: map['phone'] as String,
       workAddress: map['workAddress'] as String,
-      publicKey: map['publicKey'] as String,
       role: role,
     );
   }
@@ -91,7 +86,7 @@ class UsersEntity {
 
   @override
   String toString() {
-    return 'UsersEntity(id: $id, name: $name, email: $email, phone: $phone, workAddress: $workAddress, publicKey: $publicKey, role: $role)';
+    return 'UsersEntity(id: $id, name: $name, email: $email, phone: $phone, workAddress: $workAddress, role: $role)';
   }
 
   @override
@@ -103,7 +98,6 @@ class UsersEntity {
         other.email == email &&
         other.phone == phone &&
         other.workAddress == workAddress &&
-        other.publicKey == publicKey &&
         other.role == role;
   }
 
@@ -114,7 +108,6 @@ class UsersEntity {
         email.hashCode ^
         phone.hashCode ^
         workAddress.hashCode ^
-        publicKey.hashCode ^
         role.hashCode;
   }
 }

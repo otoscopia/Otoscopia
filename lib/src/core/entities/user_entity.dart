@@ -11,7 +11,6 @@ class UserEntity {
   final String email;
   final String phone;
   final String workAddress;
-  final String publicKey;
   final UserRole role;
   final String sessionId;
   final String? image;
@@ -24,7 +23,6 @@ class UserEntity {
     required this.email,
     required this.phone,
     required this.workAddress,
-    required this.publicKey,
     required this.role,
     required this.sessionId,
     required this.mfaFactors,
@@ -51,7 +49,6 @@ class UserEntity {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       workAddress: workAddress ?? this.workAddress,
-      publicKey: publicKey ?? this.publicKey,
       role: role ?? this.role,
       sessionId: sessionId ?? this.sessionId,
       image: image ?? this.image,
@@ -77,7 +74,6 @@ class UserEntity {
       'email': email,
       'phone': phone,
       'workAddress': workAddress,
-      'publicKey': publicKey,
       'role': role.toString(),
       'sessionId': sessionId,
       'image': image,
@@ -98,7 +94,6 @@ class UserEntity {
       email: map['email'] as String,
       phone: map['phone'] as String,
       workAddress: map['workAddress'] as String,
-      publicKey: map['publicKey'] as String,
       role: role,
       sessionId: session,
       image: image ?? "https://robohash.org/$id?set=set4",
@@ -116,7 +111,7 @@ class UserEntity {
 
   @override
   String toString() {
-    return 'UserEntity(id: $id, name: $name, email: $email, phone: $phone, workAddress: $workAddress, publicKey: $publicKey, role: $role, sessionId: $sessionId)';
+    return 'UserEntity(id: $id, name: $name, email: $email, phone: $phone, workAddress: $workAddress, role: $role, sessionId: $sessionId)';
   }
 
   @override
@@ -128,7 +123,6 @@ class UserEntity {
         other.email == email &&
         other.phone == phone &&
         other.workAddress == workAddress &&
-        other.publicKey == publicKey &&
         other.role == role &&
         other.sessionId == sessionId;
   }
@@ -140,7 +134,6 @@ class UserEntity {
         email.hashCode ^
         phone.hashCode ^
         workAddress.hashCode ^
-        publicKey.hashCode ^
         role.hashCode ^
         sessionId.hashCode;
   }
@@ -173,7 +166,6 @@ class UserEntity {
       email: '',
       phone: '',
       workAddress: '',
-      publicKey: '',
       role: UserRole.patient,
       mfaFactors: mfa,
       sessionId: '',
