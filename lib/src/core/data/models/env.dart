@@ -19,6 +19,9 @@ abstract class Env {
   @EnviedField(varName: 'SCREENING_BUCKET', obfuscate: true)
   static final String screeningBucket = _Env.screeningBucket;
 
+  @EnviedField(varName: 'AVATAR_BUCKET', obfuscate: true)
+  static final String avatarBucket = _Env.avatarBucket;
+
   @EnviedField(varName: 'PRESCRIPTIONS_BUCKET', obfuscate: true)
   static final String prescriptionsBucket = _Env.prescriptionsBucket;
 
