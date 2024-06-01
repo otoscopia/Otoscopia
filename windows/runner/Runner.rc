@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "otoscopia" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "otoscopia" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.laurencetroyv. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2022-2024 com.laurencetroyv. All rights reserved." "\0"
             VALUE "OriginalFilename", "otoscopia.exe" "\0"
             VALUE "ProductName", "otoscopia" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
